@@ -4,14 +4,19 @@ import java.util.HashMap;
 
 import de.teamwaldstadt.picsimu.command.AllCommands;
 import de.teamwaldstadt.picsimu.parser.Parser;
+import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class Main {
 	
 	public static final String PGM_NAME = "PICsimu";
 	public static final String PGM_VERSION = "0.0.1";
+	
+	public static Storage STORAGE;
 
 	public static void main(String[] args) {
 		System.out.println("Hello World, this is " + PGM_NAME + " " + PGM_VERSION);
+		
+		STORAGE = new Storage();
 		Parser p = new Parser();
 
 		try {
