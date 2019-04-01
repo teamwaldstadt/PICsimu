@@ -1,12 +1,11 @@
 package de.teamwaldstadt.picsimu;
 
+import java.util.HashMap;
+
+import de.teamwaldstadt.picsimu.command.AllCommands;
 import de.teamwaldstadt.picsimu.parser.Parser;
 
 public class Main {
-
-	/*
-	 * Main class
-	 */
 	
 	public static final String PGM_NAME = "PICsimu";
 	public static final String PGM_VERSION = "0.0.1";
@@ -16,11 +15,8 @@ public class Main {
 		Parser p = new Parser();
 
 		try {
-			String[] lines = p.loadFile("C:\\Users\\Service\\Documents\\RECHNERTECHNIK\\TPicSim\\TPicSim1.LST");
-			for (String line : lines) {
-				line = line.replaceAll(";.*", "");
-				System.out.println(line);
-			}
+			HashMap<Integer, AllCommands>[] lines = p.getCommandList("C:\\Users\\Service\\Documents\\RECHNERTECHNIK\\TPicSim\\TPicSim1.LST");
+			System.out.println(lines[0].get(0));
 		} catch (Exception e) {
 			System.exit(0);
 		}
