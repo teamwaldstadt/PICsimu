@@ -1,6 +1,5 @@
 package de.teamwaldstadt.picsimu.gui;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,6 +16,8 @@ public class GUIPanel extends JPanel  implements ActionListener{
 
 	StorageTable storageTable;
 	int counter = 0;
+	CodeView codeView;
+	
 	public GUIPanel(int width, int height) {
 		JScrollPane scrollTable = new JScrollPane();
 		storageTable = new StorageTable();
@@ -27,7 +28,8 @@ public class GUIPanel extends JPanel  implements ActionListener{
 		
 		
 		JScrollPane scrollCode = new JScrollPane();
-		scrollCode.setViewportView(new CodeView());
+		codeView = new CodeView();
+		scrollCode.setViewportView(codeView);
 		scrollCode.setBounds(width / 2 - 180, 300, 360, height - 310);
 		add(scrollCode);
 		
@@ -51,10 +53,12 @@ public class GUIPanel extends JPanel  implements ActionListener{
 		t.start();
 	}
 
+	public CodeView getCodeView() {
+		return this.codeView;
+	}
+	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		//counter++;
-		//table.getModel().setValueAt(counter, 4, 4);
 		storageTable.update();
 	}
 }

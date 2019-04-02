@@ -3,12 +3,12 @@ package de.teamwaldstadt.picsimu.parser;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 
-import de.teamwaldstadt.picsimu.command.CommandConverter;
 import de.teamwaldstadt.picsimu.command.Command;
+import de.teamwaldstadt.picsimu.command.CommandConverter;
+import de.teamwaldstadt.picsimu.command.CommandSet;
 
 public class Parser {
 
@@ -31,23 +31,25 @@ public class Parser {
 		return content.toArray(new String[0]);
 	}
 	
-	public HashMap<Integer, Command>[] getCommandList(String filename) throws IOException {
+	public CommandSet[] getCommandList(String filename) throws IOException {
 		String[] lines = loadFile(filename);
-				
+		CommandSet[] set = new CommandSet[lines.length];
+		
 		for (int i = 0; i < lines.length; i++) {
 			int commandNr = Integer.parseInt(lines[i].split(" ")[0], 16);
 			int command = Integer.parseInt(lines[i].split(" ")[1], 16);
 			int lineNr = Integer.parseInt(lines[i].split(" ")[2]);
 			
+			
+			
 			Command c = CommandConverter.convert(command);
 			
+			//invert mask and AND with command to get argument
+			int argument = command & (c.getMask() ^ 0xFFFF);		
 			
-			//TODO: Command command = new Command(commandNr, type, lineNr)
-			
-			System.out.println(commandNr + " " + c + " " + lineNr);
-			
+			set[i] = new CommandSet(c, argument, commandNr, lineNr);
 		}
-		return null;
+		return set;
 		
 	}
 	

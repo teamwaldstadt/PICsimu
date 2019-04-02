@@ -1,7 +1,10 @@
 package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -29,7 +32,20 @@ public class GUIWindow extends JFrame {
 		menuBar.setBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK));
 		JMenu menu = new JMenu("Datei");
 		
+		GUIPanel guiPanel = new GUIPanel(WIDTH, HEIGHT - 50);
+		
 		JMenuItem itemOpen = new JMenuItem("Öffnen");
+		itemOpen.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fc = new JFileChooser();
+				int returnVal = fc.showOpenDialog(GUIWindow.this);
+				if (returnVal == JFileChooser.APPROVE_OPTION) {
+					
+					guiPanel.getCodeView().loadCode(fc.getSelectedFile());
+				}
+			}
+		});
 		menu.add(itemOpen);
 		menuBar.add(menu);
 		
