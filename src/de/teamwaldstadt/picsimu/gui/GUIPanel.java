@@ -1,30 +1,51 @@
 package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
 import javax.swing.Timer;
-import javax.swing.border.EmptyBorder;
+
+import de.teamwaldstadt.picsimu.gui.storagetable.StorageTable;
 
 public class GUIPanel extends JPanel  implements ActionListener{
 
 	private static final long serialVersionUID = 1L;
 
-	StorageTable table;
+	StorageTable storageTable;
 	int counter = 0;
 	public GUIPanel(int width, int height) {
 		JScrollPane scrollTable = new JScrollPane();
-		table = new StorageTable();
-		scrollTable.setSize(200, 400);
-		scrollTable.setViewportView(table);
+		storageTable = new StorageTable();
+		scrollTable.setViewportView(storageTable);
 		setLayout(null);
 		scrollTable.setBounds(width - 206, 0, 200, height);
-		add (scrollTable, BorderLayout.CENTER);
+		add (scrollTable);
+		
+		
+		JScrollPane scrollCode = new JScrollPane();
+		scrollCode.setViewportView(new CodeView());
+		scrollCode.setBounds(width / 2 - 180, 300, 360, height - 310);
+		add(scrollCode);
+		
+		JButton startButton = new JButton("Start");
+		startButton.setBounds(width / 2 - 180, height / 2 - 20, 80, 30);
+		add(startButton);
+		
+		JButton stopButton = new JButton("Stop");
+		stopButton.setBounds(width / 2 - 87, height / 2 - 20, 80, 30);
+		add(stopButton);
+		
+		JButton resetButton = new JButton("Reset");
+		resetButton.setBounds(width / 2 + 7, height / 2 - 20, 80, 30);
+		add(resetButton);
+		
+		JButton stepButton = new JButton("Step");
+		stepButton.setBounds(width / 2 + 100, height / 2 - 20, 80, 30);
+		add(stepButton);
 		
 		Timer t = new Timer(1000, this);
 		t.start();
@@ -34,5 +55,6 @@ public class GUIPanel extends JPanel  implements ActionListener{
 	public void actionPerformed(ActionEvent arg0) {
 		//counter++;
 		//table.getModel().setValueAt(counter, 4, 4);
+		storageTable.update();
 	}
 }

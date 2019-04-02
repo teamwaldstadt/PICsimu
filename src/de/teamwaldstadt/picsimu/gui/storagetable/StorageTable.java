@@ -1,23 +1,26 @@
-package de.teamwaldstadt.picsimu.gui;
-
-import java.awt.Color;
+package de.teamwaldstadt.picsimu.gui.storagetable;
 
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
 import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
+
+import de.teamwaldstadt.picsimu.Main;
 
 public class StorageTable extends JTable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	StorageTableModel tm;
+	
 	public StorageTable() {
 		
-		StorageTableModel tm = new StorageTableModel();
+		tm = new StorageTableModel();
 		int width = 20;
 		
-		tm.setColumnCount(8);
-		tm.setRowCount(32);
+		tm.setColumnCount(9);
+		tm.setRowCount(33);
 		
 		
 
@@ -36,8 +39,6 @@ public class StorageTable extends JTable {
 		setTableHeader(null);
 		setModel(tm);
 		
-		//getColumnModel().getColumn(0).setCellRenderer(new StorageTableCellRenderer());
-		//getColumnModel().getColumn(1).setCellRenderer(new StorageTableCellRenderer());
 		setDefaultRenderer(Object.class, new StorageTableCellRenderer());
 		
 		
@@ -49,18 +50,23 @@ public class StorageTable extends JTable {
 		getColumnModel().getColumn(5).setPreferredWidth(width);
 		getColumnModel().getColumn(6).setPreferredWidth(width);
 		getColumnModel().getColumn(7).setPreferredWidth(width);
+		getColumnModel().getColumn(8).setPreferredWidth(width);
 		
-		for (int i = 0; i < 8; i++)
-			tm.setValueAt(String.format("%02X", i), 0, i);
-		for (int i = 0; i < 32; i++)
-			tm.setValueAt(String.format("%02X", i * 8), i, 0);	
+		for (int i = 1; i < 9; i++)
+			tm.setValueAt(String.format("%02X", (i-1)), 0, i);
+		for (int i = 0; i < 33; i++)
+			tm.setValueAt(String.format("%02X", i * 8 - 8), i, 0);	
 		tm.setValueAt("", 0, 0);
-		for (int i = 1; i < 8; i++) {
-			for (int j = 1; j < 32; j++) {
-				tm.setValueAt("00", j, i);
+		
+		update();
+	}
+	
+	public void update() {
+		for (int i = 1; i < 9; i++) {
+			for (int j = 1; j < 33; j++) {
+				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(i-1) + 8 * (j-1)]), j, i);
 			}
 		}
-		
 		setModel(tm);
 	}
 }
