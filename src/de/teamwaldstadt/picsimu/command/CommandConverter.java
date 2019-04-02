@@ -2,10 +2,10 @@ package de.teamwaldstadt.picsimu.command;
 
 public class CommandConverter {
 	
-	public static CommandNames convert(int hexCode) {
-		CommandNames[] commandCodes = CommandNames.values();
+	public static Command convert(int hexCode) {
+		Command[] commandCodes = Command.values();
 
-		for (CommandNames c : commandCodes) {
+		for (Command c : commandCodes) {
 			
 			int hex = hexCode & c.getMask();
 			int com = c.getValue() & c.getMask();
