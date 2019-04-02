@@ -1,22 +1,39 @@
 package de.teamwaldstadt.picsimu.command;
 
+import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.storage.GeneralRegister;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandADDWF extends CommandExecutor {
 	
+	private boolean isDestinationBitSet;
 	private int fileRegister;
 
-	public CommandADDWF(Storage storageAffected, int fileRegister) throws Exception {
-		super.setStorageAffected(storageAffected);
+	public CommandADDWF(boolean isDestinationBitSet, int fileRegister) throws Exception {
 		Storage.checkNotHalfAByte(fileRegister);
 		
+		this.isDestinationBitSet = isDestinationBitSet;
 		this.fileRegister = fileRegister;
 	}
 
 	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
-
+	public void execute() throws Exception {
+		GeneralRegister register = new GeneralRegister(this.fileRegister);
+		int w = Main.STORAGE.getW();
+		int f = Main.STORAGE.getRegister(register);
+		int result = w + f;
+		
+		super.affectStatus(Command.ADDWF, result);
+		
+		if (this.isDestinationBitSet) {
+			Main.STORAGE.setRegister(register, result);
+		} else {
+			Main.STORAGE.setW(result);
+		}
+	}
+	
+	public boolean isDestinationBitSet() {
+		return this.isDestinationBitSet;
 	}
 	
 	public int getFileRegister() {
