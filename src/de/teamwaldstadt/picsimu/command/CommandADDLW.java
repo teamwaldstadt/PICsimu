@@ -6,7 +6,7 @@ import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandADDLW extends CommandExecutor {
 	
-	int literal;
+	private int literal;
 	
 	public CommandADDLW(Storage storageAffected, int literal) throws Exception {
 		super.setStorageAffected(storageAffected);

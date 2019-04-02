@@ -12,7 +12,6 @@ public class Storage {
 
 	public void resetAll() {
 		this.resetStorage();
-		this.resetAllRegisters();
 		this.resetW();
 	}
 
@@ -20,6 +19,8 @@ public class Storage {
 		for (int i = 0; i < storage.length; i++) {
 			this.storage[i] = 0x00;
 		}
+		
+		this.resetAllRegisters();
 	}
 
 	public void resetAllRegisters() {
@@ -43,7 +44,13 @@ public class Storage {
 
 	public static void checkNotAByte(int testByte) throws Exception {
 		if (testByte < 0x00 || testByte > 0xFF) {
-			throw new Exception("Not a byte (out of range)");
+			throw new Exception("Not a byte (out of range: 0x00 to 0xFF)");
+		}
+	}
+	
+	public static void checkNotHalfAByte(int testByte) throws Exception {
+		if (testByte < 0x00 || testByte > 0x7F) {
+			throw new Exception("Not half a byte (out of range: 0x00 to 0x7F)");
 		}
 	}
 
