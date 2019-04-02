@@ -19,23 +19,27 @@ public class Storage {
 		for (int i = 0; i < storage.length; i++) {
 			this.storage[i] = 0x00;
 		}
-		
+
 		this.resetAllRegisters();
 	}
 
 	public void resetAllRegisters() {
-		for (Register register : Register.values()) {
+		for (SpecialRegister register : SpecialRegister.values()) {
 			this.resetRegister(register);
 		}
 	}
 
-	public void resetRegister(Register register) {
-		this.storage[register.getBytePosition()] = register.getDefaultValue();
-		;
+	public void resetRegister(SpecialRegister register) {
+		this.storage[register.getAddress()] = register.getDefaultValue();
 
 		if (register.getBank() == Bank.ALL) {
-			this.storage[register.getBytePosition() + Bank.BEGIN_OF_BANK_1] = register.getDefaultValue();
+			this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = register.getDefaultValue();
 		}
+	}
+	
+	public void resetRegister(GeneralRegister register) {
+		this.storage[register.getAddress()] = 0x00;
+		this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = 0x00;
 	}
 
 	public void resetW() {
@@ -47,7 +51,7 @@ public class Storage {
 			throw new Exception("Not a byte (out of range: 0x00 to 0xFF)");
 		}
 	}
-	
+
 	public static void checkNotHalfAByte(int testByte) throws Exception {
 		if (testByte < 0x00 || testByte > 0x7F) {
 			throw new Exception("Not half a byte (out of range: 0x00 to 0x7F)");
@@ -58,8 +62,12 @@ public class Storage {
 		return this.storage;
 	}
 
-	public int getRegister(Register register) {
-		return this.storage[register.getBytePosition()];
+	public int getRegister(SpecialRegister register) {
+		return this.storage[register.getAddress()];
+	}
+
+	public int getRegister(GeneralRegister register) {
+		return this.storage[register.getAddress()];
 	}
 
 	public int getW() {
@@ -68,7 +76,27 @@ public class Storage {
 
 	// hässlicher Workaround
 	// TODO schönere Variante implementieren
-	public boolean isBitOfRegisterSet(Register register, int bitDigit) throws Exception {
+	public boolean isBitOfRegisterSet(SpecialRegister register, int bitDigit) throws Exception {
+		if (bitDigit < 0 || bitDigit > 7) {
+			throw new Exception("Out of byte (digit mismatch)");
+		}
+
+		String bitSequence = String.valueOf(this.getRegister(register));
+		char[] bits = bitSequence.toCharArray();
+		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
+
+		if (bits[realDigit] == 1) {
+			return true;
+		} else if (bits[realDigit] == 0) {
+			return false;
+		} else {
+			throw new Exception("Invalid bit sequence (not only ones and zeroes)");
+		}
+	}
+
+	// hässlicher Workaround
+	// TODO schönere Variante implementieren
+	public boolean isBitOfRegisterSet(GeneralRegister register, int bitDigit) throws Exception {
 		if (bitDigit < 0 || bitDigit > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
@@ -94,13 +122,19 @@ public class Storage {
 		this.storage = storage;
 	}
 
-	public void setRegister(Register register, int value) throws Exception {
+	public void setRegister(SpecialRegister register, int value) throws Exception {
 		checkNotAByte(value);
-		this.storage[register.getBytePosition()] = value;
+		this.storage[register.getAddress()] = value;
 
 		if (register.getBank() == Bank.ALL) {
-			this.storage[register.getBytePosition() + Bank.BEGIN_OF_BANK_1] = value;
+			this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
 		}
+	}
+
+	public void setRegister(GeneralRegister register, int value) throws Exception {
+		checkNotAByte(value);
+		this.storage[register.getAddress()] = value;
+		this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
 	}
 
 	public void setW(int w) throws Exception {
@@ -110,7 +144,23 @@ public class Storage {
 
 	// hässlicher Workaround
 	// TODO schönere Variante implementieren
-	public void setBitOfRegister(Register register, int bitDigit, boolean setBit) throws Exception {
+	public void setBitOfRegister(SpecialRegister register, int bitDigit, boolean setBit) throws Exception {
+		if (bitDigit < 0 || bitDigit > 7) {
+			throw new Exception("Out of byte (digit mismatch)");
+		}
+
+		String bitSequence = String.valueOf(this.getRegister(register));
+		char[] bits = bitSequence.toCharArray();
+		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
+
+		bits[realDigit] = setBit ? '1' : '0';
+		bitSequence = new String(bits);
+		this.setRegister(register, Integer.valueOf(bitSequence));
+	}
+
+	// hässlicher Workaround
+	// TODO schönere Variante implementieren
+	public void setBitOfRegister(GeneralRegister register, int bitDigit, boolean setBit) throws Exception {
 		if (bitDigit < 0 || bitDigit > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
