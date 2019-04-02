@@ -6,17 +6,21 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import de.teamwaldstadt.picsimu.Main;
 
 public class GUIWindow extends JFrame {
+
+	private static final long serialVersionUID = 1L;
+
+	int WIDTH = 800;
+	int HEIGHT = 600;
+	
 	public GUIWindow() {
-		setSize(800, 600);
+		setSize(WIDTH, HEIGHT);
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);
-		//setLayout(new BorderLayout());
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 
@@ -31,8 +35,8 @@ public class GUIWindow extends JFrame {
 		
 		setJMenuBar(menuBar);
 		
-		
-		setContentPane(new GUIPanel());
+		setResizable(false);
+		setContentPane(new GUIPanel(WIDTH, HEIGHT - 50));
 		
 		
 		
