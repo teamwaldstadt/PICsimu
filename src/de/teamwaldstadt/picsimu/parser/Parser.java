@@ -12,9 +12,9 @@ import de.teamwaldstadt.picsimu.command.CommandSet;
 
 public class Parser {
 
-	public static String[] getAllLines(String filename) throws IOException {
+	public static String[] getAllLines(File file) throws IOException {
 		List<String> content = new ArrayList<>();
-		Scanner sc = new Scanner(new File(filename));
+		Scanner sc = new Scanner(file);
 
 		while (sc.hasNextLine()) {
 				content.add(sc.nextLine());
@@ -24,9 +24,9 @@ public class Parser {
 		return content.toArray(new String[0]);
 	}
 	
-	public String[] loadFile(String filename) throws IOException {
+	private static String[] loadFile(File file) throws IOException {
 		List<String> content = new ArrayList<>();
-		Scanner sc = new Scanner(new File(filename));
+		Scanner sc = new Scanner(file);
 
 		while (sc.hasNextLine()) {
 			String line = sc.nextLine();
@@ -43,8 +43,8 @@ public class Parser {
 		return content.toArray(new String[0]);
 	}
 	
-	public CommandSet[] getCommandList(String filename) throws IOException {
-		String[] lines = loadFile(filename);
+	public static CommandSet[] getCommandList(File file) throws IOException {
+		String[] lines = loadFile(file);
 		CommandSet[] set = new CommandSet[lines.length];
 		
 		for (int i = 0; i < lines.length; i++) {
