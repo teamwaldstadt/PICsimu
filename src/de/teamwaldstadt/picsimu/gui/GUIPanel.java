@@ -2,6 +2,7 @@ package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -53,8 +54,8 @@ public class GUIPanel extends JPanel  implements ActionListener{
 		t.start();
 	}
 
-	public CodeView getCodeView() {
-		return this.codeView;
+	public void setCodeView(File file) {
+		this.codeView.loadCode(file);
 	}
 	
 	@Override

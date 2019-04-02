@@ -42,7 +42,8 @@ public class GUIWindow extends JFrame {
 				int returnVal = fc.showOpenDialog(GUIWindow.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					
-					guiPanel.getCodeView().loadCode(fc.getSelectedFile());
+					guiPanel.setCodeView(fc.getSelectedFile());
+
 				}
 			}
 		});
@@ -52,7 +53,7 @@ public class GUIWindow extends JFrame {
 		setJMenuBar(menuBar);
 		
 		setResizable(false);
-		setContentPane(new GUIPanel(WIDTH, HEIGHT - 50));
+		setContentPane(guiPanel);
 		
 		
 		

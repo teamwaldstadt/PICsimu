@@ -12,6 +12,18 @@ import de.teamwaldstadt.picsimu.command.CommandSet;
 
 public class Parser {
 
+	public static String[] getAllLines(String filename) throws IOException {
+		List<String> content = new ArrayList<>();
+		Scanner sc = new Scanner(new File(filename));
+
+		while (sc.hasNextLine()) {
+				content.add(sc.nextLine());
+		}
+		sc.close();
+		
+		return content.toArray(new String[0]);
+	}
+	
 	public String[] loadFile(String filename) throws IOException {
 		List<String> content = new ArrayList<>();
 		Scanner sc = new Scanner(new File(filename));
