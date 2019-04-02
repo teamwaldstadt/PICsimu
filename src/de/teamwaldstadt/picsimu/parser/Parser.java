@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Scanner;
 
 import de.teamwaldstadt.picsimu.command.CommandConverter;
-import de.teamwaldstadt.picsimu.command.CommandNames;
+import de.teamwaldstadt.picsimu.command.Command;
 
 public class Parser {
 
@@ -31,7 +31,7 @@ public class Parser {
 		return content.toArray(new String[0]);
 	}
 	
-	public HashMap<Integer, CommandNames>[] getCommandList(String filename) throws IOException {
+	public HashMap<Integer, Command>[] getCommandList(String filename) throws IOException {
 		String[] lines = loadFile(filename);
 				
 		for (int i = 0; i < lines.length; i++) {
@@ -39,7 +39,7 @@ public class Parser {
 			int command = Integer.parseInt(lines[i].split(" ")[1], 16);
 			int lineNr = Integer.parseInt(lines[i].split(" ")[2]);
 			
-			CommandNames c = CommandConverter.convert(command);
+			Command c = CommandConverter.convert(command);
 			
 			
 			//TODO: Command command = new Command(commandNr, type, lineNr)

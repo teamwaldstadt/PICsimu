@@ -2,7 +2,7 @@ package de.teamwaldstadt.picsimu;
 
 import java.util.HashMap;
 
-import de.teamwaldstadt.picsimu.command.CommandNames;
+import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
@@ -13,6 +13,7 @@ public class Main {
 	
 	public static Storage STORAGE;
 
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		System.out.println("Hello World, this is " + PGM_NAME + " " + PGM_VERSION);
 		
@@ -20,7 +21,7 @@ public class Main {
 		Parser p = new Parser();
 
 		try {
-			HashMap<Integer, CommandNames>[] lines = p.getCommandList("C:\\Users\\Service\\Documents\\RECHNERTECHNIK\\TPicSim\\TPicSim10.LST");
+			HashMap<Integer, Command>[] lines = p.getCommandList("C:\\Users\\Service\\Documents\\RECHNERTECHNIK\\TPicSim\\TPicSim10.LST");
 			
 		} catch (Exception e) {
 			System.exit(0);
