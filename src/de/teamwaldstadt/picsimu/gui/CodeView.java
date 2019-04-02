@@ -27,18 +27,12 @@ public class CodeView extends JTable {
 		};
 		//setCellSelectionEnabled(false);
 		
-		tm.setColumnCount(2);
+		tm.setColumnCount(1);
 		tm.setRowCount(20);
 		setTableHeader(null);
-		for (int i = 0; i < 20; i++) {
-			tm.setValueAt(i, i, 0);
-		}
 		
 		setModel(tm);
 		setRowHeight(16);
-		
-		getColumnModel().getColumn(0).setMaxWidth(20);
-		getColumnModel().getColumn(1).setPreferredWidth(200);
 		setFont(new Font("consolas", Font.PLAIN, 14));
 		
 		cwcr = new CodeViewCellRenderer();
@@ -57,8 +51,7 @@ public class CodeView extends JTable {
 		
 		tm.setRowCount(lines.length);
 		for (int i = 0; i < lines.length; i++) {
-			tm.setValueAt(i, i, 0);
-			tm.setValueAt(lines[i], i, 1);
+			tm.setValueAt(lines[i], i, 0);
 		}
 		selectLine(0);
 		setModel(tm);
