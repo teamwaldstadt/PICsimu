@@ -1,6 +1,6 @@
 package de.teamwaldstadt.picsimu.command;
 
-import de.teamwaldstadt.picsimu.storage.Register;
+import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Status;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
@@ -42,9 +42,9 @@ public class CommandADDLW extends CommandExecutor {
 		}
 		
 		super.getStorageAffected().setW(result);
-		super.getStorageAffected().setBitOfRegister(Register.STATUS, Status.CARRY.getBitDigit(), carry);
-		super.getStorageAffected().setBitOfRegister(Register.STATUS, Status.DIGIT_CARRY.getBitDigit(), digitCarry);
-		super.getStorageAffected().setBitOfRegister(Register.STATUS, Status.ZERO_BIT.getBitDigit(), zBit);
+		super.getStorageAffected().setBitOfRegister(SpecialRegister.STATUS, Status.CARRY.getBitDigit(), carry);
+		super.getStorageAffected().setBitOfRegister(SpecialRegister.STATUS, Status.DIGIT_CARRY.getBitDigit(), digitCarry);
+		super.getStorageAffected().setBitOfRegister(SpecialRegister.STATUS, Status.ZERO_BIT.getBitDigit(), zBit);
 	}
 	
 	public int getLiteral() {
