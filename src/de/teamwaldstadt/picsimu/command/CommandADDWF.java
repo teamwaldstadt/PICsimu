@@ -12,13 +12,8 @@ public class CommandADDWF extends CommandExecutor {
 	public CommandADDWF(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		boolean isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7) == 1;
-		int fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);;
-		
-		Storage.check7Bits(fileRegister);
-		
-		this.isDestinationBitSet = isDestinationBitSet;
-		this.fileRegister = fileRegister;
+		this.isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7) == 1;
+		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);
 	}
 
 	@Override

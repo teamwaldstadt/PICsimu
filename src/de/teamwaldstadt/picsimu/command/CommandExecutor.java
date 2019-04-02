@@ -30,7 +30,7 @@ public abstract class CommandExecutor {
 				carry = true;
 			}
 			
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitDigit(), carry);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitIndex(), carry);
 		}
 		
 		if (statusAffected.contains(Status.DC)) {
@@ -43,7 +43,7 @@ public abstract class CommandExecutor {
 				digitCarry = true;
 			}
 	
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.C.getBitDigit(), digitCarry);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.C.getBitIndex(), digitCarry);
 		}
 		
 		if (statusAffected.contains(Status.Z)) {
@@ -53,7 +53,7 @@ public abstract class CommandExecutor {
 				zBit = true;
 			}
 			
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitDigit(), zBit);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitIndex(), zBit);
 		}
 	}
 	

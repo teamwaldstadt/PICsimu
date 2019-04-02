@@ -4,14 +4,14 @@ public enum Status {
 	
 	C(0), DC(1), Z(2), PD_INV(3), TO_INV(4), RP0(5), RP1(6), IRP(7);
 	
-	private int bitDigit;
+	private int bitIndex;
 	
-	Status(int bitDigit) {
-		this.bitDigit = bitDigit;
+	Status(int bitIndex) {
+		this.bitIndex = bitIndex;
 	}
 	
-	public int getBitDigit() {
-		return this.bitDigit;
+	public int getBitIndex() {
+		return this.bitIndex;
 	}
 
 }
