@@ -7,9 +7,12 @@ public class CommandADDLW extends CommandExecutor {
 	
 	private int literal;
 	
-	public CommandADDLW(int literal) throws Exception {
-		Storage.checkNotAByte(literal);
+	public CommandADDLW(int arguments) throws Exception {
+		super.setArguments(arguments);
 		
+		int literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
+		
+		Storage.check8Bits(literal);
 		this.literal = literal;
 	}
 

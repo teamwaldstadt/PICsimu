@@ -18,22 +18,27 @@ public class Main {
 		STORAGE = new Storage();
 		Parser p = new Parser();
 		CommandSet[] commands = null;
+		
 		try {
 			commands = p.getCommandList("C:\\Users\\Service\\Documents\\RECHNERTECHNIK\\TPicSim\\TPicSim1.LST");
 		} catch (Exception e) {
 			System.exit(0);
 		}
+		
 		for (CommandSet c : commands) {
 			System.out.println("Run command: " + c.getCommand());
+			
 			try {
-				if (c.getCommand().getExecutor().getConstructors()[0].getParameterTypes().length == 0)
+				if (c.getCommand().getExecutor().getConstructors()[0].getParameterTypes().length == 0) {
 					System.out.println("not yet defined");
-				else
+				} else {
 					c.getCommand().getExecutor().getConstructor(Integer.class).newInstance(c.getArgument());
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		
 		new GUIWindow();
 	}
 
