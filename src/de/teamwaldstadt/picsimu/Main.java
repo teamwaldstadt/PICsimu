@@ -2,12 +2,8 @@ package de.teamwaldstadt.picsimu;
 
 import java.util.HashMap;
 
-<<<<<<< HEAD
-import de.teamwaldstadt.picsimu.command.CommandNames;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
-=======
 import de.teamwaldstadt.picsimu.command.Command;
->>>>>>> a250fb5002f06c0012c4de415cf80361dbb942da
 import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
