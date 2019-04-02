@@ -166,14 +166,14 @@ public class Storage {
 
 	// hässlicher Workaround
 	// TODO schönere Variante implementieren
-	public void setBitOfRegister(SpecialRegister register, int bitDigit, boolean setBit) throws Exception {
-		if (bitDigit < 0 || bitDigit > 7) {
+	public void setBitOfRegister(SpecialRegister register, int bitIndex, boolean setBit) throws Exception {
+		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
-		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
+		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
 
 		bits[realDigit] = setBit ? '1' : '0';
 		bitSequence = new String(bits);
@@ -182,14 +182,14 @@ public class Storage {
 
 	// hässlicher Workaround
 	// TODO schönere Variante implementieren
-	public void setBitOfRegister(GeneralRegister register, int bitDigit, boolean setBit) throws Exception {
-		if (bitDigit < 0 || bitDigit > 7) {
+	public void setBitOfRegister(GeneralRegister register, int bitIndex, boolean setBit) throws Exception {
+		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
-		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
+		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
 
 		bits[realDigit] = setBit ? '1' : '0';
 		bitSequence = new String(bits);

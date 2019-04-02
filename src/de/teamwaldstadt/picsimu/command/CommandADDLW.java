@@ -10,10 +10,7 @@ public class CommandADDLW extends CommandExecutor {
 	public CommandADDLW(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		int literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
-		
-		Storage.check8Bits(literal);
-		this.literal = literal;
+		this.literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
 	}
 
 	@Override
