@@ -46,16 +46,38 @@ public class Storage {
 		this.w = 0x00;
 	}
 
-	public static void checkNotAByte(int testByte) throws Exception {
-		if (testByte < 0x00 || testByte > 0xFF) {
-			throw new Exception("Not a byte (out of range: 0x00 to 0xFF)");
+	public static void check8Bits(int bitSequence) throws Exception {
+		if (bitSequence < 0x00 || bitSequence > 0xFF) {
+			throw new Exception("Not 8 bits (out of range: 0x00 to 0xFF)");
 		}
 	}
 
-	public static void checkNotHalfAByte(int testByte) throws Exception {
-		if (testByte < 0x00 || testByte > 0x7F) {
-			throw new Exception("Not half a byte (out of range: 0x00 to 0x7F)");
+	public static void check7Bits(int bitSequence) throws Exception {
+		if (bitSequence < 0x00 || bitSequence > 0x7F) {
+			throw new Exception("Not 7 bits (out of range: 0x00 to 0x7F)");
 		}
+	}
+	
+	public static void check12Bits(int bitSequence) throws Exception {
+		if (bitSequence < 0x00 || bitSequence > 0xFFF) {
+			throw new Exception("Not 12 bits (out of range: 0x00 to 0xFFF)");
+		}
+	}
+	
+	// hässlicher Workaround
+	// TODO schönere Variante implementieren
+	public static int extractBitsFromIntNumber(int number, int endIndex, int beginIndex) throws Exception {
+		String bitSequence = Integer.toBinaryString(number);
+		
+		if (beginIndex < 0 || endIndex >= bitSequence.length()) {
+			throw new Exception("Out of range");
+		}
+		
+		int realBeginIndex = bitSequence.length() - beginIndex - 1; // Assembler beginnt von rechts bei 0!
+		int realEndIndex = bitSequence.length() - endIndex - 1; // Assembler beginnt von rechts bei 0!
+		String resultBits = bitSequence.substring(realBeginIndex, realEndIndex);
+		
+		return Integer.valueOf(resultBits, 2);
 	}
 
 	public int[] getStorage() {
@@ -81,7 +103,7 @@ public class Storage {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
-		String bitSequence = String.valueOf(this.getRegister(register));
+		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
@@ -101,7 +123,7 @@ public class Storage {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
-		String bitSequence = String.valueOf(this.getRegister(register));
+		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
@@ -123,7 +145,7 @@ public class Storage {
 	}
 
 	public void setRegister(SpecialRegister register, int value) throws Exception {
-		checkNotAByte(value);
+		check8Bits(value);
 		this.storage[register.getAddress()] = value;
 
 		if (register.getBank() == Bank.ALL) {
@@ -132,13 +154,13 @@ public class Storage {
 	}
 
 	public void setRegister(GeneralRegister register, int value) throws Exception {
-		checkNotAByte(value);
+		check8Bits(value);
 		this.storage[register.getAddress()] = value;
 		this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
 	}
 
 	public void setW(int w) throws Exception {
-		checkNotAByte(w);
+		check8Bits(w);
 		this.w = w;
 	}
 
@@ -149,13 +171,13 @@ public class Storage {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
-		String bitSequence = String.valueOf(this.getRegister(register));
+		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
 		bits[realDigit] = setBit ? '1' : '0';
 		bitSequence = new String(bits);
-		this.setRegister(register, Integer.valueOf(bitSequence));
+		this.setRegister(register, Integer.valueOf(bitSequence, 2));
 	}
 
 	// hässlicher Workaround
@@ -165,13 +187,13 @@ public class Storage {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
 
-		String bitSequence = String.valueOf(this.getRegister(register));
+		String bitSequence = Integer.toBinaryString(this.getRegister(register));
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
 		bits[realDigit] = setBit ? '1' : '0';
 		bitSequence = new String(bits);
-		this.setRegister(register, Integer.valueOf(bitSequence));
+		this.setRegister(register, Integer.valueOf(bitSequence, 2));
 	}
 
 }

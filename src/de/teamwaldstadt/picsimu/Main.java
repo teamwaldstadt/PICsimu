@@ -14,7 +14,7 @@ public class Main {
 		System.out.println("Hello World, this is " + PGM_NAME + " " + PGM_VERSION);
 		
 		STORAGE = new Storage();
-		
+
 		new GUIWindow();
 	}
 

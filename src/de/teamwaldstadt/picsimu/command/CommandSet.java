@@ -4,10 +4,10 @@ public class CommandSet {
 	
 	// Command set contains the type of command, its position, its line number and the argument
 	
-	Command command;
-	int commandNr;
-	int lineNr;
-	int argument;
+	private Command command;
+	private int commandNr;
+	private int lineNr;
+	private int argument;
 	
 	public CommandSet(Command command, int argument, int commandNr, int lineNr) {
 		this.command = command;
@@ -22,5 +22,13 @@ public class CommandSet {
 	
 	public Command getCommand() {
 		return this.command;
+	}
+	
+	public int getCommandNr() {
+		return this.commandNr;
+	}
+	
+	public int getLineNr() {
+		return this.lineNr;
 	}
 }

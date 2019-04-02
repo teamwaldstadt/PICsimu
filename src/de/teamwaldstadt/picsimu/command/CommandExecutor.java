@@ -6,24 +6,16 @@ import java.util.List;
 import de.teamwaldstadt.picsimu.Main;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Status;
+import de.teamwaldstadt.picsimu.storage.Storage;
 
 public abstract class CommandExecutor {
 
-	private CommandExecutor next;
+	private int arguments;
 
 	public CommandExecutor() {
 	}
 
 	public abstract void execute() throws Exception;
-
-	public void next() throws Exception {
-		if (this.next == null) {
-			System.out.println("Done!");
-			return;
-		}
-
-		this.next.execute();
-	}
 	
 	// TODO for PD_INV, TO_INV, RP0, RP1, IRP
 	public void affectStatus(Command command, int result) throws Exception {
@@ -64,13 +56,15 @@ public abstract class CommandExecutor {
 			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitDigit(), zBit);
 		}
 	}
-
-	public CommandExecutor getNext() {
-		return this.next;
+	
+	public int getArguments() {
+		return this.arguments;
 	}
-
-	public void setNext(CommandExecutor next) {
-		this.next = next;
+	
+	public void setArguments(int arguments) throws Exception {
+		Storage.check12Bits(arguments);
+		
+		this.arguments = arguments;
 	}
 
 }

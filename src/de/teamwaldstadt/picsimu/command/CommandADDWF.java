@@ -9,8 +9,13 @@ public class CommandADDWF extends CommandExecutor {
 	private boolean isDestinationBitSet;
 	private int fileRegister;
 
-	public CommandADDWF(boolean isDestinationBitSet, int fileRegister) throws Exception {
-		Storage.checkNotHalfAByte(fileRegister);
+	public CommandADDWF(int arguments) throws Exception {
+		super.setArguments(arguments);
+		
+		boolean isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7) == 1;
+		int fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);;
+		
+		Storage.check7Bits(fileRegister);
 		
 		this.isDestinationBitSet = isDestinationBitSet;
 		this.fileRegister = fileRegister;
