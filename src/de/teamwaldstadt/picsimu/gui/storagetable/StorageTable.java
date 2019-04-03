@@ -1,9 +1,11 @@
 package de.teamwaldstadt.picsimu.gui.storagetable;
 
-import javax.swing.JOptionPane;
+import java.awt.Component;
+import java.awt.event.KeyEvent;
+import java.util.EventObject;
+
 import javax.swing.JTable;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.text.JTextComponent;
 
 import de.teamwaldstadt.picsimu.Main;
 
@@ -16,31 +18,18 @@ public class StorageTable extends JTable {
 	
 	public StorageTable() {
 		
+		
 		tm = new StorageTableModel();
 		int width = 20;
 		
 		tm.setColumnCount(9);
 		tm.setRowCount(33);
 		
-		
-
-		tm.addTableModelListener(new TableModelListener() {
-			@Override
-			public void tableChanged(TableModelEvent e) {
-				if (e.getFirstRow() == 0 && e.getColumn() == 0) return;
-				if (!tm.getValueAt(e.getFirstRow(), e.getColumn()).toString().matches("[0-9a-fA-F]{2}")) {
-					JOptionPane.showMessageDialog(null, "Value not allowed!", "Alert", JOptionPane.CANCEL_OPTION);
-					tm.setValueAt("00", e.getFirstRow(), e.getColumn());
-				}
-			}
-		});
-		
 		setRowHeight(width);
 		setTableHeader(null);
 		setModel(tm);
 		
 		setDefaultRenderer(Object.class, new StorageTableCellRenderer());
-		
 		
 		getColumnModel().getColumn(0).setPreferredWidth(width);
 		getColumnModel().getColumn(1).setPreferredWidth(width);
@@ -69,4 +58,17 @@ public class StorageTable extends JTable {
 		}
 		setModel(tm);
 	}
+
+	@Override
+	public boolean editCellAt(int row, int column, EventObject e){
+        boolean result = super.editCellAt(row, column, e);
+        final Component editor = getEditorComponent();
+        if (editor == null || !(editor instanceof JTextComponent)) {
+            return result;
+        }
+        if (e instanceof KeyEvent) {
+            ((JTextComponent) editor).selectAll();
+        }
+        return result;
+    }
 }
