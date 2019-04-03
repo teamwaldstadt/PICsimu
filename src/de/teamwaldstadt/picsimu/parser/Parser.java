@@ -1,10 +1,11 @@
 package de.teamwaldstadt.picsimu.parser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.command.CommandConverter;
@@ -14,30 +15,31 @@ public class Parser {
 
 	public static String[] getAllLines(File file) throws IOException {
 		List<String> content = new ArrayList<>();
-		Scanner sc = new Scanner(file);
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line;
 
-		while (sc.hasNextLine()) {
-				content.add(sc.nextLine());
+		while ((line = reader.readLine()) != null) {
+				content.add(line);
 		}
-		sc.close();
+		reader.close();
 		
 		return content.toArray(new String[0]);
 	}
 	
 	private static String[] loadFile(File file) throws IOException {
 		List<String> content = new ArrayList<>();
-		Scanner sc = new Scanner(file);
-
-		while (sc.hasNextLine()) {
-			String line = sc.nextLine();
-			line = line.replaceAll("([0-9a-fA-F]{4} [0-9a-fA-F]{4}.*[0-9]{4}).*", "$1");
+		BufferedReader reader = new BufferedReader(new FileReader(file));
+		String line;
+		
+		while ((line = reader.readLine()) != null) {
+			line = line.replaceAll("([0-9a-fA-F]{4} [0-9a-fA-F]{4}.*[0-9]{5}).*", "$1");
 			
-			if (line.matches("[0-9a-fA-F]{4} [0-9a-fA-F]{4}.*[0-9]{4}")) {
+			if (line.matches("[0-9a-fA-F]{4} [0-9a-fA-F]{4}.*[0-9]{5}")) {
 				line = line.replaceAll(" {1,}", " ");
 				content.add(line);
 			}
 		}
-		sc.close();
+		reader.close();
 		
 		
 		return content.toArray(new String[0]);

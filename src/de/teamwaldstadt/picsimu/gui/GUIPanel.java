@@ -90,7 +90,7 @@ public class GUIPanel extends JPanel  implements ActionListener{
 	}
 	
 	public void gotoNextCommand() {
-		if (commands == null)
+		if (commands == null || commands.length == 0)
 			return;
 		if (commandNr >= commands.length) 
 			commandNr = 0;

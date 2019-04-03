@@ -33,7 +33,7 @@ public class CodeView extends JTable {
 		
 		setModel(tm);
 		setRowHeight(16);
-		setFont(new Font("consolas", Font.PLAIN, 14));
+		setFont(new Font("courier", Font.PLAIN, 14));
 		
 		cwcr = new CodeViewCellRenderer();
 		setDefaultRenderer(Object.class, cwcr);
@@ -52,6 +52,7 @@ public class CodeView extends JTable {
 		tm.setRowCount(lines.length);
 		for (int i = 0; i < lines.length; i++) {
 			tm.setValueAt(lines[i], i, 0);
+			System.out.println(lines[i]);
 		}
 		selectLine(0);
 		setModel(tm);
