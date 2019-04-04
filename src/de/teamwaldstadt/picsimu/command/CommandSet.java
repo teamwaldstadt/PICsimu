@@ -29,6 +29,6 @@ public class CommandSet {
 	}
 	
 	public int getLineNr() {
-		return this.lineNr;
+		return this.lineNr - 1;
 	}
 }

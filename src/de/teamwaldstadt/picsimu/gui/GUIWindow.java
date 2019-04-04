@@ -11,6 +11,7 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.border.MatteBorder;
 
+import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.Main;
 
 public class GUIWindow extends JFrame {
@@ -19,8 +20,9 @@ public class GUIWindow extends JFrame {
 
 	int WIDTH = 800;
 	int HEIGHT = 600;
+	GUIPanel guiPanel;
 	
-	public GUIWindow() {
+	public GUIWindow(CodeExecutor codeExecutor) {
 		setSize(WIDTH, HEIGHT);
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);
@@ -32,7 +34,8 @@ public class GUIWindow extends JFrame {
 		menuBar.setBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK));
 		JMenu menu = new JMenu("Datei");
 		
-		GUIPanel guiPanel = new GUIPanel(WIDTH, HEIGHT - 50);
+		guiPanel = new GUIPanel(WIDTH, HEIGHT - 50, codeExecutor);
+		
 		
 		JMenuItem itemOpen = new JMenuItem("Öffnen");
 		itemOpen.addActionListener(new ActionListener() {
@@ -41,13 +44,14 @@ public class GUIWindow extends JFrame {
 				JFileChooser fc = new JFileChooser();
 				int returnVal = fc.showOpenDialog(GUIWindow.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
-			
-					guiPanel.open(fc.getSelectedFile());
+					codeExecutor.loadFile(fc.getSelectedFile());
+					//guiPanel.open(fc.getSelectedFile());
 				}
 			}
 		});
 		menu.add(itemOpen);
 		menuBar.add(menu);
+		
 		
 		setJMenuBar(menuBar);
 		
@@ -57,5 +61,8 @@ public class GUIWindow extends JFrame {
 		
 		
 		setVisible(true);
+	}
+	public GUIPanel getPanel() {
+		return this.guiPanel;
 	}
 }

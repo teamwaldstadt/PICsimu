@@ -172,6 +172,11 @@ public class Storage {
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+
+		while (bitSequence.length() < 8) {
+			bitSequence = "0" + bitSequence;
+		}
+		
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
 

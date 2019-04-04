@@ -13,8 +13,6 @@ public class CodeView extends JTable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	int currentLine = 0;
-	
 	CodeViewCellRenderer cwcr;
 	DefaultTableModel tm;
 	public CodeView() {
@@ -25,7 +23,6 @@ public class CodeView extends JTable {
 				return false;
 			}
 		};
-		//setCellSelectionEnabled(false);
 		
 		tm.setColumnCount(1);
 		tm.setRowCount(20);
@@ -41,7 +38,6 @@ public class CodeView extends JTable {
 	}
 	
 	public void loadCode(File file) {
-		currentLine = 0;
 		String[] lines = null;
 		try {
 			lines = Parser.getAllLines(file);
@@ -53,22 +49,15 @@ public class CodeView extends JTable {
 		for (int i = 0; i < lines.length; i++) {
 			tm.setValueAt(lines[i], i, 0);
 		}
-		selectLine(0);
 		setModel(tm);
 	}
 	private void selectLine(int lineNr) {
 		cwcr.ROW = lineNr;
 	}
 	public void setLine(int line) {
-		currentLine = line;
-		selectLine(currentLine);
+		selectLine(line);
 		if (line < getRowCount() - 5) line += 5;
 		changeSelection(line, 0, false, false);
-		repaint();
-	}
-	public void resetLine() {
-		currentLine = 0;
-		selectLine(currentLine);
 		repaint();
 	}
 }

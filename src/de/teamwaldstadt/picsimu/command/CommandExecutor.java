@@ -52,7 +52,7 @@ public abstract class CommandExecutor {
 			if (result == 0x00) {
 				zBit = true;
 			}
-			
+		
 			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitIndex(), zBit);
 		}
 	}
