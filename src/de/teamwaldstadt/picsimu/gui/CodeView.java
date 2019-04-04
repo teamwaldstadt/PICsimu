@@ -52,7 +52,6 @@ public class CodeView extends JTable {
 		tm.setRowCount(lines.length);
 		for (int i = 0; i < lines.length; i++) {
 			tm.setValueAt(lines[i], i, 0);
-			System.out.println(lines[i]);
 		}
 		selectLine(0);
 		setModel(tm);

@@ -41,7 +41,6 @@ public class Parser {
 		}
 		reader.close();
 		
-		
 		return content.toArray(new String[0]);
 	}
 	
@@ -53,8 +52,6 @@ public class Parser {
 			int commandNr = Integer.parseInt(lines[i].split(" ")[0], 16);
 			int command = Integer.parseInt(lines[i].split(" ")[1], 16);
 			int lineNr = Integer.parseInt(lines[i].split(" ")[2]);
-			
-			
 			
 			Command c = CommandConverter.convert(command);
 			
