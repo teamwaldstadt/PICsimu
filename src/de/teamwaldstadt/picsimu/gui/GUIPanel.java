@@ -1,18 +1,18 @@
 package de.teamwaldstadt.picsimu.gui;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.Timer;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.gui.storagetable.StorageTable;
 
 
-public class GUIPanel extends JPanel  implements ActionListener{
+public class GUIPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	
@@ -22,7 +22,7 @@ public class GUIPanel extends JPanel  implements ActionListener{
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
-
+		setBackground(new Color(255,255,255));
 		JScrollPane scrollTable = new JScrollPane();
 		storageTable = new StorageTable();
 		scrollTable.setViewportView(storageTable);
@@ -32,7 +32,8 @@ public class GUIPanel extends JPanel  implements ActionListener{
 		
 		
 		JScrollPane scrollCode = new JScrollPane();
-		codeView = new CodeView();
+		codeView = new CodeView(codeExecutor);
+		
 		scrollCode.setViewportView(codeView);
 		scrollCode.setBounds(0, 300, width - 206, height - 300);
 		add(scrollCode);
@@ -64,10 +65,6 @@ public class GUIPanel extends JPanel  implements ActionListener{
 			}
 		});
 		add(stepButton);
-		
-		Timer t = new Timer(1000, this);
-		t.start();
-		
 	}
 	
 	public CodeView getCodeView() {
@@ -76,10 +73,5 @@ public class GUIPanel extends JPanel  implements ActionListener{
 	
 	public StorageTable getStorageTable() {
 		return storageTable;
-	}
-	
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		//storageTable.update();
 	}
 }

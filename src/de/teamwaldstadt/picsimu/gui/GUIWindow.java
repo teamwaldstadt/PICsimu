@@ -21,23 +21,33 @@ public class GUIWindow extends JFrame {
 	int WIDTH = 800;
 	int HEIGHT = 600;
 	GUIPanel guiPanel;
-	
+
 	public GUIWindow(CodeExecutor codeExecutor) {
+
+		guiPanel = new GUIPanel(WIDTH, HEIGHT - 50, codeExecutor);
+
 		setSize(WIDTH, HEIGHT);
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		
+		setResizable(false);
+		setJMenuBar(initializeMenuBar(codeExecutor));
+		setContentPane(guiPanel);
+		setVisible(true);
 
+	}
+
+	public GUIPanel getPanel() {
+		return this.guiPanel;
+	}
+
+	public JMenuBar initializeMenuBar(CodeExecutor codeExecutor) {
 		JMenuBar menuBar = new JMenuBar();
 		menuBar.setBackground(Color.GRAY);
 		menuBar.setBorder(new MatteBorder(0, 0, 2, 0, Color.BLACK));
 		JMenu menu = new JMenu("Datei");
-		
-		guiPanel = new GUIPanel(WIDTH, HEIGHT - 50, codeExecutor);
-		
-		
-		JMenuItem itemOpen = new JMenuItem("Öffnen");
+
+		JMenuItem itemOpen = new JMenuItem("\u00d6ffnen");
 		itemOpen.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -45,24 +55,21 @@ public class GUIWindow extends JFrame {
 				int returnVal = fc.showOpenDialog(GUIWindow.this);
 				if (returnVal == JFileChooser.APPROVE_OPTION) {
 					codeExecutor.loadFile(fc.getSelectedFile());
-					//guiPanel.open(fc.getSelectedFile());
 				}
 			}
 		});
 		menu.add(itemOpen);
+
+		JMenuItem itemClose = new JMenuItem("Beenden");
+		itemClose.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.exit(0);
+			}
+		});
+		menu.add(itemClose);
+
 		menuBar.add(menu);
-		
-		
-		setJMenuBar(menuBar);
-		
-		setResizable(false);
-		setContentPane(guiPanel);
-		
-		
-		
-		setVisible(true);
-	}
-	public GUIPanel getPanel() {
-		return this.guiPanel;
+		return menuBar;
 	}
 }

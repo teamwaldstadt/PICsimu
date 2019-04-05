@@ -183,6 +183,20 @@ public class Storage {
 		bits[realDigit] = setBit ? '1' : '0';
 		bitSequence = new String(bits);
 		this.setRegister(register, Integer.valueOf(bitSequence, 2));
+		
+		
+		/*
+		 * 
+		 * Shorter version here, TODO: implementieren
+		 * 
+		 */
+		int value = getRegister(register);
+		if (setBit) {
+			value |= (1 << bitIndex);
+		} else {
+			value &= ~(1 << bitIndex);
+		}
+		System.out.println(String.format("%02X", value));
 	}
 
 	// hässlicher Workaround

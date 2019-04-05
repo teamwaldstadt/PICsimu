@@ -19,7 +19,7 @@ public class Parser {
 		String line;
 
 		while ((line = reader.readLine()) != null) {
-				content.add(line);
+			content.add(line);
 		}
 		reader.close();
 		

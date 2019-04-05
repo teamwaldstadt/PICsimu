@@ -22,6 +22,16 @@ public class CodeExecutor {
 		gui = w.getPanel();
 	}
 	
+	public boolean lineHasCode(int line) {
+		if (commands == null) return false;
+		for (CommandSet c : commands) {
+			if (c.getLineNr() == line) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public void loadFile(File file) {
 		gui.getCodeView().loadCode(file);
 		commands = null;
