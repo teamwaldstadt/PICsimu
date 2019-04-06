@@ -3,7 +3,8 @@ package de.teamwaldstadt.picsimu.command;
 import de.teamwaldstadt.picsimu.Main;
 
 public class CommandMOVLW extends CommandExecutor {
-	int literal;
+	private int literal;
+	
 	public CommandMOVLW(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
@@ -13,7 +14,12 @@ public class CommandMOVLW extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		Main.STORAGE.setW(literal);
+		super.affectStatus(Command.MOVLW, this.literal);
+		Main.STORAGE.setW(this.literal);
+	}
+	
+	public int getLiteral() {
+		return this.literal;
 	}
 
 }

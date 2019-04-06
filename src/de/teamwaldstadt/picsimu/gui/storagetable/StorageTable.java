@@ -17,8 +17,6 @@ public class StorageTable extends JTable {
 	StorageTableModel tm;
 	
 	public StorageTable() {
-		
-		
 		tm = new StorageTableModel();
 		int width = 20;
 		

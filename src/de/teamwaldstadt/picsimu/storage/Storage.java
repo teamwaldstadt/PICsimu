@@ -69,6 +69,7 @@ public class Storage {
 	public static int extractBitsFromIntNumber(int number, int endIndex, int beginIndex) throws Exception {
 		String bitSequence = Integer.toBinaryString(number);
 		
+		System.out.println(beginIndex + " " + endIndex + " " + bitSequence.length());
 		if (beginIndex < 0 || endIndex >= bitSequence.length()) {
 			throw new Exception("Out of range");
 		}
@@ -104,12 +105,17 @@ public class Storage {
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+		
+		while (bitSequence.length() < 8) {
+			bitSequence = "0" + bitSequence;
+		}
+		
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
-		if (bits[realDigit] == 1) {
+		if (bits[realDigit] == '1') {
 			return true;
-		} else if (bits[realDigit] == 0) {
+		} else if (bits[realDigit] == '0') {
 			return false;
 		} else {
 			throw new Exception("Invalid bit sequence (not only ones and zeroes)");
@@ -124,12 +130,17 @@ public class Storage {
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+		
+		while (bitSequence.length() < 8) {
+			bitSequence = "0" + bitSequence;
+		}
+		
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitDigit - 1; // Assembler beginnt von rechts bei 0!
 
-		if (bits[realDigit] == 1) {
+		if (bits[realDigit] == '1') {
 			return true;
-		} else if (bits[realDigit] == 0) {
+		} else if (bits[realDigit] == '0') {
 			return false;
 		} else {
 			throw new Exception("Invalid bit sequence (not only ones and zeroes)");
@@ -190,13 +201,13 @@ public class Storage {
 		 * Shorter version here, TODO: implementieren
 		 * 
 		 */
-		int value = getRegister(register);
-		if (setBit) {
-			value |= (1 << bitIndex);
-		} else {
-			value &= ~(1 << bitIndex);
-		}
-		System.out.println(String.format("%02X", value));
+//		int value = getRegister(register);
+//		if (setBit) {
+//			value |= (1 << bitIndex);
+//		} else {
+//			value &= ~(1 << bitIndex);
+//		}
+//		System.out.println(String.format("%02X", value));
 	}
 
 	// hässlicher Workaround
@@ -207,6 +218,11 @@ public class Storage {
 		}
 
 		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+		
+		while (bitSequence.length() < 8) {
+			bitSequence = "0" + bitSequence;
+		}
+		
 		char[] bits = bitSequence.toCharArray();
 		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
 

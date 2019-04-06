@@ -10,6 +10,7 @@ import de.teamwaldstadt.picsimu.gui.GUIPanel;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
 import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
+import de.teamwaldstadt.picsimu.storage.Status;
 
 public class CodeExecutor {
 	int commandNr = 0;
@@ -17,7 +18,10 @@ public class CodeExecutor {
 	
 	GUIPanel gui;
 	
+	public static boolean DONE;
+	
 	public CodeExecutor() {
+		DONE = false;
 		GUIWindow w = new GUIWindow(this);
 		gui = w.getPanel();
 	}
@@ -44,35 +48,48 @@ public class CodeExecutor {
 	}
 	
 	public void reset() {
-		gui.getCodeView().setLine(commands[0].getLineNr());
+		if (commands != null && commands.length > 0) {
+			gui.getCodeView().setLine(commands[0].getLineNr());
+		}
+	
+		commandNr = 0;
+		DONE = false;
 		Main.STORAGE.resetAll();
 		gui.getStorageTable().update();
 	}
 	
 	public void nextCommand() {
-		if (commands == null || commands.length == 0)
+		if (commands == null || commands.length == 0 || DONE) {
 			return;
+		}
 		
-		runCommand(commandNr);
+		System.out.println("cmdNr: " + commandNr + ", commands: " + commands.length);
 		
-		commandNr++;
+		try {
+			runCommand(commandNr);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
-		if (commandNr >= commands.length) 
-			commandNr = 0;
-		
-		gui.getCodeView().setLine(commands[commandNr].getLineNr());
+		if (commandNr >= commands.length - 1) {
+			// Code executed. User must click 'reset'
+			DONE = true;
+		} else {
+			commandNr++;
+			gui.getCodeView().setLine(commands[commandNr].getLineNr());
+		}
 	}
 	
-	public void runCommand(int commandNr) {
+	public void runCommand(int commandNr) throws Exception {
 		try {
 			Constructor<?> commandConstructor = commands[commandNr].getCommand().getExecutor().getConstructors()[0];
 			if (commandConstructor.getParameterTypes().length == 0) {
 				System.out.println("Command '" + commands[commandNr].getCommand() + "' not yet defined");
 			} else {
-				System.out.println("Command '" + commands[commandNr].getCommand() + "' executed successfully");
+				// Expected cause of issue https://github.com/teamwaldstadt/PICsimu/issues/1
 				CommandExecutor c = (CommandExecutor) commandConstructor.newInstance(commands[commandNr].getArgument());
 				c.execute();
-				
+				System.out.println("Command '" + commands[commandNr].getCommand() + "' executed successfully");
 			}
 		} catch (ReflectiveOperationException e) {
 			e.printStackTrace();
@@ -80,8 +97,12 @@ public class CodeExecutor {
 			System.out.println("Problem with execute()");
 			e.printStackTrace();
 		}
+		
 		System.out.println("W-Reg: " + String.format("%02X", Main.STORAGE.getW()) + "h");
-		System.out.println("Z-Flag: " + ((Main.STORAGE.getRegister(SpecialRegister.STATUS) & 0x04) >> 2));
+		System.out.println("Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.C.getBitIndex()) ? 1 : 0));
+		System.out.println("Digit Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.DC.getBitIndex()) ? 1 : 0));
+		System.out.println("Z-Flag: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.Z.getBitIndex()) ? 1 : 0));
+		
 		gui.getStorageTable().update();
 	}
 	

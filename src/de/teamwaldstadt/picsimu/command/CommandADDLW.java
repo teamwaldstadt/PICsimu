@@ -1,7 +1,6 @@
 package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandADDLW extends CommandExecutor {
 	
@@ -10,7 +9,8 @@ public class CommandADDLW extends CommandExecutor {
 	public CommandADDLW(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		this.literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
+		this.literal = arguments;
+		// this.literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
 	}
 
 	@Override
