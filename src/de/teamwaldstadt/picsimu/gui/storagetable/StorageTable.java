@@ -51,10 +51,19 @@ public class StorageTable extends JTable {
 	public void update() {
 		for (int i = 1; i < 33; i++) {
 			for (int j = 1; j < 9; j++) {
-				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + 8 * (i-1)]), i, j);
+				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
+				//System.out.print(Main.STORAGE.getStorage()[(j-1) + 8 * (i - 1)]);
+			}
+			//System.out.println();
+		}
+	}
+	
+	public void test() {
+		for (int i = 1; i < 33; i++) {
+			for (int j = 1; j< 9; j++) {
+				tm.setValueAt("11", i, j);
 			}
 		}
-		setModel(tm);
 	}
 
 	@Override

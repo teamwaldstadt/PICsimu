@@ -18,11 +18,12 @@ public class CodeExecutor {
 	
 	GUIPanel gui;
 	
-	public static boolean DONE;
+	boolean DONE;
 	
 	public CodeExecutor() {
 		DONE = false;
 		GUIWindow w = new GUIWindow(this);
+		Main.STORAGE.resetAll();
 		gui = w.getPanel();
 	}
 	
@@ -63,7 +64,7 @@ public class CodeExecutor {
 			return;
 		}
 		
-		System.out.println("cmdNr: " + commandNr + ", commands: " + commands.length);
+		//System.out.println("cmdNr: " + commandNr + ", commands: " + commands.length);
 		
 		try {
 			runCommand(commandNr);

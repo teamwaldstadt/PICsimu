@@ -32,8 +32,7 @@ public class StorageTableModel extends DefaultTableModel {
 			if (value.length() == 1) 
 				value = "0" + value;
 			super.setValueAt(value.toUpperCase(), row, col);
-			
-			Main.STORAGE.getStorage()[(row-1) + getColumnCount() * (col-1)] = Integer.parseInt(value, 16);
+			Main.STORAGE.getStorage()[(col-1) + (getColumnCount() - 1) * (row-1)] = Integer.parseInt(value, 16);
 		}
 	}
 }
