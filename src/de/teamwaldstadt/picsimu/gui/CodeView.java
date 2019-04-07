@@ -77,7 +77,10 @@ public class CodeView extends JTable {
 	public void setLine(int line) {
 		changeSelection(0, 0, false, false);
 		this.selected = line;
-		if (line < getRowCount() - 8) line += 8;
+		if (line < getRowCount() - 8) 
+			line += 8;
+		else
+			line = getRowCount();
 		changeSelection(line, 0, false, false);
 		repaint();
 	}
