@@ -1,13 +1,17 @@
 package de.teamwaldstadt.picsimu.gui;
 
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableCellRenderer;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.parser.Parser;
@@ -16,8 +20,9 @@ public class CodeView extends JTable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	CodeViewCellRenderer cwcr;
 	DefaultTableModel tm;
+	int selected = 0;
+	
 	public CodeView(CodeExecutor codeExecutor) {
 		tm = new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
@@ -34,6 +39,7 @@ public class CodeView extends JTable {
 		getColumnModel().getColumn(1).setPreferredWidth(500);
 		tm.setRowCount(20);
 		setTableHeader(null);
+		setCellSelectionEnabled(false);
 		
 		setModel(tm);
 		setRowHeight(16);
@@ -50,9 +56,7 @@ public class CodeView extends JTable {
 				}
 			}
 		});
-		
-		cwcr = new CodeViewCellRenderer();
-		setDefaultRenderer(Object.class, cwcr);
+		setGridColor(Color.GRAY);
 		setModel(tm);
 	}
 	
@@ -70,13 +74,35 @@ public class CodeView extends JTable {
 		}
 		setModel(tm);
 	}
-	private void selectLine(int lineNr) {
-		cwcr.ROW = lineNr;
-	}
 	public void setLine(int line) {
-		selectLine(line);
+		changeSelection(0, 0, false, false);
+		this.selected = line;
 		if (line < getRowCount() - 8) line += 8;
 		changeSelection(line, 0, false, false);
 		repaint();
 	}
+	
+	@Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+   
+		if (row % 2 == 1)
+    		setBackground(Color.WHITE);
+    	else 
+    		setBackground(new Color(240, 240, 240));
+		
+		if (row == selected)
+        	setBackground(Color.YELLOW);
+		Component c = super.prepareRenderer(renderer, row, column);
+
+		Object value = getValueAt(row, column);
+		if (value != null && c instanceof JLabel) {
+        	JLabel l = (JLabel) c;
+        	String tooltip = null;
+        	if (String.valueOf(value).contains(";")) 
+        		tooltip = String.valueOf(value).replaceAll(".*;", "");
+        	l.setToolTipText(tooltip);
+        	
+        }        
+		return c;
+    }
 }

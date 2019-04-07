@@ -39,6 +39,8 @@ public class CodeExecutor {
 	
 	public void loadFile(File file) {
 		gui.getCodeView().loadCode(file);
+		DONE = false;
+		commandNr = 0;
 		commands = null;
 		try {
 			commands = Parser.getCommandList(file);

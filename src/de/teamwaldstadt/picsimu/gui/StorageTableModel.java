@@ -1,4 +1,4 @@
-package de.teamwaldstadt.picsimu.gui.storagetable;
+package de.teamwaldstadt.picsimu.gui;
 
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;

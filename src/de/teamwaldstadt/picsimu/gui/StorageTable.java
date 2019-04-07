@@ -1,10 +1,13 @@
-package de.teamwaldstadt.picsimu.gui.storagetable;
+package de.teamwaldstadt.picsimu.gui;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.EventObject;
 
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.text.JTextComponent;
 
 import de.teamwaldstadt.picsimu.Main;
@@ -23,11 +26,12 @@ public class StorageTable extends JTable {
 		tm.setColumnCount(9);
 		tm.setRowCount(33);
 		
-		setRowHeight(width);
+		setRowHeight(width + 2);
+		setCellSelectionEnabled(false);
+		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setTableHeader(null);
+		setGridColor(Color.GRAY);
 		setModel(tm);
-		
-		setDefaultRenderer(Object.class, new StorageTableCellRenderer());
 		
 		getColumnModel().getColumn(0).setPreferredWidth(width);
 		getColumnModel().getColumn(1).setPreferredWidth(width);
@@ -52,9 +56,7 @@ public class StorageTable extends JTable {
 		for (int i = 1; i < 33; i++) {
 			for (int j = 1; j < 9; j++) {
 				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
-				//System.out.print(Main.STORAGE.getStorage()[(j-1) + 8 * (i - 1)]);
 			}
-			//System.out.println();
 		}
 	}
 	
@@ -77,5 +79,18 @@ public class StorageTable extends JTable {
             ((JTextComponent) editor).selectAll();
         }
         return result;
+    }
+	
+	@Override
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+        if (row == 0 || column == 0)
+        	setBackground(Color.LIGHT_GRAY);
+        else 
+        	if (row % 2 == 1)
+        		setBackground(Color.WHITE);
+        	else 
+        		setBackground(new Color(240, 240, 240));
+		Component c = super.prepareRenderer(renderer, row, column);
+        return c;
     }
 }
