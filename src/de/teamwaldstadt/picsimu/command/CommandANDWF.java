@@ -12,8 +12,8 @@ public class CommandANDWF extends CommandExecutor {
 	public CommandANDWF(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		this.isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7) == 1;
-		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);
+		this.isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 0, 1, 8) == 1;
+		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 1, 8, 8);
 	}
 
 	@Override

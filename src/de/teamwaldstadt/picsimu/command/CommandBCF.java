@@ -13,8 +13,8 @@ public class CommandBCF extends CommandExecutor {
 	public CommandBCF(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		this.bitIndex = Storage.extractBitsFromIntNumber(arguments, 10, 7);
-		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);
+		this.bitIndex = Storage.extractBitsFromIntNumber(arguments, 2, 5, 12);
+		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 5, 12, 12);
 	}
 
 	@Override

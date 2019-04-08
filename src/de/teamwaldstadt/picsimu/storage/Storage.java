@@ -64,19 +64,27 @@ public class Storage {
 		}
 	}
 	
+	public static void check13Bits(int bitSequence) throws Exception {
+		if (bitSequence < 0x00 || bitSequence > 0x1FFF) {
+			throw new Exception("Not 13 bits (out of range: 0x00 to 0x1FFF)");
+		}
+	}
+	
 	// hässlicher Workaround
 	// TODO schönere Variante implementieren
-	public static int extractBitsFromIntNumber(int number, int endIndex, int beginIndex) throws Exception {
+	public static int extractBitsFromIntNumber(int number, int beginIndex, int endIndex, int minLength) throws Exception {
 		String bitSequence = Integer.toBinaryString(number);
 		
-		System.out.println(beginIndex + " " + endIndex + " " + bitSequence.length());
-		if (beginIndex < 0 || endIndex >= bitSequence.length()) {
+		while (bitSequence.length() < minLength) {
+			bitSequence = "0" + bitSequence;
+		}
+		
+//		System.out.println(beginIndex + " " + endIndex + " " + bitSequence.length());
+		if (beginIndex < 0 || endIndex > bitSequence.length()) {
 			throw new Exception("Out of range");
 		}
 		
-		int realBeginIndex = bitSequence.length() - beginIndex - 1; // Assembler beginnt von rechts bei 0!
-		int realEndIndex = bitSequence.length() - endIndex - 1; // Assembler beginnt von rechts bei 0!
-		String resultBits = bitSequence.substring(realBeginIndex, realEndIndex);
+		String resultBits = bitSequence.substring(beginIndex, endIndex);
 		
 		return Integer.valueOf(resultBits, 2);
 	}
@@ -95,6 +103,24 @@ public class Storage {
 
 	public int getW() {
 		return this.w;
+	}
+	
+	public int getPC() throws Exception {
+		int low = this.getRegister(SpecialRegister.PCL);
+		int high = extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH), 3, 8, 8);
+		
+		String lowSequence = Integer.toBinaryString(low);
+		String highSequence = Integer.toBinaryString(high);
+		
+		while (lowSequence.length() < 8) {
+			lowSequence = "0" + lowSequence;
+		}
+		
+		while (highSequence.length() < 8) {
+			highSequence = "0" + highSequence;
+		}
+		
+		return Integer.valueOf(highSequence + lowSequence, 2);
 	}
 
 	// hässlicher Workaround
@@ -173,6 +199,16 @@ public class Storage {
 	public void setW(int w) throws Exception {
 		check8Bits(w);
 		this.w = w;
+	}
+	
+	public void setPC(int pc) throws Exception {
+		check13Bits(pc);
+		
+		int low = extractBitsFromIntNumber(pc, 5, 13, 13);
+		int high = extractBitsFromIntNumber(pc, 0, 5, 13);
+		
+		this.setRegister(SpecialRegister.PCL, low);
+		this.setRegister(SpecialRegister.PCLATH, high);
 	}
 
 	// hässlicher Workaround

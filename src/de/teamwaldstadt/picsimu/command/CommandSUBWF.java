@@ -12,8 +12,8 @@ public class CommandSUBWF extends CommandExecutor {
 	public CommandSUBWF(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		this.isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7) == 1;
-		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0);
+		this.isDestinationBitSet = Storage.extractBitsFromIntNumber(arguments, 8, 7, 8) == 1;
+		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 7, 0, 8);
 	}
 
 	@Override

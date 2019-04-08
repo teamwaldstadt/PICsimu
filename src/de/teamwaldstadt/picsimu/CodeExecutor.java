@@ -14,7 +14,6 @@ import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Status;
 
 public class CodeExecutor {
-	int commandNr = 0;
 	CommandSet[] commands;
 	
 	GUIPanel gui;
@@ -41,7 +40,6 @@ public class CodeExecutor {
 	public void loadFile(File file) {
 		gui.getCodeView().loadCode(file);
 		DONE = false;
-		commandNr = 0;
 		commands = null;
 		try {
 			commands = Parser.getCommandList(file);
@@ -56,7 +54,6 @@ public class CodeExecutor {
 			gui.getCodeView().setLine(commands[0].getLineNr());
 		}
 	
-		commandNr = 0;
 		DONE = false;
 		Main.STORAGE.resetAll();
 		gui.getStorageTable().update();
@@ -70,17 +67,21 @@ public class CodeExecutor {
 		//System.out.println("cmdNr: " + commandNr + ", commands: " + commands.length);
 		
 		try {
-			runCommand(commandNr);
+			runCommand(Main.STORAGE.getPC());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
-		if (commandNr >= commands.length - 1) {
-			// Code executed. User must click 'reset'
-			DONE = true;
-		} else {
-			commandNr++;
-			gui.getCodeView().setLine(commands[commandNr].getLineNr());
+		try {
+			if (Main.STORAGE.getPC() >= commands.length - 1) {
+				// Code executed. User must click 'reset'
+				DONE = true;
+			} else {
+				Main.STORAGE.setPC(Main.STORAGE.getPC() + 1);
+				gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
