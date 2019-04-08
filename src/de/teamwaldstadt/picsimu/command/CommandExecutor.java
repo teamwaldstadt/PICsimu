@@ -24,26 +24,11 @@ public abstract class CommandExecutor {
 		if (statusAffected.contains(Status.C)) {
 			boolean carry = false;
 			
-			// TODO wird C auf 0 gesetzt, wenn result > 0xFF ist?
 			if (result > 0xFF) {
-				result = 0xFF;
 				carry = true;
 			}
 			
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitIndex(), carry);
-		}
-		
-		if (statusAffected.contains(Status.DC)) {
-			boolean digitCarry = false;
-			
-			// TODO wann wird DC genau gesetzt?
-			// TODO reicht es, wenn result > 0x0F ist?
-			// TODO wird C auf 1 gesetzt, wenn result > 0x0F ist?
-			if (result > 0x0F) {
-				digitCarry = true;
-			}
-	
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.C.getBitIndex(), digitCarry);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.C.getBitIndex(), carry);
 		}
 		
 		if (statusAffected.contains(Status.Z)) {
@@ -55,6 +40,27 @@ public abstract class CommandExecutor {
 		
 			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitIndex(), zBit);
 		}
+	}
+	
+	public void affectStatusDC(Command command, int argument) throws Exception {
+		List<Status> statusAffected = Arrays.asList(command.getStatusAffected());
+		
+		if (!statusAffected.contains(Status.DC)) {
+			return;
+		}
+		
+		boolean digitCarry = false;
+
+		int arg = argument & 0x0F;
+		int w = Main.STORAGE.getW() & 0x0F;
+		
+		if ((command == Command.ADDLW || command == Command.ADDWF) && arg + w > 0x0F) {
+			digitCarry = true;
+		} else if ((command == Command.SUBLW || command == Command.SUBWF) && arg - w < 0x0F) {
+			digitCarry = true;
+		}
+
+		Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitIndex(), digitCarry);
 	}
 	
 	public int getArguments() {

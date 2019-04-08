@@ -1,11 +1,24 @@
 package de.teamwaldstadt.picsimu.command;
 
-public class CommandSUBLW extends CommandExecutor {
+import de.teamwaldstadt.picsimu.Main;
 
+public class CommandSUBLW extends CommandExecutor {
+	
+	public CommandSUBLW(int arguments) throws Exception {
+		super.setArguments(arguments);
+	}
+	
 	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
+	public void execute() throws Exception {
+		int w = ((Main.STORAGE.getW() ^ 0xFF) + 1) & 0xFF; // 2er-Komplement und maskieren
+		int result = super.getArguments() + w;
 		
+		super.affectStatus(Command.SUBLW, result);
+		super.affectStatusDC(Command.SUBLW, super.getArguments());
+		
+		result &= 0xFF; // result maskieren
+		
+		Main.STORAGE.setW(result);
 	}
 
 }

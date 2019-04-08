@@ -21,9 +21,12 @@ public class CommandADDWF extends CommandExecutor {
 		GeneralRegister register = new GeneralRegister(this.fileRegister);
 		int w = Main.STORAGE.getW();
 		int f = Main.STORAGE.getRegister(register);
-		int result = w + f;
+		int result = f + w;
 		
 		super.affectStatus(Command.ADDWF, result);
+		super.affectStatusDC(Command.ADDWF, super.getArguments());
+		
+		result &= 0xFF; // result maskieren
 		
 		if (this.isDestinationBitSet) {
 			Main.STORAGE.setRegister(register, result);

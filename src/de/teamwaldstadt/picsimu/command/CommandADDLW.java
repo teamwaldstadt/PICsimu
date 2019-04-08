@@ -4,27 +4,21 @@ import de.teamwaldstadt.picsimu.Main;
 
 public class CommandADDLW extends CommandExecutor {
 	
-	private int literal;
-	
 	public CommandADDLW(int arguments) throws Exception {
 		super.setArguments(arguments);
-		
-		this.literal = arguments;
-		// this.literal = Storage.extractBitsFromIntNumber(arguments, 8, 0);
 	}
 
 	@Override
 	public void execute() throws Exception {
 		int w = Main.STORAGE.getW();
-		int result = w + this.literal;
+		int result = super.getArguments() + w;
 		
 		super.affectStatus(Command.ADDLW, result);
+		super.affectStatusDC(Command.ADDLW, super.getArguments());
+		
+		result &= 0xFF; // result maskieren
 		
 		Main.STORAGE.setW(result);
-	}
-	
-	public int getLiteral() {
-		return this.literal;
 	}
 
 }
