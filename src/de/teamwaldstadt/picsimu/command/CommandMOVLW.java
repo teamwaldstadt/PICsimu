@@ -14,6 +14,7 @@ public class CommandMOVLW extends CommandExecutor {
 		
 		super.affectStatus(Command.MOVLW, result);
 		Main.STORAGE.setW(result);
+		super.incrementPC();
 	}
 
 }

@@ -63,6 +63,10 @@ public abstract class CommandExecutor {
 		Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitIndex(), digitCarry);
 	}
 	
+	public void incrementPC() throws Exception {
+		Main.STORAGE.setPC(Main.STORAGE.getPC() + 1);
+	}
+	
 	public int getArguments() {
 		return this.arguments;
 	}

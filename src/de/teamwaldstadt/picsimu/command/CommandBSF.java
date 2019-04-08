@@ -30,6 +30,7 @@ public class CommandBSF extends CommandExecutor {
 		}
 		
 		super.affectStatus(Command.BSF, 0);
+		super.incrementPC();
 	}
 	
 	public int getBitIndex() {

@@ -16,6 +16,7 @@ public class CommandXORLW extends CommandExecutor {
 		super.affectStatus(Command.XORLW, result);
 		
 		Main.STORAGE.setW(result);
+		super.incrementPC();
 	}
 
 }

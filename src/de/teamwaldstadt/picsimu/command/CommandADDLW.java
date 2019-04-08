@@ -19,6 +19,7 @@ public class CommandADDLW extends CommandExecutor {
 		result &= 0xFF; // result maskieren
 		
 		Main.STORAGE.setW(result);
+		super.incrementPC();
 	}
 
 }

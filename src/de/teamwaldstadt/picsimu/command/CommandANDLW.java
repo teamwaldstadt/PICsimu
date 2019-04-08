@@ -16,6 +16,7 @@ public class CommandANDLW extends CommandExecutor {
 		super.affectStatus(Command.ANDLW, result);
 		
 		Main.STORAGE.setW(result);
+		super.incrementPC();
 	}
 
 }

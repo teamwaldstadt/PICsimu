@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 
+import javax.swing.JOptionPane;
+
 import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
@@ -57,32 +59,31 @@ public class CodeExecutor {
 		updateRegisters();
 	}
 	
-	public void nextCommand() {
-		if (commands == null || commands.length == 0 || DONE) {
-			return;
-		}
-		
-		//System.out.println("cmdNr: " + commandNr + ", commands: " + commands.length);
-		
+	public void nextCommand() {		
 		try {
-			runCommand(Main.STORAGE.getPC());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		try {
-			if (Main.STORAGE.getPC() >= commands.length - 1) {
-				// Code executed. User must click 'reset'
-				DONE = true;
-			} else {
-				Main.STORAGE.setPC(Main.STORAGE.getPC() + 1);
-				gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
+//			System.out.println("pc: " + Main.STORAGE.getPC() + " commands: " + commands.length);
+			
+			if (commands == null || commands.length == 0 || DONE) {
+				return;
 			}
+			
+			runCommand(Main.STORAGE.getPC());
+			
+			if (Main.STORAGE.getPC() >= commands.length) {
+				DONE = true;
+				JOptionPane.showMessageDialog(null, "Letzter Befehl ausgeführt.");
+				return;
+			}
+			
+			gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 		updateRegisters();
 		updateStorage();
+		
+		
 	}
 	
 	public void runCommand(int commandNr) throws Exception {
@@ -107,10 +108,6 @@ public class CodeExecutor {
 //		System.out.println("Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.C.getBitIndex()) ? 1 : 0));
 //		System.out.println("Digit Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.DC.getBitIndex()) ? 1 : 0));
 //		System.out.println("Z-Flag: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.Z.getBitIndex()) ? 1 : 0));
-		
-		
-		updateStorage();
-		updateRegisters();
 	}
 	
 	public void updateStorage() {

@@ -33,6 +33,8 @@ public class CommandADDWF extends CommandExecutor {
 		} else {
 			Main.STORAGE.setW(result);
 		}
+		
+		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {
