@@ -24,7 +24,7 @@ public class GUIWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	int WIDTH = 800;
+	int WIDTH = 1000;
 	int HEIGHT = 600;
 	GUIPanel guiPanel;
 	JFrame frame;
