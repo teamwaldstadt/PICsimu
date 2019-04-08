@@ -17,7 +17,7 @@ public abstract class CommandExecutor {
 
 	public abstract void execute() throws Exception;
 	
-	// TODO for PD_INV, TO_INV, RP0, RP1, IRP
+	// TODO for RP0, RP1, IRP
 	public void affectStatus(Command command, int result) throws Exception {
 		List<Status> statusAffected = Arrays.asList(command.getStatusAffected());
 		
@@ -34,11 +34,25 @@ public abstract class CommandExecutor {
 		if (statusAffected.contains(Status.Z)) {
 			boolean zBit = false;
 			
-			if (result == 0x00 || ((result & 0xFF) == 0x00)) {
+			if ((result & 0xFF) == 0x00) {
 				zBit = true;
 			}
 		
 			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitIndex(), zBit);
+		}
+		
+		if (statusAffected.contains(Status.PD_INV)) {
+			if (command == Command.CLRWDT) {
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.PD_INV.getBitIndex(), true);
+			} else if (command == Command.SLEEP) {
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.PD_INV.getBitIndex(), false);
+			}
+		}
+		
+		if (statusAffected.contains(Status.TO_INV)) {
+			if (command == Command.CLRWDT || command == Command.SLEEP) {
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.TO_INV.getBitIndex(), true);
+			}
 		}
 	}
 	
