@@ -8,10 +8,7 @@ import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
-import de.teamwaldstadt.picsimu.gui.JRegisterTable;
 import de.teamwaldstadt.picsimu.parser.Parser;
-import de.teamwaldstadt.picsimu.storage.SpecialRegister;
-import de.teamwaldstadt.picsimu.storage.Status;
 
 public class CodeExecutor {
 	int commandNr = 0;
@@ -59,7 +56,8 @@ public class CodeExecutor {
 		commandNr = 0;
 		DONE = false;
 		Main.STORAGE.resetAll();
-		gui.getStorageTable().update();
+		updateStorage();
+		updateRegisters();
 	}
 	
 	public void nextCommand() {
@@ -102,24 +100,27 @@ public class CodeExecutor {
 			e.printStackTrace();
 		}
 		
-		System.out.println("W-Reg: " + String.format("%02X", Main.STORAGE.getW()) + "h");
-		System.out.println("Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.C.getBitIndex()) ? 1 : 0));
-		System.out.println("Digit Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.DC.getBitIndex()) ? 1 : 0));
-		System.out.println("Z-Flag: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.Z.getBitIndex()) ? 1 : 0));
+//		System.out.println("W-Reg: " + String.format("%02X", Main.STORAGE.getW()) + "h");
+//		System.out.println("Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.C.getBitIndex()) ? 1 : 0));
+//		System.out.println("Digit Carry: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.DC.getBitIndex()) ? 1 : 0));
+//		System.out.println("Z-Flag: " + (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.STATUS, Status.Z.getBitIndex()) ? 1 : 0));
 		
-		gui.getStorageTable().update();
+		
+		updateStorage();
+		updateRegisters();
 	}
 	
 	public void updateStorage() {
-		if (gui == null) return;
-		gui.getStorageTable().update();
+		if (gui != null) gui.getStorageTable().update();
 	}
 	public void updateRegisters() {
-		if (gui == null) return;
-		
-		if (gui.getRegisterTables().isEmpty()) return;
-		for (JRegisterTable t : gui.getRegisterTables()) {
-			t.update();
+		if (gui != null) gui.updateRegistersView();
+	}
+	public void updateWReg(int wreg) {
+		try {
+			Main.STORAGE.setW(wreg);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

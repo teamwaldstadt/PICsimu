@@ -14,12 +14,8 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.border.EmptyBorder;
-import javax.swing.border.MatteBorder;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
@@ -32,6 +28,7 @@ public class GUIPanel extends JPanel {
 	StorageTable storageTable;
 	CodeView codeView;
 	CodeExecutor codeExecutor;
+	JInfoTable infoTable;
 	List<JRegisterTable> registerTables;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
@@ -83,7 +80,7 @@ public class GUIPanel extends JPanel {
 		c.gridy = 0;
 		c.gridx = 0;
 		c.gridheight = 1;
-		c.weightx = 0.1;
+		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
@@ -106,9 +103,14 @@ public class GUIPanel extends JPanel {
 		registers.add(specialRegsStatus);
 		registers.add(Box.createRigidArea(new Dimension(0, space)));
 		
-		RegisterInfoPanel regInfoPanel = new RegisterInfoPanel();
 		
+		JPanel regInfoPanel = new JPanel();
+		regInfoPanel.setBackground(Color.GREEN);
+		regInfoPanel.setLayout(new BoxLayout(regInfoPanel, BoxLayout.LINE_AXIS));
+		infoTable = new JInfoTable(codeExecutor);
+		regInfoPanel.add(infoTable);
 		registers.add(regInfoPanel);
+		
 		
 		registerTables.add(specialRegsRA);
 		registerTables.add(specialRegsRB);
@@ -116,9 +118,9 @@ public class GUIPanel extends JPanel {
 		
 		registerScroll.setViewportView(registers);
 		//registerScroll.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
-		registerScroll.setPreferredSize(new Dimension(250, 200));
-		registerScroll.setMinimumSize(new Dimension(250, 200));
-		registerScroll.setMaximumSize(new Dimension(250, 200));
+		registerScroll.setPreferredSize(new Dimension(300, 200));
+		registerScroll.setMinimumSize(new Dimension(300, 200));
+		registerScroll.setMaximumSize(new Dimension(300, 200));
 		add(registerScroll, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
@@ -178,6 +180,14 @@ public class GUIPanel extends JPanel {
 	
 	public List<JRegisterTable> getRegisterTables() {
 		return registerTables;
+	}
+
+	public void updateRegistersView() {
+		if (getRegisterTables().isEmpty()) return;
+		for (JRegisterTable t : getRegisterTables()) {
+			t.update();
+		}
+		infoTable.update();
 	}
 	
 }
