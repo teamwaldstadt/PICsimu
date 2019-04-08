@@ -34,7 +34,7 @@ public abstract class CommandExecutor {
 		if (statusAffected.contains(Status.Z)) {
 			boolean zBit = false;
 			
-			if (result == 0x00) {
+			if (result == 0x00 || ((result & 0xFF) == 0x00)) {
 				zBit = true;
 			}
 		
