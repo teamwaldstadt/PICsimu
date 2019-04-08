@@ -98,7 +98,6 @@ public class GUIWindow extends JFrame {
 					UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
 					UIManager.put( "text", new Color( 230, 230, 230) );
 				} else {
-					System.out.println("now");
 					UIManager.getDefaults().put( "control", new Color( 214, 217, 223) );
 					UIManager.put( "info", new ColorUIResource(242,242,189) );
 					UIManager.put( "nimbusBase", new ColorUIResource(51,98,140) );

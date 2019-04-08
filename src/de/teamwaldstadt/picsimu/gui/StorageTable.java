@@ -10,6 +10,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.text.JTextComponent;
 
+import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.Main;
 
 public class StorageTable extends JTable {
@@ -19,8 +20,8 @@ public class StorageTable extends JTable {
 	private static final long serialVersionUID = 1L;
 	StorageTableModel tm;
 	
-	public StorageTable() {
-		tm = new StorageTableModel();
+	public StorageTable(CodeExecutor codeExecutor) {
+		tm = new StorageTableModel(codeExecutor);
 		int width = 20;
 		
 		tm.setColumnCount(9);
@@ -56,14 +57,6 @@ public class StorageTable extends JTable {
 		for (int i = 1; i < 33; i++) {
 			for (int j = 1; j < 9; j++) {
 				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
-			}
-		}
-	}
-	
-	public void test() {
-		for (int i = 1; i < 33; i++) {
-			for (int j = 1; j< 9; j++) {
-				tm.setValueAt("11", i, j);
 			}
 		}
 	}

@@ -3,13 +3,17 @@ package de.teamwaldstadt.picsimu.gui;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
+import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.Main;
 
 public class StorageTableModel extends DefaultTableModel {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public StorageTableModel() {
+	CodeExecutor codeExecutor;
+	
+	public StorageTableModel(CodeExecutor codeExecutor) {
+		this.codeExecutor = codeExecutor;
 	}
 	
 	@Override
@@ -33,6 +37,7 @@ public class StorageTableModel extends DefaultTableModel {
 				value = "0" + value;
 			super.setValueAt(value.toUpperCase(), row, col);
 			Main.STORAGE.getStorage()[(col-1) + (getColumnCount() - 1) * (row-1)] = Integer.parseInt(value, 16);
+			codeExecutor.updateRegisters();
 		}
 	}
 }

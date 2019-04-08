@@ -8,14 +8,21 @@ import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.swing.Box;
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
+import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 
 
 public class GUIPanel extends JPanel {
@@ -25,6 +32,7 @@ public class GUIPanel extends JPanel {
 	StorageTable storageTable;
 	CodeView codeView;
 	CodeExecutor codeExecutor;
+	List<JRegisterTable> registerTables;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -43,7 +51,7 @@ public class GUIPanel extends JPanel {
 		
 		
 		JScrollPane scrollTable = new JScrollPane();
-		storageTable = new StorageTable();
+		storageTable = new StorageTable(codeExecutor);
 		scrollTable.setViewportView(storageTable);
 		
 		//scrollTable.setBounds(width - 206, 0, 200, height);
@@ -80,15 +88,38 @@ public class GUIPanel extends JPanel {
 		c.fill = GridBagConstraints.BOTH;
 		c.gridwidth = 1;
 		
+		JScrollPane registerScroll = new JScrollPane();
 		JPanel registers = new JPanel();
-		registers.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
-		JLabel text = new JLabel("Register");
-		registers.add(text);
-		//registers.setBackground(Color.GREEN);
-		registers.setPreferredSize(new Dimension(200, 200));
-		registers.setMinimumSize(new Dimension(200, 200));
-		registers.setMaximumSize(new Dimension(200, 200));
-		add(registers, c);
+		
+		int space = 10;
+		registerTables = new ArrayList<>();
+		registers.setLayout(new BoxLayout(registers, BoxLayout.PAGE_AXIS));
+		JRegisterTable specialRegsRA = new JRegisterTable("RA", codeExecutor, SpecialRegister.PORTA);
+		registers.add(specialRegsRA);
+		registers.add(Box.createRigidArea(new Dimension(0, space)));
+		
+		JRegisterTable specialRegsRB = new JRegisterTable("RB", codeExecutor, SpecialRegister.PORTB);
+		registers.add(specialRegsRB);
+		registers.add(Box.createRigidArea(new Dimension(0, space)));
+		
+		JRegisterTable specialRegsStatus = new JRegisterTable("Status", codeExecutor, SpecialRegister.STATUS);
+		registers.add(specialRegsStatus);
+		registers.add(Box.createRigidArea(new Dimension(0, space)));
+		
+		RegisterInfoPanel regInfoPanel = new RegisterInfoPanel();
+		
+		registers.add(regInfoPanel);
+		
+		registerTables.add(specialRegsRA);
+		registerTables.add(specialRegsRB);
+		registerTables.add(specialRegsStatus);
+		
+		registerScroll.setViewportView(registers);
+		//registerScroll.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
+		registerScroll.setPreferredSize(new Dimension(250, 200));
+		registerScroll.setMinimumSize(new Dimension(250, 200));
+		registerScroll.setMaximumSize(new Dimension(250, 200));
+		add(registerScroll, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.gridy = 0;
@@ -144,4 +175,9 @@ public class GUIPanel extends JPanel {
 	public StorageTable getStorageTable() {
 		return storageTable;
 	}
+	
+	public List<JRegisterTable> getRegisterTables() {
+		return registerTables;
+	}
+	
 }

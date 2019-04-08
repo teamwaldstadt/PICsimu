@@ -8,6 +8,7 @@ import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
+import de.teamwaldstadt.picsimu.gui.JRegisterTable;
 import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Status;
@@ -109,4 +110,16 @@ public class CodeExecutor {
 		gui.getStorageTable().update();
 	}
 	
+	public void updateStorage() {
+		if (gui == null) return;
+		gui.getStorageTable().update();
+	}
+	public void updateRegisters() {
+		if (gui == null) return;
+		
+		if (gui.getRegisterTables().isEmpty()) return;
+		for (JRegisterTable t : gui.getRegisterTables()) {
+			t.update();
+		}
+	}
 }
