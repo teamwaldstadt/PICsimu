@@ -80,7 +80,11 @@ public class JInfoTable extends JTable {
 	
 	public void update() {
 		setValueAt(String.format("%02X", Main.STORAGE.getW()), 0, 1);
-		setValueAt("0000", 1, 1);
+		try {
+			setValueAt(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@Override

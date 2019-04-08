@@ -81,6 +81,8 @@ public class CodeExecutor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		updateRegisters();
+		updateStorage();
 	}
 	
 	public void runCommand(int commandNr) throws Exception {

@@ -118,9 +118,9 @@ public class GUIPanel extends JPanel {
 		
 		registerScroll.setViewportView(registers);
 		//registerScroll.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
-		registerScroll.setPreferredSize(new Dimension(300, 200));
-		registerScroll.setMinimumSize(new Dimension(300, 200));
-		registerScroll.setMaximumSize(new Dimension(300, 200));
+		registerScroll.setPreferredSize(new Dimension(220, 200));
+		registerScroll.setMinimumSize(new Dimension(220, 200));
+		registerScroll.setMaximumSize(new Dimension(220, 200));
 		add(registerScroll, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;

@@ -2,6 +2,7 @@ package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -72,6 +73,8 @@ public class JRegisterTable extends JTable {
 		tm.setRowCount(2);
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
+		
+		setFont(new Font("default", Font.PLAIN, 11));
 		
 		setModel(tm);
 		setRowHeight(width);
