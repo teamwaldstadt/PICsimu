@@ -46,6 +46,17 @@ public class JRegisterTable extends JTable {
 			setValueAt(val & 0x01, getRowCount() - 1, i);
 			val = val >> 1;
 		}
+		val = 0;
+		switch (reg) {
+		case PORTA: val = Main.STORAGE.getStorage()[SpecialRegister.TRISA.getAddress()]; break;
+		case PORTB: val = Main.STORAGE.getStorage()[SpecialRegister.TRISB.getAddress()]; break;
+		case STATUS: return;
+		default: return;
+		}
+		for (int i = 8; i > 0; i--) {
+			setValueAt((val & 0x01) == 1 ? "i" : "o", 1, i);
+			val = val >> 1;
+		}
 	}
 	
 	public void init(String name) {
@@ -102,6 +113,10 @@ public class JRegisterTable extends JTable {
 		setGridColor(Color.GRAY);
 		setModel(tm);
 		setValueAt(name, 0, 0);
+		if (reg == SpecialRegister.STATUS) { 
+			setValueAt("Bit", 1, 0);
+			return;
+		}
 		setValueAt("Tris", 1, 0);
 		setValueAt("Pin", 2, 0);
 	}
