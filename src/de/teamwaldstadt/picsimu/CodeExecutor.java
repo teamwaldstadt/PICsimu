@@ -39,7 +39,7 @@ public class CodeExecutor {
 	
 	public void loadFile(File file) {
 		gui.getCodeView().loadCode(file);
-		w.setTitle(w.getTitle() + " - " + file.getName());
+		w.setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION + " - " + file.getAbsolutePath());
 		DONE = false;
 		commands = null;
 		try {
