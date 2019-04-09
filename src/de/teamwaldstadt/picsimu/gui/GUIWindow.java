@@ -1,6 +1,7 @@
 package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -46,6 +47,8 @@ public class GUIWindow extends JFrame {
 		}
 		
 		setSize(WIDTH, HEIGHT);
+		setMinimumSize(new Dimension(WIDTH - 200, HEIGHT - 150));
+		
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

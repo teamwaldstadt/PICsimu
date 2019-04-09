@@ -15,6 +15,7 @@ import javax.swing.text.JTextComponent;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 
 public class JInfoTable extends JTable {
 	
@@ -49,6 +50,19 @@ public class JInfoTable extends JTable {
 					
 					if (row == 0)
 						codeExecutor.updateWReg(Integer.parseInt(value, 16));
+					if (row == 2) {
+						try {
+							Main.STORAGE.setRegister(SpecialRegister.FSR, Integer.parseInt(value, 16));
+						} catch (NumberFormatException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						if (codeExecutor.gui != null)
+							codeExecutor.gui.getStorageTable().getStorageTableModel().setValueWithoutRegisterUpdate(SpecialRegister.FSR.getAddress(), Integer.parseInt(value, 16));
+					}
 				}
 			}
 		};
@@ -58,23 +72,18 @@ public class JInfoTable extends JTable {
 
 		getColumnModel().getColumn(0).setPreferredWidth(width);
 		getColumnModel().getColumn(1).setPreferredWidth(width);
-		tm.setRowCount(2);
+		tm.setRowCount(3);
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
 		
 		setModel(tm);
 		setRowHeight(width);
-		
-		addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				
-			}
-		});
+	
 		setGridColor(Color.GRAY);
 		setModel(tm);
 		setValueAt("W", 0, 0);
 		setValueAt("PC", 1, 0);
+		setValueAt("FSR", 2, 0);
 		update();
 	}
 	
@@ -82,9 +91,11 @@ public class JInfoTable extends JTable {
 		setValueAt(String.format("%02X", Main.STORAGE.getW()), 0, 1);
 		try {
 			setValueAt(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
+			setValueAt(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR)), 2, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 	
 	@Override

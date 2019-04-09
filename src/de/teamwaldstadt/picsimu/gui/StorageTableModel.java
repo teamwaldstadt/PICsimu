@@ -11,9 +11,10 @@ public class StorageTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;
 	
 	CodeExecutor codeExecutor;
-	
+	boolean doUpdate;
 	public StorageTableModel(CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
+		doUpdate = true;
 	}
 	
 	@Override
@@ -37,7 +38,15 @@ public class StorageTableModel extends DefaultTableModel {
 				value = "0" + value;
 			super.setValueAt(value.toUpperCase(), row, col);
 			Main.STORAGE.getStorage()[(col-1) + (getColumnCount() - 1) * (row-1)] = Integer.parseInt(value, 16);
-			codeExecutor.updateRegisters();
+			if (doUpdate) codeExecutor.updateRegisters();
 		}
+	}
+	
+	public void setValueWithoutRegisterUpdate(int address, int value) {
+		int row = 1 + (int) (address / 8);
+		int col = 1 + address % 8;
+		doUpdate = false;
+		setValueAt(String.format("%02X", value), row, col);
+		doUpdate = true;
 	}
 }

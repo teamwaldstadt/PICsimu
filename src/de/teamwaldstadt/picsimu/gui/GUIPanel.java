@@ -14,8 +14,13 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JSlider;
+import javax.swing.border.Border;
+import javax.swing.border.MatteBorder;
+import javax.swing.border.TitledBorder;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
@@ -39,7 +44,7 @@ public class GUIPanel extends JPanel {
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridy = 0;
 		c.gridx = 2;
-		c.gridheight = 1;
+		c.gridheight = 2;
 		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.VERTICAL;
@@ -58,7 +63,7 @@ public class GUIPanel extends JPanel {
 		add (scrollTable, c);
 		c.fill = GridBagConstraints.BOTH;
 		c.gridx = 0;
-		c.gridy = 1;
+		c.gridy = 2;
 		c.weightx = 1;
 		c.weighty = 0.4;
 		c.gridwidth = 3;
@@ -79,7 +84,7 @@ public class GUIPanel extends JPanel {
 		
 		c.gridy = 0;
 		c.gridx = 0;
-		c.gridheight = 1;
+		c.gridheight = 2;
 		c.weightx = 0;
 		c.weighty = 1;
 		c.fill = GridBagConstraints.BOTH;
@@ -125,11 +130,11 @@ public class GUIPanel extends JPanel {
 		add(registerScroll, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
-		c.gridy = 0;
+		c.gridy = 1;
 		c.gridx = 1;
 		c.gridwidth = 1;
 		c.gridheight = 1;
-		c.weighty = 1;
+		c.weighty = 0;
 		c.weightx = 1;
 		
 		c.anchor = GridBagConstraints.SOUTH;
@@ -169,6 +174,33 @@ public class GUIPanel extends JPanel {
 		});
 		buttons.add(stepButton);
 		add(buttons, c);
+		
+
+		c.fill = GridBagConstraints.BOTH;
+		c.gridy = 0;
+		c.gridx = 1;
+		c.gridwidth = 1;
+		c.gridheight = 1;
+		c.weighty = 1;
+		c.weightx = 0;
+		
+		c.anchor = GridBagConstraints.CENTER;
+		c.insets = new Insets(2, 2, 2, 2);
+		
+		JPanel more = new JPanel();
+		//more.setBorder(new MatteBorder(1,1,1,1, new Color(150,150,150)));
+		more.setLayout(new GridLayout(1, 2));
+		JPanel freqGenerator = new JPanel();
+		TitledBorder border = new TitledBorder("Frequenz-Generator");
+		border.setTitleJustification(TitledBorder.CENTER);
+		border.setTitlePosition(TitledBorder.TOP);
+		border.setBorder(new MatteBorder(1, 1, 1, 1, new Color(150, 150, 150)));
+		freqGenerator.setBorder(border);
+		JLabel label2 = new JLabel("");
+		label2.setHorizontalAlignment(JLabel.CENTER);
+		more.add(freqGenerator);
+		more.add(label2);
+		add(more, c);
 	}
 	
 	public CodeView getCodeView() {
@@ -190,5 +222,5 @@ public class GUIPanel extends JPanel {
 		}
 		infoTable.update();
 	}
-	
+
 }
