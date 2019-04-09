@@ -2,6 +2,7 @@ package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
 import de.teamwaldstadt.picsimu.storage.GeneralRegister;
+import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 
 public class CommandCLRF extends CommandExecutor {
 	
@@ -11,9 +12,14 @@ public class CommandCLRF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		GeneralRegister register = new GeneralRegister(super.getArguments());
+		try {
+			GeneralRegister register = new GeneralRegister(super.getArguments());
+			Main.STORAGE.setRegister(register, 0x00);
+		} catch (Exception e) {
+			SpecialRegister register = SpecialRegister.atAddress(super.getArguments());
+			Main.STORAGE.setRegister(register, 0x00);
+		}
 		
-		Main.STORAGE.setRegister(register, 0x00);
 		super.affectStatus(Command.CLRF, 0x00);
 		super.incrementPC();
 	}
