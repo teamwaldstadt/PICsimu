@@ -1,5 +1,7 @@
 package de.teamwaldstadt.picsimu.storage;
 
+import de.teamwaldstadt.picsimu.Main;
+
 public class Storage {
 
 	private int[] storage;
@@ -93,8 +95,19 @@ public class Storage {
 		return this.storage;
 	}
 
-	public int getRegister(SpecialRegister register) {
-		return this.storage[register.getAddress()];
+	public int getRegister(SpecialRegister register) throws Exception {
+		// indirekte Adressierung
+		if (register.getAddress() == 0x00) {	
+			int indAddress = this.getRegister(SpecialRegister.FSR);
+			
+			if (indAddress == 0x00) {
+				throw new Exception("Invalid indirect adressing: FSR contains address 0x00 (endless loop)");
+			}
+			
+			return this.storage[indAddress];
+		} else {
+			return this.storage[register.getAddress()];
+		}
 	}
 
 	public int getRegister(GeneralRegister register) {
@@ -129,8 +142,23 @@ public class Storage {
 		if (bitDigit < 0 || bitDigit > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
-
-		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+		
+		String bitSequence = "0";
+		
+		// indirekte Adressierung
+		if (register.getAddress() == 0x00) {
+			int indAddress = Main.STORAGE.getRegister(SpecialRegister.FSR);
+			
+			try {
+				SpecialRegister indRegister = SpecialRegister.atAddress(indAddress);
+				bitSequence = Integer.toBinaryString(this.getRegister(indRegister));
+			} catch (Exception e) {
+				GeneralRegister indRegister = new GeneralRegister(indAddress);
+				bitSequence = Integer.toBinaryString(this.getRegister(indRegister));
+			}
+		} else {
+			bitSequence = Integer.toBinaryString(this.getRegister(register));
+		}
 		
 		while (bitSequence.length() < 8) {
 			bitSequence = "0" + bitSequence;
@@ -183,10 +211,34 @@ public class Storage {
 
 	public void setRegister(SpecialRegister register, int value) throws Exception {
 		check8Bits(value);
-		this.storage[register.getAddress()] = value;
+		
+		// indirekte Adressierung
+		if (register.getAddress() == 0x00) {
+			int indAddress = this.getRegister(SpecialRegister.FSR);
+			
+			this.storage[indAddress] = value;
+				
+			try {
+				SpecialRegister indReg = SpecialRegister.atAddress(indAddress);
+				
+				if (indReg == SpecialRegister.FSR && value == 0x00) {
+					throw new Exception("Invalid indirect adressing: Cannot set 0x00 into FSR (endless loop)");
+				}
+				
+				// mirror to bank 1 if it is a mirrored general register
+				if (indReg.getBank() == Bank.ALL) {
+					this.storage[indAddress + Bank.BEGIN_OF_BANK_1] = value;
+				}
+			} catch (Exception e) {
+				// mirror to bank 1 if it is a general register
+				this.storage[indAddress + Bank.BEGIN_OF_BANK_1] = value;
+			}
+		} else {
+			this.storage[register.getAddress()] = value;
 
-		if (register.getBank() == Bank.ALL) {
-			this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
+			if (register.getBank() == Bank.ALL) {
+				this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
+			}
 		}
 	}
 
@@ -217,20 +269,45 @@ public class Storage {
 		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch)");
 		}
-
-		String bitSequence = Integer.toBinaryString(this.getRegister(register));
-
-		while (bitSequence.length() < 8) {
-			bitSequence = "0" + bitSequence;
+		
+		// indirekte Adressierung
+		if (register.getAddress() == 0x00) {
+			int indAddress = this.getRegister(SpecialRegister.FSR);
+			
+			try {
+				SpecialRegister indReg = SpecialRegister.atAddress(indAddress);
+				
+				String bitSequence = Integer.toBinaryString(this.getRegister(indReg));
+				
+				while (bitSequence.length() < 8) {
+					bitSequence = "0" + bitSequence;
+				}
+				
+				char[] bits = bitSequence.toCharArray();
+				int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
+		
+				bits[realDigit] = setBit ? '1' : '0';
+				bitSequence = new String(bits);
+				this.setRegister(indReg, Integer.valueOf(bitSequence, 2));
+			} catch(Exception e) {
+				GeneralRegister indReg = new GeneralRegister(indAddress);
+				
+				this.setBitOfRegister(indReg, bitIndex, setBit);
+			}
+		} else {
+			String bitSequence = Integer.toBinaryString(this.getRegister(register));
+	
+			while (bitSequence.length() < 8) {
+				bitSequence = "0" + bitSequence;
+			}
+			
+			char[] bits = bitSequence.toCharArray();
+			int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
+	
+			bits[realDigit] = setBit ? '1' : '0';
+			bitSequence = new String(bits);
+			this.setRegister(register, Integer.valueOf(bitSequence, 2));
 		}
-		
-		char[] bits = bitSequence.toCharArray();
-		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
-
-		bits[realDigit] = setBit ? '1' : '0';
-		bitSequence = new String(bits);
-		this.setRegister(register, Integer.valueOf(bitSequence, 2));
-		
 		
 		/*
 		 * 
