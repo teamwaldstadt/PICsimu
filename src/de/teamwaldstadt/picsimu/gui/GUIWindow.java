@@ -140,7 +140,7 @@ public class GUIWindow extends JFrame {
 		menuBar.add(menu);
 		
 		JMenu info = new JMenu("Info");
-		JMenuItem about = new JMenuItem("Über");
+		JMenuItem about = new JMenuItem("\u00DCber");
 		JMenuItem license = new JMenuItem("Lizenz");
 		JMenuItem help = new JMenuItem("Dokumentation");
 		info.add(about);

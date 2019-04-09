@@ -57,7 +57,7 @@ public class StorageTable extends JTable {
 		for (int i = 1; i < 33; i++) {
 			for (int j = 1; j < 9; j++) {
 				//if (i == 1) System.out.print(Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)] + " ");
-				tm.setValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
+				tm.setValueJustForGUI(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
 			}
 			//System.out.println();
 		}

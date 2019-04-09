@@ -32,14 +32,14 @@ public enum SpecialRegister {
 	}
 
 	public static SpecialRegister atAddress(int address) throws Exception {	
-		if (Bank.getCurrent() == Bank.BANK_1) {
-			address += Bank.BEGIN_OF_BANK_1;
-		}
+//		if (Bank.getCurrent() == Bank.BANK_1) {
+//			address += Bank.BEGIN_OF_BANK_1;
+//		}
 		
-		if (address < 0x00 || (address >= GeneralRegister.FIRST_ADDRESS && address < Bank.BEGIN_OF_BANK_1)
-				|| address >= (GeneralRegister.FIRST_ADDRESS + Bank.BEGIN_OF_BANK_1)) {
-			throw new Exception("Not a special register (out of range): " + String.format("%2X", address));
-		}
+//		if (address < 0x00 || (address >= GeneralRegister.FIRST_ADDRESS && address < Bank.BEGIN_OF_BANK_1)
+//				|| address >= (GeneralRegister.FIRST_ADDRESS + Bank.BEGIN_OF_BANK_1)) {
+//			throw new Exception("Not a special register (out of range): " + String.format("%2X", address));
+//		}
 		
 		for (SpecialRegister register : values()) {
 			if (address == register.getAddress() || (register.getBank() == Bank.ALL
