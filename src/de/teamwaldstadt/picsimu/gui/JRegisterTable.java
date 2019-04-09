@@ -126,6 +126,11 @@ public class JRegisterTable extends JTable {
 	@Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
    
+		if (row == 0 || row == getRowCount() - 2 || column == 0) {
+			setBackground(Color.LIGHT_GRAY);
+			return super.prepareRenderer(renderer, row, column);
+		}
+		
 		if (row % 2 == 1)
     		setBackground(Color.WHITE);
     	else 

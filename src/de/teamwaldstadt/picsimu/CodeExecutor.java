@@ -18,10 +18,11 @@ public class CodeExecutor {
 	GUIPanel gui;
 	
 	boolean DONE;
+	GUIWindow w;
 	
 	public CodeExecutor() {
 		DONE = false;
-		GUIWindow w = new GUIWindow(this);
+		w = new GUIWindow(this);
 		Main.STORAGE.resetAll();
 		gui = w.getPanel();
 	}
@@ -38,6 +39,7 @@ public class CodeExecutor {
 	
 	public void loadFile(File file) {
 		gui.getCodeView().loadCode(file);
+		w.setTitle(w.getTitle() + " - " + file.getName());
 		DONE = false;
 		commands = null;
 		try {
