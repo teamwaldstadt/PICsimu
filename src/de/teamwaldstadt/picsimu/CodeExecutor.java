@@ -45,7 +45,7 @@ public class CodeExecutor {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		gui.getCodeView().setLine(commands[0].getLineNr());
+		reset();
 	}
 	
 	public void reset() {
@@ -90,7 +90,8 @@ public class CodeExecutor {
 		try {
 			Constructor<?> commandConstructor = commands[commandNr].getCommand().getExecutor().getConstructors()[0];
 			if (commandConstructor.getParameterTypes().length == 0) {
-				System.out.println("Command '" + commands[commandNr].getCommand() + "' not yet defined");
+				System.out.println("Command '" + commands[commandNr].getCommand() + "' not yet defined, skipping");
+				Main.STORAGE.setPC(Main.STORAGE.getPC() + 1);
 			} else {
 				// Expected cause of issue https://github.com/teamwaldstadt/PICsimu/issues/1
 				CommandExecutor c = (CommandExecutor) commandConstructor.newInstance(commands[commandNr].getArgument());

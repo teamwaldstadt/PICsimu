@@ -30,12 +30,11 @@ public class JRegisterTable extends JTable {
 			String[] values = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
 			for (int i = 8; i > 0; i--) {
 				setValueAt(values[8 - i], 0, 8 - i + 1);
-				setValueAt(0, 1, 8 - i + 1);
 			}
+			tm.setRowCount(2);
 		} else {
 			for (int i = 8; i > 0; i--) {
 				setValueAt(i-1, 0, 8 - i + 1);
-				setValueAt(0, 1, 8 - i + 1);
 			}
 		}
 		update();
@@ -44,7 +43,7 @@ public class JRegisterTable extends JTable {
 	public void update() {
 		int val = Main.STORAGE.getStorage()[reg.getAddress()];
 		for (int i = 8; i > 0; i--) {
-			setValueAt(val & 0x01, 1, i);
+			setValueAt(val & 0x01, getRowCount() - 1, i);
 			val = val >> 1;
 		}
 	}
@@ -70,7 +69,9 @@ public class JRegisterTable extends JTable {
 		getColumnModel().getColumn(6).setPreferredWidth(width);
 		getColumnModel().getColumn(7).setPreferredWidth(width);
 		getColumnModel().getColumn(8).setPreferredWidth(width);
-		tm.setRowCount(2);
+		
+		tm.setRowCount(3);
+		
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
 		
@@ -85,6 +86,7 @@ public class JRegisterTable extends JTable {
 				int row = rowAtPoint(e.getPoint());
 				int col = columnAtPoint(e.getPoint());
 				if (row == 0 || col == 0) return;
+				if (row != getRowCount() - 1) return;
 				
 				setValueAt(Integer.parseInt(String.valueOf(getValueAt(row, col))) ^ 1, row, col);
 				
@@ -100,7 +102,8 @@ public class JRegisterTable extends JTable {
 		setGridColor(Color.GRAY);
 		setModel(tm);
 		setValueAt(name, 0, 0);
-		setValueAt("Pin", 1, 0);
+		setValueAt("Tris", 1, 0);
+		setValueAt("Pin", 2, 0);
 	}
 
 	

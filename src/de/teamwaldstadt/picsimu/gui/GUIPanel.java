@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.border.EmptyBorder;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
@@ -92,6 +93,7 @@ public class GUIPanel extends JPanel {
 		registerTables = new ArrayList<>();
 		registers.setLayout(new BoxLayout(registers, BoxLayout.PAGE_AXIS));
 		JRegisterTable specialRegsRA = new JRegisterTable("RA", codeExecutor, SpecialRegister.PORTA);
+		
 		registers.add(specialRegsRA);
 		registers.add(Box.createRigidArea(new Dimension(0, space)));
 		
@@ -118,9 +120,9 @@ public class GUIPanel extends JPanel {
 		
 		registerScroll.setViewportView(registers);
 		//registerScroll.setBorder(new MatteBorder(1,1,1,1, Color.BLACK));
-		registerScroll.setPreferredSize(new Dimension(220, 200));
-		registerScroll.setMinimumSize(new Dimension(220, 200));
-		registerScroll.setMaximumSize(new Dimension(220, 200));
+		registerScroll.setPreferredSize(new Dimension(250, 200));
+		registerScroll.setMinimumSize(new Dimension(250, 200));
+		registerScroll.setMaximumSize(new Dimension(250, 200));
 		add(registerScroll, c);
 		
 		c.fill = GridBagConstraints.HORIZONTAL;
