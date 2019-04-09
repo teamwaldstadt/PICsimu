@@ -1,8 +1,6 @@
 package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.storage.GeneralRegister;
-import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandBCF extends CommandExecutor {
@@ -19,15 +17,7 @@ public class CommandBCF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		try {
-			GeneralRegister register = new GeneralRegister(this.fileRegister);
-			
-			Main.STORAGE.setBitOfRegister(register, bitIndex, false);
-		} catch (Exception e) {
-			SpecialRegister register = SpecialRegister.atAddress(fileRegister);
-			
-			Main.STORAGE.setBitOfRegister(register, bitIndex, false);
-		}
+		Main.STORAGE.setBitOfRegister(this.fileRegister, bitIndex, false);
 		
 		super.affectStatus(Command.BCF, 0);
 		super.incrementPC();

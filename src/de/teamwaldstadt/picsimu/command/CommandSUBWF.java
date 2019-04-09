@@ -1,8 +1,6 @@
 package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.storage.GeneralRegister;
-import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandSUBWF extends CommandExecutor {
@@ -20,37 +18,18 @@ public class CommandSUBWF extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int w = ((Main.STORAGE.getW() ^ 0xFF) + 1) & 0xFF; // 2er-Komplement und maskieren
-
-		try {
-			GeneralRegister register = new GeneralRegister(this.fileRegister);
-			int f = Main.STORAGE.getRegister(register);
-			int result = f + w;
-			
-			super.affectStatus(Command.SUBWF, result);
-			super.affectStatusDC(Command.SUBWF, super.getArguments());
-			
-			result &= 0xFF; // result maskieren
-			
-			if (this.isDestinationBitSet) {
-				Main.STORAGE.setRegister(register, result);
-			} else {
-				Main.STORAGE.setW(result);
-			}
-		} catch (Exception e) {
-			SpecialRegister register = SpecialRegister.atAddress(this.fileRegister);
-			int f = Main.STORAGE.getRegister(register);
-			int result = f + w;
-			
-			super.affectStatus(Command.SUBWF, result);
-			super.affectStatusDC(Command.SUBWF, super.getArguments());
-			
-			result &= 0xFF; // result maskieren
-			
-			if (this.isDestinationBitSet) {
-				Main.STORAGE.setRegister(register, result);
-			} else {
-				Main.STORAGE.setW(result);
-			}
+		int f = Main.STORAGE.getRegister(this.fileRegister);
+		int result = f + w;
+		
+		super.affectStatus(Command.SUBWF, result);
+		super.affectStatusDC(Command.SUBWF, super.getArguments());
+		
+		result &= 0xFF; // result maskieren
+		
+		if (this.isDestinationBitSet) {
+			Main.STORAGE.setRegister(this.fileRegister, result);
+		} else {
+			Main.STORAGE.setW(result);
 		}
 		
 		super.incrementPC();

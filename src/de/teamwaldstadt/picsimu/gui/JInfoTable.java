@@ -3,8 +3,6 @@ package de.teamwaldstadt.picsimu.gui;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
 import javax.swing.JOptionPane;
@@ -52,7 +50,7 @@ public class JInfoTable extends JTable {
 						codeExecutor.updateWReg(Integer.parseInt(value, 16));
 					if (row == 2) {
 						try {
-							Main.STORAGE.setRegister(SpecialRegister.FSR, Integer.parseInt(value, 16));
+							Main.STORAGE.setRegister(SpecialRegister.FSR.getAddress(), Integer.parseInt(value, 16));
 						} catch (NumberFormatException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -91,7 +89,7 @@ public class JInfoTable extends JTable {
 		setValueAt(String.format("%02X", Main.STORAGE.getW()), 0, 1);
 		try {
 			setValueAt(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
-			setValueAt(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR)), 2, 1);
+			setValueAt(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR.getAddress())), 2, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
