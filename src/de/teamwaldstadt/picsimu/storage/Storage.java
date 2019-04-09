@@ -79,9 +79,12 @@ public class Storage {
 			bitSequence = "0" + bitSequence;
 		}
 		
-//		System.out.println(beginIndex + " " + endIndex + " " + bitSequence.length());
-		if (beginIndex < 0 || endIndex > bitSequence.length()) {
-			throw new Exception("Out of range");
+		if (beginIndex < 0 || beginIndex > bitSequence.length() || endIndex < 0 || endIndex > bitSequence.length()) {
+			throw new Exception("Out of range (beginIndex: " + beginIndex + ", endIndex: " + endIndex + ", length: " + bitSequence.length() + ")");
+		}
+		
+		if (beginIndex >= endIndex) {
+			throw new Exception("beginIndex must be smaller then endIndex (beginIndex: " + beginIndex + ", endIndex: " + endIndex + ")");
 		}
 		
 		String resultBits = bitSequence.substring(beginIndex, endIndex);
@@ -118,7 +121,7 @@ public class Storage {
 		throw new Exception("Invalid register address: " + String.format("%2X", address));
 	}
 
-	private int getRegister(SpecialRegister register) throws Exception {
+	private int getRegister(SpecialRegister register) {
 		return this.storage[register.getAddress()];
 	}
 
