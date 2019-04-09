@@ -28,7 +28,7 @@ public abstract class CommandExecutor {
 				carry = true;
 			}
 			
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.C.getBitIndex(), carry);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.C.getBitIndex(), carry);
 		}
 		
 		if (statusAffected.contains(Status.Z)) {
@@ -38,20 +38,20 @@ public abstract class CommandExecutor {
 				zBit = true;
 			}
 		
-			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.Z.getBitIndex(), zBit);
+			Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.Z.getBitIndex(), zBit);
 		}
 		
 		if (statusAffected.contains(Status.PD_INV)) {
 			if (command == Command.CLRWDT) {
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.PD_INV.getBitIndex(), true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.PD_INV.getBitIndex(), true);
 			} else if (command == Command.SLEEP) {
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.PD_INV.getBitIndex(), false);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.PD_INV.getBitIndex(), false);
 			}
 		}
 		
 		if (statusAffected.contains(Status.TO_INV)) {
 			if (command == Command.CLRWDT || command == Command.SLEEP) {
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.TO_INV.getBitIndex(), true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.TO_INV.getBitIndex(), true);
 			}
 		}
 	}
@@ -74,7 +74,7 @@ public abstract class CommandExecutor {
 			digitCarry = true;
 		}
 
-		Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS, Status.DC.getBitIndex(), digitCarry);
+		Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), Status.DC.getBitIndex(), digitCarry);
 	}
 	
 	public void incrementPC() throws Exception {

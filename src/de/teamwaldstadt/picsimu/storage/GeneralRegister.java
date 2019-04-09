@@ -9,7 +9,7 @@ public class GeneralRegister {
 
 	public GeneralRegister(int address) throws Exception {
 		if (address < FIRST_ADDRESS || address > LAST_ADDRESS) {
-			throw new Exception("Not a general purpose register (out of range: " + FIRST_ADDRESS + " to " + LAST_ADDRESS);
+			throw new Exception("Not a general purpose register (out of range: " + String.format("%2X", FIRST_ADDRESS) + " to " + String.format("%2X", LAST_ADDRESS) + "): " + String.format("%2X", address));
 		}
 
 		this.address = address;

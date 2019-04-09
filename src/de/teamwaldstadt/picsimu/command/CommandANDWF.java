@@ -1,8 +1,6 @@
 package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.storage.GeneralRegister;
-import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Storage;
 
 public class CommandANDWF extends CommandExecutor {
@@ -20,31 +18,15 @@ public class CommandANDWF extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int w = Main.STORAGE.getW();
+		int f = Main.STORAGE.getRegister(this.fileRegister);
+		int result = w & f;
 		
-		try {
-			GeneralRegister register = new GeneralRegister(this.fileRegister);
-			int f = Main.STORAGE.getRegister(register);
-			int result = w & f;
-			
-			super.affectStatus(Command.ANDWF, result);
-			
-			if (this.isDestinationBitSet) {
-				Main.STORAGE.setRegister(register, result);
-			} else {
-				Main.STORAGE.setW(result);
-			}
-		} catch (Exception e) {
-			SpecialRegister register = SpecialRegister.atAddress(this.fileRegister);
-			int f = Main.STORAGE.getRegister(register);
-			int result = w & f;
-			
-			super.affectStatus(Command.ANDWF, result);
-			
-			if (this.isDestinationBitSet) {
-				Main.STORAGE.setRegister(register, result);
-			} else {
-				Main.STORAGE.setW(result);
-			}
+		super.affectStatus(Command.ANDWF, result);
+		
+		if (this.isDestinationBitSet) {
+			Main.STORAGE.setRegister(this.fileRegister, result);
+		} else {
+			Main.STORAGE.setW(result);
 		}
 		
 		super.incrementPC();

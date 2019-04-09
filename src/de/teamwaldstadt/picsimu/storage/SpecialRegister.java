@@ -38,7 +38,7 @@ public enum SpecialRegister {
 		
 		if (address < 0x00 || (address >= GeneralRegister.FIRST_ADDRESS && address < Bank.BEGIN_OF_BANK_1)
 				|| address >= (GeneralRegister.FIRST_ADDRESS + Bank.BEGIN_OF_BANK_1)) {
-			throw new Exception("Not a special register (out of range)");
+			throw new Exception("Not a special register (out of range): " + String.format("%2X", address));
 		}
 		
 		for (SpecialRegister register : values()) {
@@ -48,7 +48,7 @@ public enum SpecialRegister {
 			}
 		}
 
-		throw new Exception("Not a special register (unknown error)");
+		throw new Exception("Not a special register (unknown error): " + String.format("%2X", address));
 	}
 
 	public int getAddress() {

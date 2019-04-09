@@ -11,7 +11,6 @@ import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
 import de.teamwaldstadt.picsimu.parser.Parser;
-import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 
 public class CodeExecutor {
 	CommandSet[] commands;
