@@ -118,7 +118,8 @@ public class Storage {
 			// do nothing
 		}
 		
-		throw new Exception("Invalid register address: " + String.format("%2X", address));
+//		throw new Exception("Invalid register address: " + String.format("%2X", address));
+		return 0x00; // if no register found, return 0x00
 	}
 
 	private int getRegister(SpecialRegister register) {
@@ -150,30 +151,15 @@ public class Storage {
 		
 		return Integer.valueOf(highSequence + lowSequence, 2);
 	}
-
-	// hässlicher Workaround
-	// TODO schönere Variante implementieren
+	
 	public boolean isBitOfRegisterSet(int register, int bitIndex) throws Exception {
 		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch): " + bitIndex);
 		}
 		
-		String bitSequence = Integer.toBinaryString(this.getRegister(register));
+		int value = this.getRegister(register);
 		
-		while (bitSequence.length() < 8) {
-			bitSequence = "0" + bitSequence;
-		}
-		
-		char[] bits = bitSequence.toCharArray();
-		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
-
-		if (bits[realDigit] == '1') {
-			return true;
-		} else if (bits[realDigit] == '0') {
-			return false;
-		} else {
-			throw new Exception("Invalid bit sequence (not only ones and zeroes)");
-		}
+		return ((value >> (bitIndex)) & 1) == 1;
 	}
 
 	public void setStorage(int[] storage) throws Exception {
@@ -239,39 +225,21 @@ public class Storage {
 		this.setRegister(SpecialRegister.PCL, low);
 		this.setRegister(SpecialRegister.PCLATH, high);
 	}
-
-	// hässlicher Workaround
-	// TODO schönere Variante implementieren
+	
 	public void setBitOfRegister(int register, int bitIndex, boolean setBit) throws Exception {
 		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch): " + bitIndex);
 		}
 		
-		String bitSequence = Integer.toBinaryString(this.getRegister(register));
-
-		while (bitSequence.length() < 8) {
-			bitSequence = "0" + bitSequence;
+		int value = this.getRegister(register);
+		
+		if (setBit) {
+			value |= (1 << bitIndex);
+		} else {
+			value &= ~(1 << bitIndex);
 		}
 		
-		char[] bits = bitSequence.toCharArray();
-		int realDigit = bitSequence.length() - bitIndex - 1; // Assembler beginnt von rechts bei 0!
-
-		bits[realDigit] = setBit ? '1' : '0';
-		bitSequence = new String(bits);
-		this.setRegister(register, Integer.valueOf(bitSequence, 2));
-		
-		/*
-		 * 
-		 * Shorter version here, TODO: implementieren
-		 * 
-		 */
-//		int value = getRegister(register);
-//		if (setBit) {
-//			value |= (1 << bitIndex);
-//		} else {
-//			value &= ~(1 << bitIndex);
-//		}
-//		System.out.println(String.format("%02X", value));
+		this.setRegister(register, value);
 	}
 
 }
