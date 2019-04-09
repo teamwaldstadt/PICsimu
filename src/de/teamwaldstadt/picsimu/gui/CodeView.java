@@ -9,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
@@ -33,21 +34,21 @@ public class CodeView extends JTable {
 		};
 		
 		tm.setColumnCount(2);
+		tm.setRowCount(20);
 		setModel(tm);
 
 		getColumnModel().getColumn(0).setMaxWidth(10);
 		getColumnModel().getColumn(1).setPreferredWidth(500);
-		tm.setRowCount(20);
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
-		
-		setModel(tm);
+		setGridColor(Color.GRAY);
 		setRowHeight(16);
 		setFont(new Font("courier", Font.PLAIN, 14));
 		
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				//toggle 'B' flag
 				if (columnAtPoint(e.getPoint()) > 0) return;
 				if (String.valueOf(getValueAt(rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()))).equals("B")) {
 					setValueAt("", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
@@ -56,23 +57,19 @@ public class CodeView extends JTable {
 				}
 			}
 		});
-		setGridColor(Color.GRAY);
-		setModel(tm);
 	}
 	
 	public void loadCode(File file) {
 		String[] lines = null;
 		try {
 			lines = Parser.getAllLines(file);
+			tm.setRowCount(lines.length);
+			for (int i = 0; i < lines.length; i++) {
+				tm.setValueAt(lines[i], i, 1);
+			}
 		} catch (IOException e) {
-			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.CANCEL_OPTION);
 		}
-		
-		tm.setRowCount(lines.length);
-		for (int i = 0; i < lines.length; i++) {
-			tm.setValueAt(lines[i], i, 1);
-		}
-		setModel(tm);
 	}
 	public void setLine(int line) {
 		changeSelection(0, 0, false, false);

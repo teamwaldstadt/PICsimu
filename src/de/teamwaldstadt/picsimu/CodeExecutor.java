@@ -114,7 +114,7 @@ public class CodeExecutor {
 	}
 	
 	public void updateStorage() {
-		if (gui != null) gui.getStorageTable().update();
+		if (gui != null) gui.getStorageTable().updateGUI();
 	}
 	public void updateRegisters() {
 		if (gui != null) gui.updateRegistersView();

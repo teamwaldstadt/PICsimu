@@ -16,57 +16,86 @@ import de.teamwaldstadt.picsimu.Main;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 
 public class JRegisterTable extends JTable {
-	
+
 	private static final long serialVersionUID = 1L;
-	
+
 	CodeExecutor codeExecutor;
 	SpecialRegister reg;
 	DefaultTableModel tm;
+
 	public JRegisterTable(String name, CodeExecutor codeExecutor, SpecialRegister reg) {
 		this.codeExecutor = codeExecutor;
 		this.reg = reg;
+		tm = new DefaultTableModel() {
+			private static final long serialVersionUID = 1L;
+
+			@Override
+			public boolean isCellEditable(int row, int col) {
+				return false;
+			}
+		};
+
 		init(name);
 		if (reg == SpecialRegister.STATUS) {
-			String[] values = {"IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C"};
+			tm.setRowCount(2);
+			String[] values = { "IRP", "RP1", "RP0", "TO", "PD", "Z", "DC", "C" };
 			for (int i = 8; i > 0; i--) {
 				setValueAt(values[8 - i], 0, 8 - i + 1);
 			}
-			tm.setRowCount(2);
+			setValueAt("Bit", 1, 0);
 		} else {
 			for (int i = 8; i > 0; i--) {
-				setValueAt(i-1, 0, 8 - i + 1);
+				setValueAt(i - 1, 0, 8 - i + 1);
 			}
+			setValueAt("Tris", 1, 0);
+			setValueAt("Pin", 2, 0);
 		}
 		update();
 	}
-	
+
 	public void update() {
-		int val = Main.STORAGE.getStorage()[reg.getAddress()];
+		//update bit and pin values (! not TRIS)
+		int val = 0;
+		try {
+			val = Main.STORAGE.getRegister(reg.getAddress());
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		for (int i = 8; i > 0; i--) {
 			setValueAt(val & 0x01, getRowCount() - 1, i);
 			val = val >> 1;
 		}
+		
+		//update TRIS (only PORTA and PORTB)
 		val = 0;
 		switch (reg) {
-		case PORTA: val = Main.STORAGE.getStorage()[SpecialRegister.TRISA.getAddress()]; break;
-		case PORTB: val = Main.STORAGE.getStorage()[SpecialRegister.TRISB.getAddress()]; break;
-		case STATUS: return;
-		default: return;
+		case PORTA:
+			try {
+				val = Main.STORAGE.getRegister(SpecialRegister.TRISA.getAddress());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case PORTB:
+			try {
+				val = Main.STORAGE.getRegister(SpecialRegister.TRISB.getAddress());
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			break;
+		case STATUS:
+			return;
+		default:
+			return;
 		}
 		for (int i = 8; i > 0; i--) {
 			setValueAt((val & 0x01) == 1 ? "i" : "o", 1, i);
 			val = val >> 1;
 		}
 	}
-	
+
 	public void init(String name) {
-		tm = new DefaultTableModel() {
-			private static final long serialVersionUID = 1L;
-			@Override
-			public boolean isCellEditable(int row, int col) {
-				return false;
-			}
-		};
+
 		int width = 20;
 		tm.setColumnCount(9);
 		setModel(tm);
@@ -80,78 +109,70 @@ public class JRegisterTable extends JTable {
 		getColumnModel().getColumn(6).setPreferredWidth(width);
 		getColumnModel().getColumn(7).setPreferredWidth(width);
 		getColumnModel().getColumn(8).setPreferredWidth(width);
-		
+
 		tm.setRowCount(3);
-		
+
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
-		
+
 		setFont(new Font("default", Font.PLAIN, 11));
-		
-		setModel(tm);
+
 		setRowHeight(width);
-		
+
 		addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				int row = rowAtPoint(e.getPoint());
 				int col = columnAtPoint(e.getPoint());
-				if (row == 0 || col == 0) return;
-				if (row != getRowCount() - 1) return;
-				
+				if (row == 0 || col == 0)
+					return;
+				if (row != getRowCount() - 1)
+					return;
+
 				setValueAt(Integer.parseInt(String.valueOf(getValueAt(row, col))) ^ 1, row, col);
-				
+
 				int value = 0;
 				for (int i = 0; i < 8; i++) {
 					value = (value << 1) + Integer.parseInt(String.valueOf(getValueAt(row, i + 1)));
 				}
-				
+
 				try {
 					Main.STORAGE.setRegister(reg.getAddress(), value);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-				
+
 				codeExecutor.updateStorage();
 			}
 		});
 		setGridColor(Color.GRAY);
-		setModel(tm);
 		setValueAt(name, 0, 0);
-		if (reg == SpecialRegister.STATUS) { 
-			setValueAt("Bit", 1, 0);
-			return;
-		}
-		setValueAt("Tris", 1, 0);
-		setValueAt("Pin", 2, 0);
 	}
 
-	
-	
 	@Override
-    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-   
+	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
+
 		if (row == 0 || row == getRowCount() - 2 || column == 0) {
 			setBackground(Color.LIGHT_GRAY);
 			return super.prepareRenderer(renderer, row, column);
 		}
-		
+
 		if (row % 2 == 1)
-    		setBackground(Color.WHITE);
-    	else 
-    		setBackground(new Color(240, 240, 240));
-		
+			setBackground(Color.WHITE);
+		else
+			setBackground(new Color(240, 240, 240));
+
 		Component c = super.prepareRenderer(renderer, row, column);
 
 		Object value = getValueAt(row, column);
 		if (value != null && c instanceof JLabel) {
-        	JLabel l = (JLabel) c;
-        	String tooltip = null;
-        	if (String.valueOf(value).contains(";")) 
-        		tooltip = String.valueOf(value).replaceAll(".*;", "");
-        	l.setToolTipText(tooltip);
-        	
-        }        
+			JLabel l = (JLabel) c;
+			String tooltip = null;
+			if (String.valueOf(value).contains(";"))
+				tooltip = String.valueOf(value).replaceAll(".*;", "");
+			l.setToolTipText(tooltip);
+
+		}
 		return c;
-    }
+	}
 }

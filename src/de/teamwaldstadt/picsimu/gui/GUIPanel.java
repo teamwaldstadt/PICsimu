@@ -14,6 +14,7 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -208,9 +209,8 @@ public class GUIPanel extends JPanel {
 		JSpinner frequencySpinner = new JSpinner(snm);
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));
 		frequencySpinner.setMinimumSize(new Dimension(100, 30));
-		frequencySpinner.setMaximumSize(new Dimension(100, 30));
 		frequencySpinner.setValue(4000000);
-		JLabel labelKhz = new JLabel("MHz");
+		JLabel labelMhz = new JLabel("MHz");
 		JLabel labelTitle = new JLabel("Quartz-Frequenz: ");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.BASELINE;
@@ -224,12 +224,34 @@ public class GUIPanel extends JPanel {
 		c.gridx = 1;
 		freqSettings.add(frequencySpinner, c);
 		c.gridx = 2;
-		freqSettings.add(labelKhz, c);
-		/*JLabel labelFreqGen = new JLabel("Frequenz-Generator: ");
+		freqSettings.add(labelMhz, c);
+		
+		JLabel labelFreqGen = new JLabel("Impuls-Generator: ");
 		c.gridy = 1;
 		c.gridx = 0;
-		freqSettings.add(labelFreqGen, c);*/
+		c.insets = new Insets(30, 2, 0, 2);
+		freqSettings.add(labelFreqGen, c);
+		c.insets = new Insets(0,2,0,2);
+		c.gridx = 1;
+		SpinnerNumberModel snm2 = new SpinnerNumberModel();
+		snm2.setStepSize(10);
+		snm2.setMinimum(10);
+		snm2.setMaximum(100);
+		JSpinner freqGenSpinner = new JSpinner(snm2);
+		freqGenSpinner.setValue(20);
+		freqSettings.add(freqGenSpinner, c);
+		JLabel labelKhz = new JLabel("kHz");
+		c.gridx = 2;
+		freqSettings.add(labelKhz, c);
 		
+		JLabel labelFreqGenOut = new JLabel("Impuls-Output: ");
+		c.gridy = 2;
+		c.gridx = 0;
+		freqSettings.add(labelFreqGenOut, c);
+		String[] outValues = {"None", "RA0", "RA1", "RA2", "RA3", "RA4", "RA5", "RA6", "RA7", "RA8",};
+		JComboBox<?> genOut = new JComboBox<>(outValues);
+		c.gridx = 1;
+		freqSettings.add(genOut, c);
 		
 		c.gridwidth = 1;
 		c.gridheight = 1;
@@ -262,7 +284,7 @@ public class GUIPanel extends JPanel {
 		for (JRegisterTable t : registerTables) {
 			t.update();
 		}
-		infoTable.update();
+		infoTable.updateGUI();
 	}
 
 }

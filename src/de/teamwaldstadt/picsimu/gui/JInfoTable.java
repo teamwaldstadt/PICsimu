@@ -20,31 +20,31 @@ public class JInfoTable extends JTable {
 	public JInfoTable(CodeExecutor codeExecutor) {
 		tm = new JInfoTableModel(codeExecutor);
 		int width = 20;
+		
 		tm.setColumnCount(2);
-		setModel(tm);
-
-		getColumnModel().getColumn(0).setPreferredWidth(width);
-		getColumnModel().getColumn(1).setPreferredWidth(width);
 		tm.setRowCount(3);
+		
+		setRowHeight(width);
+		setGridColor(Color.GRAY);
 		setTableHeader(null);
 		setCellSelectionEnabled(false);
+		setModel(tm);
 		
-		setModel(tm);
-		setRowHeight(width);
-	
-		setGridColor(Color.GRAY);
-		setModel(tm);
+		getColumnModel().getColumn(0).setPreferredWidth(width);
+		getColumnModel().getColumn(1).setPreferredWidth(width);
+		
 		setValueAt("W", 0, 0);
 		setValueAt("PC", 1, 0);
 		setValueAt("FSR", 2, 0);
-		update();
+		
+		updateGUI();
 	}
 	
-	public void update() {
-		tm.setValueJustForGUI(String.format("%02X", Main.STORAGE.getW()), 0, 1);
+	public void updateGUI() {
 		try {
-			tm.setValueJustForGUI(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
-			tm.setValueJustForGUI(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR.getAddress())), 2, 1);
+			tm.setValue(String.format("%02X", Main.STORAGE.getW()), 0, 1);
+			tm.setValue(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
+			tm.setValue(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR.getAddress())), 2, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
