@@ -42,11 +42,11 @@ public class StorageTableModel extends DefaultTableModel {
 		}
 	}
 	
-	public void setValueWithoutRegisterUpdate(int address, int value) {
-		int row = 1 + (int) (address / 8);
-		int col = 1 + address % 8;
+	public void setHardValueAt(Object data, int row, int col) {
+		/*int row = 1 + (int) (address / 8);
+		int col = 1 + address % 8;*/
 		doUpdate = false;
-		setValueAt(String.format("%02X", value), row, col);
+		setValueAt(data, row, col);
 		doUpdate = true;
 	}
 }

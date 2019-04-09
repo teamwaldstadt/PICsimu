@@ -27,7 +27,7 @@ public class StorageTable extends JTable {
 		tm.setColumnCount(9);
 		tm.setRowCount(33);
 		
-		setRowHeight(width + 2);
+		setRowHeight(width + 5);
 		setCellSelectionEnabled(false);
 		setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		setTableHeader(null);
@@ -65,6 +65,16 @@ public class StorageTable extends JTable {
 	
 	public StorageTableModel getStorageTableModel() {
 		return tm;
+	}
+	
+	public void updateWithoutRegisterUpdate() {
+		for (int i = 1; i < 33; i++) {
+			for (int j = 1; j < 9; j++) {
+				//if (i == 1) System.out.print(Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)] + " ");
+				tm.setHardValueAt(String.format("%02X", Main.STORAGE.getStorage()[(j-1) + (getColumnCount() - 1) * (i-1)]), i, j);
+			}
+			//System.out.println();
+		}
 	}
 
 	@Override

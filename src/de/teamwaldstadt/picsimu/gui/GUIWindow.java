@@ -47,7 +47,7 @@ public class GUIWindow extends JFrame {
 		}
 		
 		setSize(WIDTH, HEIGHT);
-		setMinimumSize(new Dimension(WIDTH - 200, HEIGHT - 150));
+		setMinimumSize(new Dimension(WIDTH, HEIGHT - 150));
 		
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);
@@ -136,8 +136,17 @@ public class GUIWindow extends JFrame {
 			}
 		});
 		menu.add(itemClose);
-
+		
 		menuBar.add(menu);
+		
+		JMenu info = new JMenu("Info");
+		JMenuItem about = new JMenuItem("Über");
+		JMenuItem license = new JMenuItem("Lizenz");
+		JMenuItem help = new JMenuItem("Dokumentation");
+		info.add(about);
+		info.add(license);
+		info.add(help);
+		menuBar.add(info);
 		return menuBar;
 	}
 }
