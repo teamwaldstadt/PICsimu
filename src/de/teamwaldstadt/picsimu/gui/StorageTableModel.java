@@ -33,21 +33,26 @@ public class StorageTableModel extends DefaultTableModel {
 			super.setValueAt(data, row, col); 
 			return; 
 		}
+		if (row == 1 && col == 1 && doUpdate) {
+			JOptionPane.showMessageDialog(null, "Not a physical register", "Error", JOptionPane.CANCEL_OPTION);
+			return;
+		}
 		
 		if (!value.matches("[0-9a-fA-F]{1,2}")) {
-			JOptionPane.showMessageDialog(null, "Value not allowed!", "Alert", JOptionPane.CANCEL_OPTION); 
+			JOptionPane.showMessageDialog(null, "Value not allowed!", "Error", JOptionPane.CANCEL_OPTION); 
 		} else {
 			if (value.length() == 1) 
 				value = "0" + value;
-			super.setValueAt(value.toUpperCase(), row, col);
+			
 			try {
 				//System.out.println(value + " at address " + String.format("%02X", ((col-1) + (getColumnCount() - 1) * (row-1))));
 				if (doStorageUpdate) {
 					Main.STORAGE.setRegister((col-1) + (getColumnCount() - 1) * (row-1), Integer.parseInt(value, 16));
 					updateGUIOnly();
 				}
+				super.setValueAt(value.toUpperCase(), row, col);
 			} catch (Exception e) {
-				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage(), "Error", JOptionPane.CANCEL_OPTION);
 			}
 			if (doUpdate) codeExecutor.updateRegisters();
 			
@@ -66,7 +71,9 @@ public class StorageTableModel extends DefaultTableModel {
 	
 	public void setValueJustForGUI(Object data, int row, int col) {
 		doStorageUpdate = false;
+		doUpdate = false;
 		setValueAt(data, row, col);
+		doUpdate = true;
 		doStorageUpdate = true;
 	}
 	
