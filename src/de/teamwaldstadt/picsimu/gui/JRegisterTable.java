@@ -106,7 +106,12 @@ public class JRegisterTable extends JTable {
 					value = (value << 1) + Integer.parseInt(String.valueOf(getValueAt(row, i + 1)));
 				}
 				
-				Main.STORAGE.getStorage()[reg.getAddress()] = value;
+				try {
+					Main.STORAGE.setRegister(reg.getAddress(), value);
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
+				
 				codeExecutor.updateStorage();
 			}
 		});
