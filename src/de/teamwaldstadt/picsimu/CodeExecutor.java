@@ -75,7 +75,7 @@ public class CodeExecutor {
 			
 			if (Main.STORAGE.getPC() >= commands.length) {
 				DONE = true;
-				JOptionPane.showMessageDialog(null, "Letzter Befehl ausgeführt.");
+				JOptionPane.showMessageDialog(null, "Letzter Befehl ausgef\u00FChrt.");
 				return;
 			}
 			
