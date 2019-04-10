@@ -12,7 +12,7 @@ public class CommandMOVWF extends CommandExecutor {
 	public void execute() throws Exception {
 		int w = Main.STORAGE.getW();
 		
-		Main.STORAGE.setRegister(super.getArguments(), w);
+		Main.STORAGE.setRegister(super.getArguments(), w, false);
 		
 		super.affectStatus(Command.MOVWF, 0);
 		super.incrementPC();

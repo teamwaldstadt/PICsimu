@@ -18,13 +18,13 @@ public class CommandXORWF extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int w = Main.STORAGE.getW();
-		int f = Main.STORAGE.getRegister(this.fileRegister);
+		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = w ^ f;
 		
 		super.affectStatus(Command.XORWF, result);
 		
 		if (this.isDestinationBitSet) {
-			Main.STORAGE.setRegister(this.fileRegister, result);
+			Main.STORAGE.setRegister(this.fileRegister, result, false);
 		} else {
 			Main.STORAGE.setW(result);
 		}

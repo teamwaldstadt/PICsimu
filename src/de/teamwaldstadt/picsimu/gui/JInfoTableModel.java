@@ -58,7 +58,7 @@ public class JInfoTableModel extends DefaultTableModel {
 		//set FSR
 		if (row == 2) {
 			try {
-				Main.STORAGE.setRegister(SpecialRegister.FSR.getAddress(), Integer.parseInt(value, 16));
+				Main.STORAGE.setRegister(SpecialRegister.FSR.getAddress(), Integer.parseInt(value, 16), true);
 				super.setValueAt(value.toUpperCase(), row, col);
 			} catch (Exception e) {
 				e.printStackTrace();

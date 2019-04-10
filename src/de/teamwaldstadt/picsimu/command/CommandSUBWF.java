@@ -18,7 +18,7 @@ public class CommandSUBWF extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int w = ((Main.STORAGE.getW() ^ 0xFF) + 1) & 0xFF; // 2er-Komplement und maskieren
-		int f = Main.STORAGE.getRegister(this.fileRegister);
+		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f + w;
 		
 		super.affectStatus(Command.SUBWF, result);
@@ -27,7 +27,7 @@ public class CommandSUBWF extends CommandExecutor {
 		result &= 0xFF; // result maskieren
 		
 		if (this.isDestinationBitSet) {
-			Main.STORAGE.setRegister(this.fileRegister, result);
+			Main.STORAGE.setRegister(this.fileRegister, result, false);
 		} else {
 			Main.STORAGE.setW(result);
 		}

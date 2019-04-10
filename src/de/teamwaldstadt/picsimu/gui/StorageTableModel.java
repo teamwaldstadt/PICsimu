@@ -31,8 +31,8 @@ public class StorageTableModel extends DefaultTableModel {
 		
 		String value = String.valueOf(data);
 		
-		//disable edit of storage cell 0
-		if (row == 1 && col == 1) {
+		//disable edit of storage cell 0x00 and 0x80
+		if ((row == 1 && col == 1) || (row == 17 && col == 1)) {
 			JOptionPane.showMessageDialog(null, "Not a physical register", "Error", JOptionPane.CANCEL_OPTION);
 			return;
 		}
@@ -48,7 +48,7 @@ public class StorageTableModel extends DefaultTableModel {
 		
 		//try to set the register in the storage and update the table (for mirroring)
 		try {
-			Main.STORAGE.setRegister((col-1) + (getColumnCount() - 1) * (row-1), Integer.parseInt(value, 16));
+			Main.STORAGE.setRegister((col-1) + (getColumnCount() - 1) * (row-1), Integer.parseInt(value, 16), true);
 			updateGUI();
 			//the graphical value will only be set if there was no exception
 			super.setValueAt(value.toUpperCase(), row, col);
@@ -76,7 +76,7 @@ public class StorageTableModel extends DefaultTableModel {
 	public void updateGUI() {
 		for (int i = 0; i < Main.STORAGE.getStorage().length; i++) {
 			try {
-				setValue(Main.STORAGE.getRegister(i), i);
+				setValue(Main.STORAGE.getRegister(i, true), i);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

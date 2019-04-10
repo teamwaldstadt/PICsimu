@@ -33,13 +33,13 @@ public class Storage {
 		this.storage[register.getAddress()] = register.getDefaultValue();
 
 		if (register.getBank() == Bank.ALL) {
-			this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = register.getDefaultValue();
+			this.storage[register.getAddress() + Bank.OFFSET] = register.getDefaultValue();
 		}
 	}
 	
 	public void resetRegister(GeneralRegister register) {
 		this.storage[register.getAddress()] = 0x00;
-		this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = 0x00;
+		this.storage[register.getAddress() + Bank.OFFSET] = 0x00;
 	}
 
 	public void resetW() {
@@ -96,10 +96,15 @@ public class Storage {
 		return this.storage;
 	}
 	
-	public int getRegister(int address) throws Exception {
+	public int getRegister(int address, boolean ignoreBank) throws Exception {
 		// indirekte Adressierung
 		if (address == 0x00) {
 			address = this.getRegister(SpecialRegister.FSR);
+		}
+		
+		// Bank 1
+		if (Bank.getCurrent() == Bank.BANK_1 && !ignoreBank) {
+			address += Bank.OFFSET;
 		}
 		
 		try {
@@ -152,12 +157,12 @@ public class Storage {
 		return Integer.valueOf(highSequence + lowSequence, 2);
 	}
 	
-	public boolean isBitOfRegisterSet(int register, int bitIndex) throws Exception {
+	public boolean isBitOfRegisterSet(int register, int bitIndex, boolean ignoreBank) throws Exception {
 		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch): " + bitIndex);
 		}
 		
-		int value = this.getRegister(register);
+		int value = this.getRegister(register, ignoreBank);
 		
 		return ((value >> (bitIndex)) & 1) == 1;
 	}
@@ -170,12 +175,17 @@ public class Storage {
 		this.storage = storage;
 	}
 	
-	public void setRegister(int address, int value) throws Exception {
+	public void setRegister(int address, int value, boolean ignoreBank) throws Exception {
 		check8Bits(value);
 		
 		// indirekte Adressierung
 		if (address == 0x00) {
 			address = this.getRegister(SpecialRegister.FSR);
+		}
+		
+		// Bank 1
+		if (Bank.getCurrent() == Bank.BANK_1 && !ignoreBank) {
+			address += Bank.OFFSET;
 		}
 		
 		try {			
@@ -201,14 +211,14 @@ public class Storage {
 		this.storage[register.getAddress()] = value;
 
 		if (register.getBank() == Bank.ALL) {
-			this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
+			this.storage[register.getAddress() + Bank.OFFSET] = value;
 		}
 	}
 
 	private void setRegister(GeneralRegister register, int value) throws Exception {
 		check8Bits(value);
 		this.storage[register.getAddress()] = value;
-		this.storage[register.getAddress() + Bank.BEGIN_OF_BANK_1] = value;
+		this.storage[register.getAddress() + Bank.OFFSET] = value;
 	}
 
 	public void setW(int w) throws Exception {
@@ -226,12 +236,12 @@ public class Storage {
 		this.setRegister(SpecialRegister.PCLATH, high);
 	}
 	
-	public void setBitOfRegister(int register, int bitIndex, boolean setBit) throws Exception {
+	public void setBitOfRegister(int register, int bitIndex, boolean setBit, boolean ignoreBank) throws Exception {
 		if (bitIndex < 0 || bitIndex > 7) {
 			throw new Exception("Out of byte (digit mismatch): " + bitIndex);
 		}
 		
-		int value = this.getRegister(register);
+		int value = this.getRegister(register, ignoreBank);
 		
 		if (setBit) {
 			value |= (1 << bitIndex);
@@ -239,7 +249,7 @@ public class Storage {
 			value &= ~(1 << bitIndex);
 		}
 		
-		this.setRegister(register, value);
+		this.setRegister(register, value, ignoreBank);
 	}
 
 }

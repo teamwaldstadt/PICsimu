@@ -57,7 +57,7 @@ public class JRegisterTable extends JTable {
 		//update bit and pin values (! not TRIS)
 		int val = 0;
 		try {
-			val = Main.STORAGE.getRegister(reg.getAddress());
+			val = Main.STORAGE.getRegister(reg.getAddress(), true);
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
@@ -71,14 +71,14 @@ public class JRegisterTable extends JTable {
 		switch (reg) {
 		case PORTA:
 			try {
-				val = Main.STORAGE.getRegister(SpecialRegister.TRISA.getAddress());
+				val = Main.STORAGE.getRegister(SpecialRegister.TRISA.getAddress(), true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			break;
 		case PORTB:
 			try {
-				val = Main.STORAGE.getRegister(SpecialRegister.TRISB.getAddress());
+				val = Main.STORAGE.getRegister(SpecialRegister.TRISB.getAddress(), true);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -137,7 +137,7 @@ public class JRegisterTable extends JTable {
 				}
 
 				try {
-					Main.STORAGE.setRegister(reg.getAddress(), value);
+					Main.STORAGE.setRegister(reg.getAddress(), value, true);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}

@@ -44,7 +44,7 @@ public class JInfoTable extends JTable {
 		try {
 			tm.setValue(String.format("%02X", Main.STORAGE.getW()), 0, 1);
 			tm.setValue(String.format("%04X", Main.STORAGE.getPC()), 1, 1);
-			tm.setValue(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR.getAddress())), 2, 1);
+			tm.setValue(String.format("%02X", Main.STORAGE.getRegister(SpecialRegister.FSR.getAddress(), true)), 2, 1);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

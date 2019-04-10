@@ -43,7 +43,7 @@ public enum SpecialRegister {
 		
 		for (SpecialRegister register : values()) {
 			if (address == register.getAddress() || (register.getBank() == Bank.ALL
-					&& (address == (register.getAddress() + Bank.BEGIN_OF_BANK_1)))) {
+					&& (address == (register.getAddress() + Bank.OFFSET)))) {
 				return register;
 			}
 		}

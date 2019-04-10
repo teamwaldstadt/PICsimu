@@ -18,7 +18,7 @@ public class CommandADDWF extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int w = Main.STORAGE.getW();
-		int f = Main.STORAGE.getRegister(this.fileRegister);
+		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f + w;
 		
 		super.affectStatus(Command.ADDWF, result);
@@ -27,7 +27,7 @@ public class CommandADDWF extends CommandExecutor {
 		result &= 0xFF; // result maskieren
 		
 		if (this.isDestinationBitSet) {
-			Main.STORAGE.setRegister(this.fileRegister, result);
+			Main.STORAGE.setRegister(this.fileRegister, result, false);
 		} else {
 			Main.STORAGE.setW(result);
 		}

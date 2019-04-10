@@ -17,7 +17,7 @@ public class CommandBCF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		Main.STORAGE.setBitOfRegister(this.fileRegister, bitIndex, false);
+		Main.STORAGE.setBitOfRegister(this.fileRegister, bitIndex, false, false);
 		
 		super.affectStatus(Command.BCF, 0);
 		super.incrementPC();
