@@ -22,9 +22,12 @@ import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
+import de.teamwaldstadt.picsimu.utils.FrequencyGenerator;
 
 
 public class GUIPanel extends JPanel {
@@ -36,6 +39,9 @@ public class GUIPanel extends JPanel {
 	CodeExecutor codeExecutor;
 	JInfoTable infoTable;
 	List<JRegisterTable> registerTables;
+	JComboBox<?> genOut2;
+	JSpinner freqGenSpinner;
+	JComboBox<?> genOut;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -222,8 +228,10 @@ public class GUIPanel extends JPanel {
 		labelTitle.setMinimumSize(new Dimension(110, 30));
 		freqSettings.add(labelTitle, c);
 		c.gridx = 1;
+		c.gridwidth = 2;
 		freqSettings.add(frequencySpinner, c);
-		c.gridx = 2;
+		c.gridwidth = 1;
+		c.gridx = 3;
 		freqSettings.add(labelMhz, c);
 		
 		JLabel labelFreqGen = new JLabel("Impuls-Generator: ");
@@ -233,25 +241,64 @@ public class GUIPanel extends JPanel {
 		freqSettings.add(labelFreqGen, c);
 		c.insets = new Insets(0,2,0,2);
 		c.gridx = 1;
+		c.gridwidth = 2;
 		SpinnerNumberModel snm2 = new SpinnerNumberModel();
 		snm2.setStepSize(10);
 		snm2.setMinimum(10);
 		snm2.setMaximum(100);
-		JSpinner freqGenSpinner = new JSpinner(snm2);
+		
+		freqGenSpinner = new JSpinner(snm2);
 		freqGenSpinner.setValue(20);
 		freqSettings.add(freqGenSpinner, c);
 		JLabel labelKhz = new JLabel("kHz");
-		c.gridx = 2;
+		c.gridwidth = 1;
+		c.gridx = 3;
 		freqSettings.add(labelKhz, c);
 		
 		JLabel labelFreqGenOut = new JLabel("Impuls-Output: ");
 		c.gridy = 2;
 		c.gridx = 0;
 		freqSettings.add(labelFreqGenOut, c);
-		String[] outValues = {"None", "RA0", "RA1", "RA2", "RA3", "RA4", "RA5", "RA6", "RA7", "RA8",};
-		JComboBox<?> genOut = new JComboBox<>(outValues);
+		String[] outValues = {"None", "RA", "RB"};
+		genOut = new JComboBox<>(outValues);
 		c.gridx = 1;
+		
+
+		String[] outValues2 = {"0", "1", "2", "3", "4", "5", "6", "7"};
+		genOut2 = new JComboBox<>(outValues2);
+		
+		genOut.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateFreqGen();
+			}
+		});
+		genOut2.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				updateFreqGen();
+			}
+		});
+		freqGenSpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				updateFreqGen();
+			}
+		});
+		
 		freqSettings.add(genOut, c);
+		JLabel pinLabel = new JLabel("Pin:");
+		c.insets = new Insets(0,5,0,0);
+		c.gridx = 2;
+		freqSettings.add(pinLabel, c);
+		c.insets = new Insets(0,0,0,0);
+		
+		genOut2.setToolTipText("Pin");
+		c.gridx = 3;
+		freqSettings.add(genOut2, c);
+		
+		
+		
 		
 		c.gridwidth = 1;
 		c.gridheight = 1;
@@ -270,7 +317,19 @@ public class GUIPanel extends JPanel {
 		more.add(label2);
 		add(more, c);
 	}
-	
+	private void updateFreqGen() {
+		double delay = ((1.0 / (double) Integer.parseInt(String.valueOf(freqGenSpinner.getValue()))) * 10000);
+		int bit = Integer.parseInt(String.valueOf(genOut2.getSelectedItem()));
+
+		int regAddr = 0;
+		switch(String.valueOf(genOut.getSelectedItem())) {
+		case "RA": regAddr = SpecialRegister.PORTA.getAddress(); break;
+		case "RB": regAddr = SpecialRegister.PORTB.getAddress(); break;
+		default: FrequencyGenerator.getInstance().stop(); return;
+		}
+		
+		FrequencyGenerator.getInstance().runWithFreq((int) delay, regAddr, bit);
+	}
 	public CodeView getCodeView() {
 		return codeView;
 	}

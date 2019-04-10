@@ -11,6 +11,7 @@ import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
 import de.teamwaldstadt.picsimu.gui.GUIWindow;
 import de.teamwaldstadt.picsimu.parser.Parser;
+import de.teamwaldstadt.picsimu.utils.FrequencyGenerator;
 
 public class CodeExecutor {
 	CommandSet[] commands;
@@ -25,6 +26,7 @@ public class CodeExecutor {
 		w = new GUIWindow(this);
 		Main.STORAGE.resetAll();
 		gui = w.getPanel();
+		FrequencyGenerator.getInstance().setCodeExecutor(this);
 	}
 	
 	public boolean lineHasCode(int line) {
