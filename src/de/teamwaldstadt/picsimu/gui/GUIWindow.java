@@ -11,6 +11,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
@@ -119,7 +120,6 @@ public class GUIWindow extends JFrame {
 				try {
 					UIManager.setLookAndFeel(new NimbusLookAndFeel());
 				} catch (UnsupportedLookAndFeelException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 				SwingUtilities.updateComponentTreeUI(frame);
@@ -140,9 +140,32 @@ public class GUIWindow extends JFrame {
 		menuBar.add(menu);
 		
 		JMenu info = new JMenu("Info");
+		
 		JMenuItem about = new JMenuItem("\u00DCber");
 		JMenuItem license = new JMenuItem("Lizenz");
 		JMenuItem help = new JMenuItem("Dokumentation");
+		
+		about.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, Main.PGM_NAME + " version " + Main.PGM_VERSION + "\n\nMade by:\nTeam Waldstadt (Jakob Gietl, Fynn Arnold)\n\nView source code at:\nhttps://github.com/teamwaldstadt/PICsimu", "\u00DCber", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
+		license.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Not implemented yet", "Lizenz", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
+		help.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(null, "Not implemented yet", "Dokumentation", JOptionPane.INFORMATION_MESSAGE);
+			}
+		});
+		
 		info.add(about);
 		info.add(license);
 		info.add(help);
