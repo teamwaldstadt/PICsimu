@@ -160,11 +160,23 @@ public class GUIPanel extends JPanel {
 		/* 'start' */ 
 		JButton startButton = new JButton("Start");
 		startButton.setFocusPainted(false);
+		startButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				codeExecutor.start();
+			}
+		});
 		buttons.add(startButton);
 		
 		/* 'stop' */
 		JButton stopButton = new JButton("Stop");
 		stopButton.setFocusPainted(false);
+		stopButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				codeExecutor.stop();
+			}
+		});
 		buttons.add(stopButton);
 		
 		/* 'reset' */
@@ -208,14 +220,20 @@ public class GUIPanel extends JPanel {
 		freqSettings1.setBorder(border);
 		freqSettings.setLayout(new GridBagLayout());
 		
-		SpinnerNumberModel snm = new SpinnerNumberModel();
-		snm.setStepSize(100000);
-		snm.setMinimum(2000000);
-		snm.setMaximum(5000000);
+		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 3.0, 5.0, 0.1);
 		JSpinner frequencySpinner = new JSpinner(snm);
+        
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));
 		frequencySpinner.setMinimumSize(new Dimension(100, 30));
-		frequencySpinner.setValue(4000000);
+		frequencySpinner.setValue(4.00000f);
+		
+		frequencySpinner.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent e) {
+				codeExecutor.setFrequency(Double.parseDouble(String.valueOf(frequencySpinner.getValue())) * 1000);
+			}
+		});
+		
 		JLabel labelMhz = new JLabel("MHz");
 		JLabel labelTitle = new JLabel("Quartz-Frequenz: ");
 		c.fill = GridBagConstraints.HORIZONTAL;

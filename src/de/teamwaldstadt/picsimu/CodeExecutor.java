@@ -1,10 +1,13 @@
 package de.teamwaldstadt.picsimu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 
 import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
@@ -13,13 +16,14 @@ import de.teamwaldstadt.picsimu.gui.GUIWindow;
 import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.utils.FrequencyGenerator;
 
-public class CodeExecutor {
+public class CodeExecutor implements ActionListener {
 	CommandSet[] commands;
 	
 	public GUIPanel gui;
 	
 	boolean DONE;
 	GUIWindow w;
+	Timer t;
 	
 	public CodeExecutor() {
 		DONE = false;
@@ -27,6 +31,8 @@ public class CodeExecutor {
 		Main.STORAGE.resetAll();
 		gui = w.getPanel();
 		FrequencyGenerator.getInstance().setCodeExecutor(this);
+		
+		t = new Timer(100, this);
 	}
 	
 	public boolean lineHasCode(int line) {
@@ -56,7 +62,7 @@ public class CodeExecutor {
 		if (commands != null && commands.length > 0) {
 			gui.getCodeView().setLine(commands[0].getLineNr());
 		}
-	
+		stop();
 		DONE = false;
 		Main.STORAGE.resetAll();
 		updateStorage();
@@ -127,5 +133,20 @@ public class CodeExecutor {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	public void setFrequency(double freq) {
+//		System.out.println((int) (1 / freq * 10000 * 4));
+//		t.setDelay((int) (1 / freq * 10000 * 4));
+	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if (commands != null)
+			nextCommand();
+	}
+	public void start() {
+		if (!t.isRunning() && commands != null) t.start();
+	}
+	public void stop() {
+		if (t.isRunning()) t.stop();
 	}
 }
