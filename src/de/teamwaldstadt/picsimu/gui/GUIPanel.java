@@ -1,13 +1,17 @@
 package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.Color;
+import java.awt.ComponentOrientation;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,9 +24,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.SwingConstants;
-import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -46,6 +50,8 @@ public class GUIPanel extends JPanel {
 	JSpinner freqGenSpinner;
 	JComboBox<?> genOut;
 	JCheckBox impulsActivated;
+	JTextField runtimeField;
+	JLabel runtime;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -224,7 +230,8 @@ public class GUIPanel extends JPanel {
 		freqSettings1.setBorder(border);
 		freqSettings.setLayout(new GridBagLayout());
 		
-		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 3.0, 5.0, 0.1);
+		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 0.5, 6.0, 0.1);
+		codeExecutor.setQuarzFrequency(4000000);
 		JSpinner frequencySpinner = new JSpinner(snm);
         
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));
@@ -234,11 +241,11 @@ public class GUIPanel extends JPanel {
 		frequencySpinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				codeExecutor.setFrequency(Double.parseDouble(String.valueOf(frequencySpinner.getValue())) * 1000);
+				codeExecutor.setQuarzFrequency(Double.parseDouble(String.valueOf(frequencySpinner.getValue())) * 1000000);
 			}
 		});
 		
-		JLabel labelTitle = new JLabel("Quartz-Frequenz (MHz): ");
+		JLabel labelTitle = new JLabel("Quarz-Frequenz (MHz) ");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.BASELINE;
 		c.gridy = 0;
@@ -248,16 +255,33 @@ public class GUIPanel extends JPanel {
 		freqSettings.add(labelTitle, c);
 		c.gridx = 1;
 		c.gridwidth = 2;
+		c.insets = new Insets(0,2,0,2);
 		freqSettings.add(frequencySpinner, c);
 		c.gridwidth = 1;
 		c.gridx = 3;
 		
-		JLabel labelFreqGen = new JLabel("Impuls-Generator (kHz): ");
+		runtime = new JLabel("Laufzeit (1\u00B5s / Befehl)");
 		c.gridy = 1;
 		c.gridx = 0;
-		c.insets = new Insets(30, 2, 0, 2);
-		freqSettings.add(labelFreqGen, c);
+		freqSettings.add(runtime, c);
+		runtimeField = new JTextField("0\u00B5s");
+		runtimeField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
+		runtimeField.setEditable(false);
+		c.gridx = 1;
+		freqSettings.add(runtimeField, c);
+		
+		JLabel freqGenHeadline = new JLabel("Frequenzgenerator");
+		freqGenHeadline.setFont(new Font("default", Font.BOLD, 12));
+		c.gridx = 0;
+		c.gridy = 2;
+		c.insets = new Insets(20, 2, 5, 2);
+		freqSettings.add(freqGenHeadline, c);
+		
+		JLabel labelFreqGen = new JLabel("Frequenz (kHz)");
+		c.gridy = 3;
+		c.gridx = 0;
 		c.insets = new Insets(0,2,0,2);
+		freqSettings.add(labelFreqGen, c);
 		c.gridx = 1;
 		c.gridwidth = 2;
 		SpinnerNumberModel snm2 = new SpinnerNumberModel();
@@ -269,8 +293,8 @@ public class GUIPanel extends JPanel {
 		freqGenSpinner.setValue(20);
 		freqSettings.add(freqGenSpinner, c);
 		
-		JLabel labelFreqGenOut = new JLabel("Impuls-Register: ");
-		c.gridy = 2;
+		JLabel labelFreqGenOut = new JLabel("Register");
+		c.gridy = 4;
 		c.gridx = 0;
 		freqSettings.add(labelFreqGenOut, c);
 		String[] outValues = {"RA", "RB"};
@@ -301,18 +325,17 @@ public class GUIPanel extends JPanel {
 		});
 		
 		freqSettings.add(genOut, c);
-		JLabel pinLabel = new JLabel("Impuls-Pin:");
+		JLabel pinLabel = new JLabel("Pin");
 		c.gridx = 0;
-		c.gridy = 3;
+		c.gridy = 5;
 		freqSettings.add(pinLabel, c);
 		
-		genOut2.setToolTipText("Pin");
 		c.gridx = 1;
 		freqSettings.add(genOut2, c);
 		
-		JLabel impulsGeneratorLabel = new JLabel("Frequenzgenerator aktiviert:");
+		JLabel impulsGeneratorLabel = new JLabel("Aktiviert");
 		c.gridx = 0;
-		c.gridy = 4;
+		c.gridy = 6;
 		c.insets = new Insets(4,2,4,2);
 		freqSettings.add(impulsGeneratorLabel, c);
 		
@@ -364,9 +387,18 @@ public class GUIPanel extends JPanel {
 	public CodeView getCodeView() {
 		return codeView;
 	}
-	
+	public void setCommandDuration(double duration) {
+		DecimalFormat df = new DecimalFormat("#.###");
+		df.setRoundingMode(RoundingMode.HALF_UP);
+		runtime.setText("Laufzeit (" + df.format(duration) + "\u00B5s / Befehl)");
+	}
 	public StorageTable getStorageTable() {
 		return storageTable;
+	}
+	public void setRuntime(double value) {
+		DecimalFormat df = new DecimalFormat("#.####");
+		df.setRoundingMode(RoundingMode.HALF_UP);
+		runtimeField.setText(df.format(value) + "\u00B5s");
 	}
 
 	public void updateRegistersView() {

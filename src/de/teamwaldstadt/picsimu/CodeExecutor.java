@@ -25,14 +25,18 @@ public class CodeExecutor implements ActionListener {
 	GUIWindow w;
 	Timer t;
 	
+	// values in micro seconds
+	double runtime;
+	double commandDuration = 0;
+	
 	public CodeExecutor() {
+		runtime = 0;
+		t = new Timer(100, this);
 		DONE = false;
 		w = new GUIWindow(this);
 		Main.STORAGE.resetAll();
 		gui = w.getPanel();
 		FrequencyGenerator.getInstance().setCodeExecutor(this);
-		
-		t = new Timer(100, this);
 	}
 	
 	public boolean lineHasCode(int line) {
@@ -67,6 +71,7 @@ public class CodeExecutor implements ActionListener {
 		Main.STORAGE.resetAll();
 		updateStorage();
 		updateRegisters();
+		runtime = 0;
 	}
 	
 	public void nextCommand() {		
@@ -77,23 +82,42 @@ public class CodeExecutor implements ActionListener {
 				return;
 			}
 			
-			runCommand(Main.STORAGE.getPC());
+			//runCommand(Main.STORAGE.getPC());
+			runtime += commandDuration * (commands[correctPC(Main.STORAGE.getPC())].getCommand().getQuartzTacts() / 4);
+
+			runCommand(correctPC(Main.STORAGE.getPC()));
 			
-			if (Main.STORAGE.getPC() >= commands.length) {
+			if (correctPC(Main.STORAGE.getPC()) >= commands.length) {
 				DONE = true;
 				JOptionPane.showMessageDialog(null, "Letzter Befehl ausgef\u00FChrt.");
 				return;
 			}
 			
-			gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
+			
+			gui.getCodeView().setLine(commands[correctPC(Main.STORAGE.getPC())].getLineNr());
+			//gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+		gui.setRuntime(runtime);
 		
 		updateRegisters();
 		updateStorage();
 		
 		
+	}
+	
+	public int correctPC(int pc) {
+		if (pc >= commands.length || commands[pc].getCommandNr() != pc) {
+			for (int i = 0; i < commands.length; i++) {
+				if (commands[i].getCommandNr() == pc) {
+					return i;
+				}
+			}
+		}
+		return pc;
 	}
 	
 	public void runCommand(int commandNr) throws Exception {
@@ -134,9 +158,13 @@ public class CodeExecutor implements ActionListener {
 			e.printStackTrace();
 		}
 	}
-	public void setFrequency(double freq) {
-//		System.out.println((int) (1 / freq * 10000 * 4));
-//		t.setDelay((int) (1 / freq * 10000 * 4));
+	public void setQuarzFrequency(double freq) {
+		freq = Math.round(freq);
+		commandDuration = 1 / freq * 4 * 1000000;
+		if (gui != null)
+			gui.setCommandDuration(commandDuration);
+//		System.out.println((int) (commandDuration * 10));
+		t.setDelay((int) (commandDuration * 10)); 
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
