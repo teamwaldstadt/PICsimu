@@ -14,12 +14,15 @@ import java.util.List;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingConstants;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 import javax.swing.border.TitledBorder;
 import javax.swing.event.ChangeEvent;
@@ -42,6 +45,7 @@ public class GUIPanel extends JPanel {
 	JComboBox<?> genOut2;
 	JSpinner freqGenSpinner;
 	JComboBox<?> genOut;
+	JCheckBox impulsActivated;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -209,7 +213,7 @@ public class GUIPanel extends JPanel {
 		
 		
 		JPanel more = new JPanel();
-		more.setLayout(new GridLayout(1, 2));
+		more.setLayout(new GridLayout(1, 1));
 		JPanel freqSettings = new JPanel();
 		JPanel freqSettings1 = new JPanel();
 		
@@ -234,25 +238,21 @@ public class GUIPanel extends JPanel {
 			}
 		});
 		
-		JLabel labelMhz = new JLabel("MHz");
-		JLabel labelTitle = new JLabel("Quartz-Frequenz: ");
+		JLabel labelTitle = new JLabel("Quartz-Frequenz (MHz): ");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.BASELINE;
 		c.gridy = 0;
 		c.gridx = 0;
 		c.weighty = 0;
 		c.insets = new Insets(5, 2, 0, 2);
-		labelTitle.setPreferredSize(new Dimension(110, 30));
-		labelTitle.setMinimumSize(new Dimension(110, 30));
 		freqSettings.add(labelTitle, c);
 		c.gridx = 1;
 		c.gridwidth = 2;
 		freqSettings.add(frequencySpinner, c);
 		c.gridwidth = 1;
 		c.gridx = 3;
-		freqSettings.add(labelMhz, c);
 		
-		JLabel labelFreqGen = new JLabel("Impuls-Generator: ");
+		JLabel labelFreqGen = new JLabel("Impuls-Generator (kHz): ");
 		c.gridy = 1;
 		c.gridx = 0;
 		c.insets = new Insets(30, 2, 0, 2);
@@ -268,16 +268,12 @@ public class GUIPanel extends JPanel {
 		freqGenSpinner = new JSpinner(snm2);
 		freqGenSpinner.setValue(20);
 		freqSettings.add(freqGenSpinner, c);
-		JLabel labelKhz = new JLabel("kHz");
-		c.gridwidth = 1;
-		c.gridx = 3;
-		freqSettings.add(labelKhz, c);
 		
-		JLabel labelFreqGenOut = new JLabel("Impuls-Output: ");
+		JLabel labelFreqGenOut = new JLabel("Impuls-Register: ");
 		c.gridy = 2;
 		c.gridx = 0;
 		freqSettings.add(labelFreqGenOut, c);
-		String[] outValues = {"None", "RA", "RB"};
+		String[] outValues = {"RA", "RB"};
 		genOut = new JComboBox<>(outValues);
 		c.gridx = 1;
 		
@@ -305,18 +301,33 @@ public class GUIPanel extends JPanel {
 		});
 		
 		freqSettings.add(genOut, c);
-		JLabel pinLabel = new JLabel("Pin:");
-		c.insets = new Insets(0,5,0,0);
-		c.gridx = 2;
+		JLabel pinLabel = new JLabel("Impuls-Pin:");
+		c.gridx = 0;
+		c.gridy = 3;
 		freqSettings.add(pinLabel, c);
-		c.insets = new Insets(0,0,0,0);
 		
 		genOut2.setToolTipText("Pin");
-		c.gridx = 3;
+		c.gridx = 1;
 		freqSettings.add(genOut2, c);
 		
+		JLabel impulsGeneratorLabel = new JLabel("Frequenzgenerator aktiviert:");
+		c.gridx = 0;
+		c.gridy = 4;
+		c.insets = new Insets(4,2,4,2);
+		freqSettings.add(impulsGeneratorLabel, c);
 		
-		
+		impulsActivated = new JCheckBox();
+		c.gridx = 1;
+		c.weightx = 1;
+		impulsActivated.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateFreqGen();
+			}
+		});
+		impulsActivated.setHorizontalAlignment(SwingConstants.CENTER);
+		freqSettings.add(impulsActivated, c);
+		c.insets = new Insets(0,2,0,2);
 		
 		c.gridwidth = 1;
 		c.gridheight = 1;
@@ -330,9 +341,9 @@ public class GUIPanel extends JPanel {
 		freqSettings1.add(freqSettings);
 		more.add(freqSettings1);
 		
-		JLabel label2 = new JLabel("");
+		/*JLabel label2 = new JLabel("");
 		label2.setHorizontalAlignment(JLabel.CENTER);
-		more.add(label2);
+		more.add(label2);*/
 		add(more, c);
 	}
 	private void updateFreqGen() {
@@ -345,8 +356,10 @@ public class GUIPanel extends JPanel {
 		case "RB": regAddr = SpecialRegister.PORTB.getAddress(); break;
 		default: FrequencyGenerator.getInstance().stop(); return;
 		}
-		
-		FrequencyGenerator.getInstance().runWithFreq((int) delay, regAddr, bit);
+		if (impulsActivated.isSelected())
+			FrequencyGenerator.getInstance().runWithFreq((int) delay, regAddr, bit);
+		else
+			FrequencyGenerator.getInstance().stop();
 	}
 	public CodeView getCodeView() {
 		return codeView;

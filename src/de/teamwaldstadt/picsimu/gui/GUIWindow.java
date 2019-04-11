@@ -26,7 +26,7 @@ public class GUIWindow extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	int WIDTH = 1000;
+	int WIDTH = 900;
 	int HEIGHT = 600;
 	GUIPanel guiPanel;
 	JFrame frame;
@@ -48,7 +48,7 @@ public class GUIWindow extends JFrame {
 		}
 		
 		setSize(WIDTH, HEIGHT);
-		setMinimumSize(new Dimension(WIDTH, HEIGHT - 150));
+		setMinimumSize(new Dimension(WIDTH - 50, HEIGHT - 150));
 		
 		setTitle(Main.PGM_NAME + " " + Main.PGM_VERSION);
 		setLocationRelativeTo(null);

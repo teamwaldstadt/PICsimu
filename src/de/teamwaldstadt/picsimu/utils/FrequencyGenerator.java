@@ -48,6 +48,8 @@ public class FrequencyGenerator implements ActionListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		codeExecutor.updateRegisters();
+		codeExecutor.updateStorage();
 	}
 	
 	@Override
