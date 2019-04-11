@@ -17,6 +17,16 @@ import de.teamwaldstadt.picsimu.parser.Parser;
 import de.teamwaldstadt.picsimu.utils.FrequencyGenerator;
 
 public class CodeExecutor implements ActionListener {
+	
+	/*
+	 * factor, that gets multiplied with the real delay in micro seconds, to create the delay in ms
+	 * example: real delay: 1us -> simulated delay: 1us * 10 -> 10ms
+	 * 
+	 * if this FACTOR is 1, then 1kHz = 1s delay
+	 * with 100, 100kHz = 1s delay, or 1kHz = 100s delay
+	 */
+	public int DELAY_FACTOR = 100; 
+	
 	CommandSet[] commands;
 	
 	public GUIPanel gui;
@@ -24,6 +34,7 @@ public class CodeExecutor implements ActionListener {
 	boolean DONE;
 	GUIWindow w;
 	Timer t;
+	
 	
 	// values in micro seconds
 	double runtime;
@@ -72,6 +83,7 @@ public class CodeExecutor implements ActionListener {
 		updateStorage();
 		updateRegisters();
 		runtime = 0;
+		gui.setRuntime(runtime);
 	}
 	
 	public void nextCommand() {		
@@ -84,7 +96,7 @@ public class CodeExecutor implements ActionListener {
 			
 			//runCommand(Main.STORAGE.getPC());
 			runtime += commandDuration * (commands[correctPC(Main.STORAGE.getPC())].getCommand().getQuartzTacts() / 4);
-
+			
 			runCommand(correctPC(Main.STORAGE.getPC()));
 			
 			if (correctPC(Main.STORAGE.getPC()) >= commands.length) {
@@ -159,12 +171,11 @@ public class CodeExecutor implements ActionListener {
 		}
 	}
 	public void setQuarzFrequency(double freq) {
-		freq = Math.round(freq);
-		commandDuration = 1 / freq * 4 * 1000000;
+		commandDuration = (1 / freq) * 4;
 		if (gui != null)
 			gui.setCommandDuration(commandDuration);
 //		System.out.println((int) (commandDuration * 10));
-		t.setDelay((int) (commandDuration * 10)); 
+		t.setDelay((int) (commandDuration * DELAY_FACTOR)); 
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {

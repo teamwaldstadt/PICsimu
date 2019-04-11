@@ -231,17 +231,17 @@ public class GUIPanel extends JPanel {
 		freqSettings.setLayout(new GridBagLayout());
 		
 		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 0.5, 6.0, 0.1);
-		codeExecutor.setQuarzFrequency(4000000);
 		JSpinner frequencySpinner = new JSpinner(snm);
         
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));
 		frequencySpinner.setMinimumSize(new Dimension(100, 30));
-		frequencySpinner.setValue(4.00000f);
+		frequencySpinner.setValue(4f);
+		codeExecutor.setQuarzFrequency(4f);
 		
 		frequencySpinner.addChangeListener(new ChangeListener() {
 			@Override
 			public void stateChanged(ChangeEvent e) {
-				codeExecutor.setQuarzFrequency(Double.parseDouble(String.valueOf(frequencySpinner.getValue())) * 1000000);
+				codeExecutor.setQuarzFrequency(Double.parseDouble(String.valueOf(frequencySpinner.getValue())));
 			}
 		});
 		
@@ -285,9 +285,9 @@ public class GUIPanel extends JPanel {
 		c.gridx = 1;
 		c.gridwidth = 2;
 		SpinnerNumberModel snm2 = new SpinnerNumberModel();
-		snm2.setStepSize(10);
-		snm2.setMinimum(10);
-		snm2.setMaximum(100);
+		snm2.setStepSize(1);
+		snm2.setMinimum(1);
+		snm2.setMaximum(200);
 		
 		freqGenSpinner = new JSpinner(snm2);
 		freqGenSpinner.setValue(20);
@@ -370,7 +370,8 @@ public class GUIPanel extends JPanel {
 		add(more, c);
 	}
 	private void updateFreqGen() {
-		double delay = ((1.0 / (double) Integer.parseInt(String.valueOf(freqGenSpinner.getValue()))) * 10000);
+		double value = (double) Integer.parseInt(String.valueOf(freqGenSpinner.getValue()));
+		double delay = ((1.0 /  value) * 1000 * codeExecutor.DELAY_FACTOR);
 		int bit = Integer.parseInt(String.valueOf(genOut2.getSelectedItem()));
 
 		int regAddr = 0;
