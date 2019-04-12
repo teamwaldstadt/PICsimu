@@ -22,7 +22,7 @@ public class CommandDECF extends CommandExecutor {
 		
 		// TODO wie verhält sich der Command, wenn f bereits 0 ist?
 		if (result == -1) {
-			result = 0;
+			result = 0x00;
 		}
 		
 		super.affectStatus(Command.DECF, result);

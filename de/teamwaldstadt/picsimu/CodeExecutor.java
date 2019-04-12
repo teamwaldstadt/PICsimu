@@ -9,6 +9,7 @@ import java.lang.reflect.Constructor;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
+import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.gui.GUIPanel;
@@ -25,7 +26,7 @@ public class CodeExecutor implements ActionListener {
 	 * if this FACTOR is 1, then 1kHz = 1s delay
 	 * with 100, 100kHz = 1s delay, or 1kHz = 100s delay
 	 */
-	public int DELAY_FACTOR = 100; 
+	public int DELAY_FACTOR = 50; 
 	
 	CommandSet[] commands;
 	
@@ -95,7 +96,7 @@ public class CodeExecutor implements ActionListener {
 			}
 			
 			//runCommand(Main.STORAGE.getPC());
-			runtime += commandDuration * (commands[correctPC(Main.STORAGE.getPC())].getCommand().getQuartzTacts() / 4);
+			this.incrementRuntime(commands[correctPC(Main.STORAGE.getPC())].getCommand());
 			
 			runCommand(correctPC(Main.STORAGE.getPC()));
 			
@@ -119,6 +120,10 @@ public class CodeExecutor implements ActionListener {
 		updateStorage();
 		
 		
+	}
+	
+	public void incrementRuntime(Command command) {
+		runtime += commandDuration * (command.getQuartzTacts() / 4);
 	}
 	
 	public int correctPC(int pc) {

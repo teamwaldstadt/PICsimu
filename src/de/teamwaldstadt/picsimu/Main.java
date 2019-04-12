@@ -8,13 +8,13 @@ public class Main {
 	public static final String PGM_VERSION = "0.0.1";
 	
 	public static Storage STORAGE;
+	public static CodeExecutor EXECUTOR;
 
 	public static void main(String[] args) {
 		System.out.println("Hello World, this is " + PGM_NAME + " " + PGM_VERSION);
 		
 		STORAGE = new Storage(); 
-		
-		new CodeExecutor();
+		EXECUTOR = new CodeExecutor();
 	}
 
 }
