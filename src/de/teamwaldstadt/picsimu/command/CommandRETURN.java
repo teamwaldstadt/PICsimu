@@ -1,11 +1,21 @@
 package de.teamwaldstadt.picsimu.command;
 
-public class CommandRETURN extends CommandExecutor {
+import de.teamwaldstadt.picsimu.Main;
 
+public class CommandRETURN extends CommandExecutor {
+	
+	public CommandRETURN(int arguments) throws Exception {
+		super.setArguments(arguments);
+	}
+	
 	@Override
-	public void execute() {
-		// TODO Auto-generated method stub
+	public void execute() throws Exception {
+		int tos = Main.STACK.pop();
 		
+		// lade tos in PC
+		Main.STORAGE.setPC(tos);
+		
+		super.affectStatus(Command.RETURN, 0);
 	}
 
 }
