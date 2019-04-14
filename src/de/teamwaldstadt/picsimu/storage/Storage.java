@@ -1,5 +1,7 @@
 package de.teamwaldstadt.picsimu.storage;
 
+import de.teamwaldstadt.picsimu.utils.Utils;
+
 public class Storage {
 
 	private int[] storage;
@@ -44,52 +46,6 @@ public class Storage {
 
 	public void resetW() {
 		this.w = 0x00;
-	}
-
-	public static void check8Bits(int bitSequence) throws Exception {
-		if (bitSequence < 0x00 || bitSequence > 0xFF) {
-			throw new Exception("Not 8 bits (out of range: 0x00 to 0xFF): " + String.format("%2X", bitSequence));
-		}
-	}
-
-	public static void check7Bits(int bitSequence) throws Exception {
-		if (bitSequence < 0x00 || bitSequence > 0x7F) {
-			throw new Exception("Not 7 bits (out of range: 0x00 to 0x7F): " + String.format("%2X", bitSequence));
-		}
-	}
-	
-	public static void check12Bits(int bitSequence) throws Exception {
-		if (bitSequence < 0x00 || bitSequence > 0xFFF) {
-			throw new Exception("Not 12 bits (out of range: 0x00 to 0xFFF): " + String.format("%2X", bitSequence));
-		}
-	}
-	
-	public static void check13Bits(int bitSequence) throws Exception {
-		if (bitSequence < 0x00 || bitSequence > 0x1FFF) {
-			throw new Exception("Not 13 bits (out of range: 0x00 to 0x1FFF): " + String.format("%2X", bitSequence));
-		}
-	}
-	
-	// hässlicher Workaround
-	// TODO schönere Variante implementieren
-	public static int extractBitsFromIntNumber(int number, int beginIndex, int endIndex, int minLength) throws Exception {
-		String bitSequence = Integer.toBinaryString(number);
-		
-		while (bitSequence.length() < minLength) {
-			bitSequence = "0" + bitSequence;
-		}
-		
-		if (beginIndex < 0 || beginIndex > bitSequence.length() || endIndex < 0 || endIndex > bitSequence.length()) {
-			throw new Exception("Out of range (beginIndex: " + beginIndex + ", endIndex: " + endIndex + ", length: " + bitSequence.length() + ")");
-		}
-		
-		if (beginIndex >= endIndex) {
-			throw new Exception("beginIndex must be smaller then endIndex (beginIndex: " + beginIndex + ", endIndex: " + endIndex + ")");
-		}
-		
-		String resultBits = bitSequence.substring(beginIndex, endIndex);
-		
-		return Integer.valueOf(resultBits, 2);
 	}
 
 	public int[] getStorage() {
@@ -141,7 +97,7 @@ public class Storage {
 	
 	public int getPC() throws Exception {
 		int low = this.getRegister(SpecialRegister.PCL);
-		int high = extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH), 3, 8, 8);
+		int high = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH), 0, 5);
 		
 		String lowSequence = Integer.toBinaryString(low);
 		String highSequence = Integer.toBinaryString(high);
@@ -176,7 +132,7 @@ public class Storage {
 	}
 	
 	public void setRegister(int address, int value, boolean ignoreBank) throws Exception {
-		check8Bits(value);
+		Utils.checkBitsExceed(value, 8);
 		
 		// indirekte Adressierung
 		if (address == 0x00) {
@@ -206,7 +162,7 @@ public class Storage {
 	}
 
 	private void setRegister(SpecialRegister register, int value) throws Exception {
-		check8Bits(value);
+		Utils.checkBitsExceed(value, 8);
 		
 		this.storage[register.getAddress()] = value;
 
@@ -216,21 +172,21 @@ public class Storage {
 	}
 
 	private void setRegister(GeneralRegister register, int value) throws Exception {
-		check8Bits(value);
+		Utils.checkBitsExceed(value, 8);
 		this.storage[register.getAddress()] = value;
 		this.storage[register.getAddress() + Bank.OFFSET] = value;
 	}
 
 	public void setW(int w) throws Exception {
-		check8Bits(w);
+		Utils.checkBitsExceed(w, 8);
 		this.w = w;
 	}
 	
 	public void setPC(int pc) throws Exception {
-		check13Bits(pc);
+		Utils.checkBitsExceed(pc, 13);
 		
-		int low = extractBitsFromIntNumber(pc, 5, 13, 13);
-		int high = extractBitsFromIntNumber(pc, 0, 5, 13);
+		int low = Utils.extractBitsFromIntNumber(pc, 0, 8);
+		int high = Utils.extractBitsFromIntNumber(pc, 8, 5);
 		
 		this.setRegister(SpecialRegister.PCL, low);
 		this.setRegister(SpecialRegister.PCLATH, high);

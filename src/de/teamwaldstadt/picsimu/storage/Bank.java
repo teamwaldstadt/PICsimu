@@ -1,6 +1,7 @@
 package de.teamwaldstadt.picsimu.storage;
 
 import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.utils.Utils;
 
 public enum Bank {
 
@@ -13,8 +14,7 @@ public enum Bank {
 		 * Hier wird explizit nicht die Funktion Main.STORAGE isBitOfRegisterSet(...)
 		 * verwendet, da dies zu einer Endlosrekursion f�hrt!
 		 */
-		int rp0 = Storage.extractBitsFromIntNumber(Main.STORAGE.getStorage()[SpecialRegister.STATUS.getAddress()],
-				8 - Status.RP0.getBitIndex() - 1, 8 - Status.RP0.getBitIndex(), 8);
+		int rp0 = Utils.extractBitsFromIntNumber(Main.STORAGE.getStorage()[SpecialRegister.STATUS.getAddress()], Status.RP0.getBitIndex(), 1);
 
 		return rp0 == 1 ? BANK_1 : BANK_0;
 	}

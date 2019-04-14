@@ -6,7 +6,7 @@ import java.util.List;
 import de.teamwaldstadt.picsimu.Main;
 import de.teamwaldstadt.picsimu.storage.SpecialRegister;
 import de.teamwaldstadt.picsimu.storage.Status;
-import de.teamwaldstadt.picsimu.storage.Storage;
+import de.teamwaldstadt.picsimu.utils.Utils;
 
 public abstract class CommandExecutor {
 
@@ -70,7 +70,7 @@ public abstract class CommandExecutor {
 		
 		if ((command == Command.ADDLW || command == Command.ADDWF) && arg + w > 0x0F) {
 			digitCarry = true;
-		} else if ((command == Command.SUBLW || command == Command.SUBWF) && arg - w < 0x0F) {
+		} else if ((command == Command.SUBLW || command == Command.SUBWF) && arg - w < 0x00) {
 			digitCarry = true;
 		}
 
@@ -86,7 +86,7 @@ public abstract class CommandExecutor {
 	}
 	
 	public void setArguments(int arguments) throws Exception {
-		Storage.check12Bits(arguments);
+		Utils.checkBitsExceed(arguments, 12);
 		
 		this.arguments = arguments;
 	}

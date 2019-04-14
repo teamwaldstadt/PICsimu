@@ -1,7 +1,7 @@
 package de.teamwaldstadt.picsimu.command;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.storage.Storage;
+import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class CommandBCF extends CommandExecutor {
 	
@@ -11,8 +11,8 @@ public class CommandBCF extends CommandExecutor {
 	public CommandBCF(int arguments) throws Exception {
 		super.setArguments(arguments);
 		
-		this.bitIndex = Storage.extractBitsFromIntNumber(arguments, 2, 5, 12);
-		this.fileRegister = Storage.extractBitsFromIntNumber(arguments, 5, 12, 12);
+		this.bitIndex = Utils.extractBitsFromIntNumber(arguments, 7, 3);
+		this.fileRegister = Utils.extractBitsFromIntNumber(arguments, 0, 7);
 	}
 
 	@Override
