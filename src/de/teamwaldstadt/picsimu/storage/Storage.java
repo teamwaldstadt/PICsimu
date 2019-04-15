@@ -48,6 +48,42 @@ public class Storage {
 	public void resetW() {
 		this.w = 0x00;
 	}
+	
+	private void manipulatePC(int arg) throws Exception {
+		int lower = arg;
+		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
+		
+		this.pc = (upper << 8) + lower;
+	}
+	
+	public void jumpPC(int arg) throws Exception {
+		Utils.checkBitsExceed(arg, 11);
+		
+		int lower = arg & 0xFF;
+		int upper = (Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2) << 3) + Utils.extractBitsFromIntNumber(arg, 8, 3);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		
+		this.pc = (upper << 8) + lower;
+	}
+	
+	public void incrementPC() throws Exception {
+		int lower = this.getRegister(SpecialRegister.PCL.getAddress(), true);
+		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
+		
+		int dummyPC = (upper << 8) + lower + 1;
+		
+		lower = Utils.extractBitsFromIntNumber(dummyPC, 0, 8);
+		upper = Utils.extractBitsFromIntNumber(dummyPC, 8, 5);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
+		
+		this.pc = pc + 1;
+	}
 
 	public int[] getStorage() {
 		return this.storage;
@@ -131,15 +167,25 @@ public class Storage {
 			address += Bank.OFFSET;
 		}
 		
-		try {			
-			this.setRegister(SpecialRegister.atAddress(address), value);
+		try {
+			SpecialRegister register = SpecialRegister.atAddress(address);
+			
+			// Sonderfall für PCL
+			if (register == SpecialRegister.PCL) {
+				this.manipulatePC(value);
+				return;
+			}
+			
+			this.setRegister(register, value);
 			return;
 		} catch (Exception e) {
 			// do nothing
 		}
 		
-		try {			
-			this.setRegister(new GeneralRegister(address), value);
+		try {
+			GeneralRegister register = new GeneralRegister(address);
+			
+			this.setRegister(register, value);
 			return;
 		} catch (Exception e) {
 			// do nothing
@@ -150,10 +196,6 @@ public class Storage {
 
 	private void setRegister(SpecialRegister register, int value) throws Exception {
 		Utils.checkBitsExceed(value, 8);
-		
-		if (register == SpecialRegister.PCL) {
-			this.setPC(value, false);
-		}
 		
 		this.storage[register.getAddress()] = value;
 
@@ -171,19 +213,6 @@ public class Storage {
 	public void setW(int w) throws Exception {
 		Utils.checkBitsExceed(w, 8);
 		this.w = w;
-	}
-	
-	public void setPC(int arg, boolean setPcl) throws Exception {
-		Utils.checkBitsExceed(arg, 13);
-		
-		int lower = arg & 0x3FF;
-		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2);
-	
-		this.pc = (upper << 11) + lower;
-		
-		if (setPcl) {
-			this.setRegister(SpecialRegister.PCL.getAddress(), this.pc & 0xFF, true);
-		}
 	}
 	
 	public void setBitOfRegister(int register, int bitIndex, boolean setBit, boolean ignoreBank) throws Exception {

@@ -11,7 +11,8 @@ public class CommandGOTO extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		super.affectStatus(Command.GOTO, 0);
-		Main.STORAGE.setPC(super.getArguments(), true);
+		
+		Main.STORAGE.jumpPC(super.getArguments());
 	}
 
 }

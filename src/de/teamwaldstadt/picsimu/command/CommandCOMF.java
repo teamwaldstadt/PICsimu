@@ -17,6 +17,8 @@ public class CommandCOMF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = ~f;
 		
@@ -29,8 +31,6 @@ public class CommandCOMF extends CommandExecutor {
 		} else {
 			Main.STORAGE.setW(result);
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

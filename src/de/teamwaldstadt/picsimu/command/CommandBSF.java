@@ -17,10 +17,11 @@ public class CommandBSF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		Main.STORAGE.setBitOfRegister(this.fileRegister, bitIndex, true, false);
 		
 		super.affectStatus(Command.BSF, 0);
-		super.incrementPC();
 	}
 	
 	public int getBitIndex() {

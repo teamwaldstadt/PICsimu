@@ -16,7 +16,7 @@ public class CommandRETLW extends CommandExecutor {
 		Main.STORAGE.setW(super.getArguments());
 		
 		// lade tos in PC
-		Main.STORAGE.setPC(tos, true);
+		Main.STORAGE.jumpPC(tos);
 		
 		super.affectStatus(Command.RETLW, 0);
 	}

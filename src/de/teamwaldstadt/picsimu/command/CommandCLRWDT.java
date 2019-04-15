@@ -11,6 +11,8 @@ public class CommandCLRWDT extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		// set Prescaler Assignment (PSA) bit
 		Main.STORAGE.setBitOfRegister(SpecialRegister.OPTION_REG.getAddress(), 3, true, false);
 		
@@ -23,7 +25,6 @@ public class CommandCLRWDT extends CommandExecutor {
 		Main.STORAGE.setRegister(SpecialRegister.TMR0.getAddress(), 0x00, false);
 		
 		super.affectStatus(Command.CLRWDT, 0);
-		super.incrementPC();
 	}
 
 }

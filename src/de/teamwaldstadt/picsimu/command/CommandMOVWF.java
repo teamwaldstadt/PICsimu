@@ -10,12 +10,13 @@ public class CommandMOVWF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int w = Main.STORAGE.getW();
 		
 		Main.STORAGE.setRegister(super.getArguments(), w, false);
 		
 		super.affectStatus(Command.MOVWF, 0);
-		super.incrementPC();
 	}
 
 }

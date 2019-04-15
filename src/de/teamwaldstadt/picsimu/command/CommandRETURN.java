@@ -13,7 +13,7 @@ public class CommandRETURN extends CommandExecutor {
 		int tos = Main.STACK.pop();
 		
 		// lade tos in PC
-		Main.STORAGE.setPC(tos, true);
+		Main.STORAGE.jumpPC(tos);
 		
 		super.affectStatus(Command.RETURN, 0);
 	}

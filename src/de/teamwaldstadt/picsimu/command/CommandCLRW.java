@@ -10,10 +10,11 @@ public class CommandCLRW extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		Main.STORAGE.setW(0x00);
 		
 		super.affectStatus(Command.CLRW, 0x00);
-		super.incrementPC();
 	}
 
 }

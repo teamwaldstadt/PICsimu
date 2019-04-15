@@ -17,6 +17,8 @@ public class CommandINCFSZ extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f + 1;
 		
@@ -37,8 +39,6 @@ public class CommandINCFSZ extends CommandExecutor {
 			
 			System.out.println("Command '" + Command.INCFSZ.name() + "' skipped the next command");
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

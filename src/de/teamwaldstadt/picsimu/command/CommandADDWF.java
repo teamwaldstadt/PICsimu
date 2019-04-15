@@ -17,24 +17,23 @@ public class CommandADDWF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int w = Main.STORAGE.getW();
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
+		
 		int result = f + w;
 		
 		super.affectStatus(Command.ADDWF, result);
 		super.affectStatusDC(Command.ADDWF, f, w);
 		
-//		result &= 0xFF; // result maskieren
-		
-		System.out.println(String.format("%2X", result));
+		result &= 0xFF; // result maskieren
 		
 		if (this.isDestinationBitSet) {
 			Main.STORAGE.setRegister(this.fileRegister, result, false);
 		} else {
 			Main.STORAGE.setW(result);
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

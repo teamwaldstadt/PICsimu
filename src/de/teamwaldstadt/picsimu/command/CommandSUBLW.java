@@ -10,6 +10,8 @@ public class CommandSUBLW extends CommandExecutor {
 	
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int w = ((~Main.STORAGE.getW()) + 1) & 0xFF; // 2er-Komplement und maskieren
 		int result = super.getArguments() + w;
 		
@@ -19,7 +21,6 @@ public class CommandSUBLW extends CommandExecutor {
 		result &= 0xFF; // result maskieren
 		
 		Main.STORAGE.setW(result);
-		super.incrementPC();
 	}
 
 }
