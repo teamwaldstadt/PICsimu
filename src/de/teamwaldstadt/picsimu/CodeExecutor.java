@@ -29,6 +29,7 @@ public class CodeExecutor implements ActionListener {
 	public int DELAY_FACTOR = 50; 
 	
 	CommandSet[] commands;
+	boolean[] breakpoints;
 	
 	public GUIPanel gui;
 	
@@ -71,6 +72,7 @@ public class CodeExecutor implements ActionListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		breakpoints = new boolean[commands.length];
 		reset();
 	}
 	
@@ -85,6 +87,12 @@ public class CodeExecutor implements ActionListener {
 		updateRegisters();
 		runtime = 0;
 		gui.setRuntime(runtime);
+		if (breakpoints != null) {
+			for (int i = 0; i < breakpoints.length; i++) {
+				breakpoints[i] = false;
+			}
+		}
+		gui.getCodeView().removeBreakPoints();
 	}
 	
 	public void nextCommand() {		
@@ -182,8 +190,18 @@ public class CodeExecutor implements ActionListener {
 //		System.out.println((int) (commandDuration * 10));
 		t.setDelay((int) (commandDuration * DELAY_FACTOR)); 
 	}
+	
+	int stoppedOnLine = -1;
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		if (breakpoints[correctPC(Main.STORAGE.getPC())] && stoppedOnLine != correctPC(Main.STORAGE.getPC())) {
+			t.stop();
+			stoppedOnLine = correctPC(Main.STORAGE.getPC());
+			return;
+		}
+		stoppedOnLine = -1;
+
 		if (commands != null)
 			nextCommand();
 	}
@@ -192,5 +210,14 @@ public class CodeExecutor implements ActionListener {
 	}
 	public void stop() {
 		if (t.isRunning()) t.stop();
+	}
+	public CommandSet[] getCommands() {
+		return commands;
+	}
+	public void setBreakpoint(int commandNr) {
+		breakpoints[commandNr] = true;
+	}
+	public void removeBreakpoint(int commandNr) {
+		breakpoints[commandNr] = false;
 	}
 }

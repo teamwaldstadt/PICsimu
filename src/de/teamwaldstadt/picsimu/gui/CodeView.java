@@ -51,12 +51,44 @@ public class CodeView extends JTable {
 				//toggle 'B' flag
 				if (columnAtPoint(e.getPoint()) > 0) return;
 				if (String.valueOf(getValueAt(rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()))).equals("B")) {
-					setValueAt("", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
+					int line = rowAtPoint(e.getPoint());
+					int commandNr = -1;
+					for (int i = 0; i < codeExecutor.getCommands().length; i++) {
+						if (line == codeExecutor.getCommands()[i].getLineNr()) {
+							commandNr = codeExecutor.getCommands()[i].getCommandNr();
+							break;
+						}
+					}
+					if (commandNr != -1) {
+						setValueAt("", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
+						codeExecutor.removeBreakpoint(commandNr);
+					} else {
+						System.out.println("Breakpoint error");
+					}
 				} else if (codeExecutor.lineHasCode(rowAtPoint(e.getPoint()))) {
-					setValueAt("B", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
+					int line = rowAtPoint(e.getPoint());
+					int commandNr = -1;
+					for (int i = 0; i < codeExecutor.getCommands().length; i++) {
+						if (line == codeExecutor.getCommands()[i].getLineNr()) {
+							commandNr = codeExecutor.getCommands()[i].getCommandNr();
+							break;
+						}
+					}
+					if (commandNr != -1) {
+						setValueAt("B", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
+						codeExecutor.setBreakpoint(commandNr);
+					} else {
+						System.out.println("Breakpoint error");
+					}
 				}
 			}
 		});
+	}
+	
+	public void removeBreakPoints() {
+		for (int i = 0; i < getRowCount(); i++) {
+			setValueAt("", i, 0);
+		}
 	}
 	
 	public void loadCode(File file) {
