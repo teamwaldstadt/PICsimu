@@ -20,9 +20,9 @@ public class CommandDECFSZ extends CommandExecutor {
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f - 1;
 		
-		// TODO wie verhält sich der Command, wenn f bereits 0 ist?
+		// TODO wie verhï¿½lt sich der Command, wenn f bereits 0 ist?
 		if (result == -1) {
-			result = 0x00;
+			result = 0xFF;
 		}
 		
 		super.affectStatus(Command.DECFSZ, result);
@@ -35,7 +35,7 @@ public class CommandDECFSZ extends CommandExecutor {
 			Main.STORAGE.setW(result);
 		}
 		
-		// wenn result 0x00, dann führe NOP aus und erhöhe Runtime-Counter
+		// wenn result 0x00, dann fï¿½hre NOP aus und erhï¿½he Runtime-Counter
 		if (result == 0x00) {
 			new CommandNOP(super.getArguments()).execute();
 			Main.EXECUTOR.incrementRuntime(Command.NOP);
