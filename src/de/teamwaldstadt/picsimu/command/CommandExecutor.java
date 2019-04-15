@@ -76,7 +76,7 @@ public abstract class CommandExecutor {
 	}
 	
 	public void incrementPC() throws Exception {
-		Main.STORAGE.setPC(Main.STORAGE.getPC() + 1);
+		Main.STORAGE.setPC(Main.STORAGE.getPC() + 1, true);
 	}
 	
 	public int getArguments() {

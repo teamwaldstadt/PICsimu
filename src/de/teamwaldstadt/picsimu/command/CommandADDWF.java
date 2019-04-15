@@ -24,7 +24,9 @@ public class CommandADDWF extends CommandExecutor {
 		super.affectStatus(Command.ADDWF, result);
 		super.affectStatusDC(Command.ADDWF, f, w);
 		
-		result &= 0xFF; // result maskieren
+//		result &= 0xFF; // result maskieren
+		
+		System.out.println(String.format("%2X", result));
 		
 		if (this.isDestinationBitSet) {
 			Main.STORAGE.setRegister(this.fileRegister, result, false);

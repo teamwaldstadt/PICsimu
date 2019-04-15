@@ -5,7 +5,7 @@ import de.teamwaldstadt.picsimu.utils.Utils;
 public class Storage {
 
 	private int[] storage;
-	private int w;
+	private int w, pc;
 
 	public Storage() {
 		this.storage = new int[32 * 8]; // PIC main storage of 256 bytes
@@ -15,6 +15,7 @@ public class Storage {
 	public void resetAll() {
 		this.resetStorage();
 		this.resetW();
+		this.pc = 0;
 	}
 
 	public void resetStorage() {
@@ -95,22 +96,8 @@ public class Storage {
 		return this.w;
 	}
 	
-	public int getPC() throws Exception {
-		int low = this.getRegister(SpecialRegister.PCL);
-		int high = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH), 0, 5);
-		
-		String lowSequence = Integer.toBinaryString(low);
-		String highSequence = Integer.toBinaryString(high);
-		
-		while (lowSequence.length() < 8) {
-			lowSequence = "0" + lowSequence;
-		}
-		
-		while (highSequence.length() < 8) {
-			highSequence = "0" + highSequence;
-		}
-		
-		return Integer.valueOf(highSequence + lowSequence, 2);
+	public int getPC() {
+		return this.pc;
 	}
 	
 	public boolean isBitOfRegisterSet(int register, int bitIndex, boolean ignoreBank) throws Exception {
@@ -164,6 +151,10 @@ public class Storage {
 	private void setRegister(SpecialRegister register, int value) throws Exception {
 		Utils.checkBitsExceed(value, 8);
 		
+		if (register == SpecialRegister.PCL) {
+			this.setPC(value, false);
+		}
+		
 		this.storage[register.getAddress()] = value;
 
 		if (register.getBank() == Bank.ALL) {
@@ -182,14 +173,17 @@ public class Storage {
 		this.w = w;
 	}
 	
-	public void setPC(int pc) throws Exception {
-		Utils.checkBitsExceed(pc, 13);
+	public void setPC(int arg, boolean setPcl) throws Exception {
+		Utils.checkBitsExceed(arg, 13);
 		
-		int low = Utils.extractBitsFromIntNumber(pc, 0, 8);
-		int high = Utils.extractBitsFromIntNumber(pc, 8, 5);
+		int lower = arg & 0x3FF;
+		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2);
+	
+		this.pc = (upper << 11) + lower;
 		
-		this.setRegister(SpecialRegister.PCL, low);
-		this.setRegister(SpecialRegister.PCLATH, high);
+		if (setPcl) {
+			this.setRegister(SpecialRegister.PCL.getAddress(), this.pc & 0xFF, true);
+		}
 	}
 	
 	public void setBitOfRegister(int register, int bitIndex, boolean setBit, boolean ignoreBank) throws Exception {
