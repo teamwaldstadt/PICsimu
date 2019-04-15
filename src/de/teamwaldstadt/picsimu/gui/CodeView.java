@@ -14,7 +14,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import de.teamwaldstadt.picsimu.CodeExecutor;
+import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.parser.Parser;
 
 public class CodeView extends JTable {
@@ -24,7 +25,7 @@ public class CodeView extends JTable {
 	DefaultTableModel tm;
 	int selected = 0;
 	
-	public CodeView(CodeExecutor codeExecutor) {
+	public CodeView() {
 		tm = new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
 			@Override
@@ -50,10 +51,17 @@ public class CodeView extends JTable {
 			public void mouseClicked(MouseEvent e) {
 				//toggle 'B' flag
 				if (columnAtPoint(e.getPoint()) > 0) return;
-				if (String.valueOf(getValueAt(rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()))).equals("B")) {
+				
+				CommandSet c = Main.EXECUTOR.getCommandSetAt(rowAtPoint(e.getPoint()));
+				
+				if (c == null) return;
+				
+				if (c.hasBreakpoint()) {
 					setValueAt("", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
-				} else if (codeExecutor.lineHasCode(rowAtPoint(e.getPoint()))) {
+					c.setBreakPoint(false);
+				} else {
 					setValueAt("B", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
+					c.setBreakPoint(true);
 				}
 			}
 		});
