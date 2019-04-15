@@ -15,7 +15,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.parser.Parser;
 
 public class CodeView extends JTable {
@@ -54,30 +53,30 @@ public class CodeView extends JTable {
 				if (String.valueOf(getValueAt(rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()))).equals("B")) {
 					int line = rowAtPoint(e.getPoint());
 					int commandNr = -1;
-					for (int i = 0; i < codeExecutor.getCommands().length; i++) {
-						if (line == codeExecutor.getCommands()[i].getLineNr()) {
-							commandNr = codeExecutor.getCommands()[i].getCommandNr();
+					for (int i = 0; i < Main.EXECUTOR.getCommands().length; i++) {
+						if (line == Main.EXECUTOR.getCommands()[i].getLineNr()) {
+							commandNr = Main.EXECUTOR.getCommands()[i].getCommandNr();
 							break;
 						}
 					}
 					if (commandNr != -1) {
 						setValueAt("", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
-						codeExecutor.removeBreakpoint(commandNr);
+						Main.EXECUTOR.removeBreakpoint(commandNr);
 					} else {
 						System.out.println("Breakpoint error");
 					}
-				} else if (codeExecutor.lineHasCode(rowAtPoint(e.getPoint()))) {
+				} else if (Main.EXECUTOR.getCommandSetAt(rowAtPoint(e.getPoint())) != null) {
 					int line = rowAtPoint(e.getPoint());
 					int commandNr = -1;
-					for (int i = 0; i < codeExecutor.getCommands().length; i++) {
-						if (line == codeExecutor.getCommands()[i].getLineNr()) {
-							commandNr = codeExecutor.getCommands()[i].getCommandNr();
+					for (int i = 0; i < Main.EXECUTOR.getCommands().length; i++) {
+						if (line == Main.EXECUTOR.getCommands()[i].getLineNr()) {
+							commandNr = Main.EXECUTOR.getCommands()[i].getCommandNr();
 							break;
 						}
 					}
 					if (commandNr != -1) {
 						setValueAt("B", rowAtPoint(e.getPoint()), columnAtPoint(e.getPoint()));
-						codeExecutor.setBreakpoint(commandNr);
+						Main.EXECUTOR.setBreakpoint(commandNr);
 					} else {
 						System.out.println("Breakpoint error");
 					}

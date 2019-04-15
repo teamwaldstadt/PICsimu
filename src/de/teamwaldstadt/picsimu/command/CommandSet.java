@@ -8,18 +8,12 @@ public class CommandSet {
 	private int commandNr;
 	private int lineNr;
 	private int argument;
-	private boolean breakpoint;
 	
 	public CommandSet(Command command, int argument, int commandNr, int lineNr) {
 		this.command = command;
 		this.argument = argument;
 		this.commandNr = commandNr;
 		this.lineNr = lineNr;
-		this.breakpoint = false;
-	}
-	
-	public void setBreakPoint(boolean breakpoint) {
-		this.breakpoint = breakpoint;
 	}
 	
 	public int getArgument() {
@@ -36,10 +30,6 @@ public class CommandSet {
 	
 	public int getLineNr() {
 		return this.lineNr - 1;
-	}
-	
-	public boolean hasBreakpoint() {
-		return this.breakpoint;
 	}
 	
 }

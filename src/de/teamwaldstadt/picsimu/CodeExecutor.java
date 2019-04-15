@@ -98,11 +98,6 @@ public class CodeExecutor implements ActionListener {
 	}
 	
 	public void nextCommand() {
-		if (commands[Main.STORAGE.getPC()].hasBreakpoint()) {
-			stop();
-			return;
-		}
-		
 		try {
 			if (commands == null || commands.length == 0 || DONE) {
 				return;
@@ -209,7 +204,7 @@ public class CodeExecutor implements ActionListener {
 	}
 	
 	public void start() {
-		if (!t.isRunning() && commands != null && !commands[Main.STORAGE.getPC()].hasBreakpoint()) t.start();
+		if (!t.isRunning() && commands != null) t.start();
 	}
 	
 	public void stop() {
