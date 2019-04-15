@@ -65,14 +65,19 @@ public class StorageTable extends JTable {
     }
 	
 	@Override
-    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-        if (row == 0 || column == 0)
+    public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {		
+        if (row == 0 || column == 0) {
         	setBackground(Color.LIGHT_GRAY);
-        else 
+        } else {
+    		setToolTipText("Adresse: 0x" + String.format("%2X", (column-1) + (getColumnCount() - 1) * (row-1)).replaceAll(" ", "0"));
+//        	setToolTipText("row: " + row + " col: " + column);
+        	
         	if (row % 2 == 1)
         		setBackground(Color.WHITE);
         	else 
         		setBackground(new Color(240, 240, 240));
+        }
+        
 		Component c = super.prepareRenderer(renderer, row, column);
         return c;
     }

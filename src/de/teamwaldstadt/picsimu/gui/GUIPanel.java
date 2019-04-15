@@ -95,7 +95,7 @@ public class GUIPanel extends JPanel {
 		c.gridheight = 1;
 		c.anchor = GridBagConstraints.PAGE_END;
 		JScrollPane scrollCode = new JScrollPane();
-		codeView = new CodeView(codeExecutor);
+		codeView = new CodeView();
 		scrollCode.setViewportView(codeView);
 		scrollCode.setPreferredSize(new Dimension(900, 250));
 		scrollCode.setMinimumSize(new Dimension(900, 250));

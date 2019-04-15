@@ -14,7 +14,8 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellRenderer;
 
-import de.teamwaldstadt.picsimu.CodeExecutor;
+import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.command.CommandSet;
 import de.teamwaldstadt.picsimu.parser.Parser;
 
 public class CodeView extends JTable {
@@ -24,7 +25,7 @@ public class CodeView extends JTable {
 	DefaultTableModel tm;
 	int selected = 0;
 	
-	public CodeView(CodeExecutor codeExecutor) {
+	public CodeView() {
 		tm = new DefaultTableModel() {
 			private static final long serialVersionUID = 1L;
 			@Override

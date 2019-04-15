@@ -52,14 +52,16 @@ public class CodeExecutor implements ActionListener {
 		FrequencyGenerator.getInstance().setCodeExecutor(this);
 	}
 	
-	public boolean lineHasCode(int line) {
-		if (commands == null) return false;
+	public CommandSet getCommandSetAt(int line) {
+		if (commands == null) return null;
+		
 		for (CommandSet c : commands) {
 			if (c.getLineNr() == line) {
-				return true;
+				return c;
 			}
 		}
-		return false;
+		
+		return null;
 	}
 	
 	public void loadFile(File file) {
@@ -95,15 +97,17 @@ public class CodeExecutor implements ActionListener {
 		gui.getCodeView().removeBreakPoints();
 	}
 	
-	public void nextCommand() {		
+	public void nextCommand() {
+		if (commands[Main.STORAGE.getPC()].hasBreakpoint()) {
+			stop();
+			return;
+		}
+		
 		try {
-//			System.out.println("pc: " + Main.STORAGE.getPC() + " commands: " + commands.length);
-			
 			if (commands == null || commands.length == 0 || DONE) {
 				return;
 			}
 			
-			//runCommand(Main.STORAGE.getPC());
 			this.incrementRuntime(commands[correctPC(Main.STORAGE.getPC())].getCommand());
 			
 			runCommand(correctPC(Main.STORAGE.getPC()));
@@ -114,10 +118,7 @@ public class CodeExecutor implements ActionListener {
 				return;
 			}
 			
-			
 			gui.getCodeView().setLine(commands[correctPC(Main.STORAGE.getPC())].getLineNr());
-			//gui.getCodeView().setLine(commands[Main.STORAGE.getPC()].getLineNr());
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -126,8 +127,6 @@ public class CodeExecutor implements ActionListener {
 		
 		updateRegisters();
 		updateStorage();
-		
-		
 	}
 	
 	public void incrementRuntime(Command command) {
@@ -173,9 +172,11 @@ public class CodeExecutor implements ActionListener {
 	public void updateStorage() {
 		if (gui != null) gui.getStorageTable().updateGUI();
 	}
+	
 	public void updateRegisters() {
 		if (gui != null) gui.updateRegistersView();
 	}
+	
 	public void updateWReg(int wreg) {
 		try {
 			Main.STORAGE.setW(wreg);
@@ -183,6 +184,7 @@ public class CodeExecutor implements ActionListener {
 			e.printStackTrace();
 		}
 	}
+	
 	public void setQuarzFrequency(double freq) {
 		commandDuration = (1 / freq) * 4;
 		if (gui != null)
@@ -190,7 +192,7 @@ public class CodeExecutor implements ActionListener {
 //		System.out.println((int) (commandDuration * 10));
 		t.setDelay((int) (commandDuration * DELAY_FACTOR)); 
 	}
-	
+
 	int stoppedOnLine = -1;
 	
 	@Override
@@ -205,12 +207,15 @@ public class CodeExecutor implements ActionListener {
 		if (commands != null)
 			nextCommand();
 	}
+	
 	public void start() {
-		if (!t.isRunning() && commands != null) t.start();
+		if (!t.isRunning() && commands != null && !commands[Main.STORAGE.getPC()].hasBreakpoint()) t.start();
 	}
+	
 	public void stop() {
 		if (t.isRunning()) t.stop();
 	}
+
 	public CommandSet[] getCommands() {
 		return commands;
 	}
@@ -220,4 +225,5 @@ public class CodeExecutor implements ActionListener {
 	public void removeBreakpoint(int commandNr) {
 		breakpoints[commandNr] = false;
 	}
+  
 }
