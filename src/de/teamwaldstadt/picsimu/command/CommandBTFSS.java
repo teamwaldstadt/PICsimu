@@ -17,6 +17,8 @@ public class CommandBTFSS extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		boolean testBit = Main.STORAGE.isBitOfRegisterSet(this.fileRegister, this.bitIndex, false);
 		
 		super.affectStatus(Command.BTFSS, 0);
@@ -28,8 +30,6 @@ public class CommandBTFSS extends CommandExecutor {
 			
 			System.out.println("Command '" + Command.BTFSS.name() + "' skipped the next command");
 		}
-		
-		super.incrementPC();
 	}
 	
 	public int getBitIndex() {

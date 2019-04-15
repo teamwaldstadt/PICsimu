@@ -17,6 +17,8 @@ public class CommandSWAPF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int newLowerNibble = (f & 0xF0) >> 4;
 		int newUpperNibble = (f & 0x0F) << 4;
@@ -29,8 +31,6 @@ public class CommandSWAPF extends CommandExecutor {
 		} else {
 			Main.STORAGE.setW(result);
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

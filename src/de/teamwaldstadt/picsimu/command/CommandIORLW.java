@@ -10,13 +10,14 @@ public class CommandIORLW extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int w = Main.STORAGE.getW();
 		int result = w | super.getArguments();
 
 		super.affectStatus(Command.IORLW, result);
 		
 		Main.STORAGE.setW(result);
-		super.incrementPC();
 	}
 
 }

@@ -5,7 +5,7 @@ import de.teamwaldstadt.picsimu.utils.Utils;
 public class Storage {
 
 	private int[] storage;
-	private int w;
+	private int w, pc;
 
 	public Storage() {
 		this.storage = new int[32 * 8]; // PIC main storage of 256 bytes
@@ -15,6 +15,7 @@ public class Storage {
 	public void resetAll() {
 		this.resetStorage();
 		this.resetW();
+		this.pc = 0;
 	}
 
 	public void resetStorage() {
@@ -46,6 +47,42 @@ public class Storage {
 
 	public void resetW() {
 		this.w = 0x00;
+	}
+	
+	private void manipulatePC(int arg) throws Exception {
+		int lower = arg;
+		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
+		
+		this.pc = (upper << 8) + lower;
+	}
+	
+	public void jumpPC(int arg) throws Exception {
+		Utils.checkBitsExceed(arg, 11);
+		
+		int lower = arg & 0xFF;
+		int upper = (Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2) << 3) + Utils.extractBitsFromIntNumber(arg, 8, 3);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		
+		this.pc = (upper << 8) + lower;
+	}
+	
+	public void incrementPC() throws Exception {
+		int lower = this.getRegister(SpecialRegister.PCL.getAddress(), true);
+		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
+		
+		int dummyPC = (upper << 8) + lower + 1;
+		
+		lower = Utils.extractBitsFromIntNumber(dummyPC, 0, 8);
+		upper = Utils.extractBitsFromIntNumber(dummyPC, 8, 5);
+		
+		this.setRegister(SpecialRegister.PCL, lower);
+		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
+		
+		this.pc = pc + 1;
 	}
 
 	public int[] getStorage() {
@@ -95,22 +132,8 @@ public class Storage {
 		return this.w;
 	}
 	
-	public int getPC() throws Exception {
-		int low = this.getRegister(SpecialRegister.PCL);
-		int high = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH), 0, 5);
-		
-		String lowSequence = Integer.toBinaryString(low);
-		String highSequence = Integer.toBinaryString(high);
-		
-		while (lowSequence.length() < 8) {
-			lowSequence = "0" + lowSequence;
-		}
-		
-		while (highSequence.length() < 8) {
-			highSequence = "0" + highSequence;
-		}
-		
-		return Integer.valueOf(highSequence + lowSequence, 2);
+	public int getPC() {
+		return this.pc;
 	}
 	
 	public boolean isBitOfRegisterSet(int register, int bitIndex, boolean ignoreBank) throws Exception {
@@ -144,15 +167,25 @@ public class Storage {
 			address += Bank.OFFSET;
 		}
 		
-		try {			
-			this.setRegister(SpecialRegister.atAddress(address), value);
+		try {
+			SpecialRegister register = SpecialRegister.atAddress(address);
+			
+			// Sonderfall für PCL
+			if (register == SpecialRegister.PCL) {
+				this.manipulatePC(value);
+				return;
+			}
+			
+			this.setRegister(register, value);
 			return;
 		} catch (Exception e) {
 			// do nothing
 		}
 		
-		try {			
-			this.setRegister(new GeneralRegister(address), value);
+		try {
+			GeneralRegister register = new GeneralRegister(address);
+			
+			this.setRegister(register, value);
 			return;
 		} catch (Exception e) {
 			// do nothing
@@ -180,16 +213,6 @@ public class Storage {
 	public void setW(int w) throws Exception {
 		Utils.checkBitsExceed(w, 8);
 		this.w = w;
-	}
-	
-	public void setPC(int pc) throws Exception {
-		Utils.checkBitsExceed(pc, 13);
-		
-		int low = Utils.extractBitsFromIntNumber(pc, 0, 8);
-		int high = Utils.extractBitsFromIntNumber(pc, 8, 5);
-		
-		this.setRegister(SpecialRegister.PCL, low);
-		this.setRegister(SpecialRegister.PCLATH, high);
 	}
 	
 	public void setBitOfRegister(int register, int bitIndex, boolean setBit, boolean ignoreBank) throws Exception {

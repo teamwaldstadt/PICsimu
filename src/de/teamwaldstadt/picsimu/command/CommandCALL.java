@@ -14,7 +14,7 @@ public class CommandCALL extends CommandExecutor {
 		Main.STACK.push(Main.STORAGE.getPC() + 1);
 		
 		// setze PC auf die Adresse der Routine
-		Main.STORAGE.setPC(super.getArguments());
+		Main.STORAGE.jumpPC(super.getArguments());
 		
 		super.affectStatus(Command.CALL, 0);
 	}

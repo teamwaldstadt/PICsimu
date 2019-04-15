@@ -19,6 +19,8 @@ public class CommandRLF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f << 1;
 		
@@ -37,8 +39,6 @@ public class CommandRLF extends CommandExecutor {
 		} else {
 			Main.STORAGE.setW(result);
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

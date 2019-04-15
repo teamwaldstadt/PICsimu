@@ -17,6 +17,8 @@ public class CommandDECFSZ extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int minus = ((~1) + 1) & 0xFF; // 2er-Komplement und maskieren
 		int result = f + minus;
@@ -38,8 +40,6 @@ public class CommandDECFSZ extends CommandExecutor {
 			
 			System.out.println("Command '" + Command.DECFSZ.name() + "' skipped the next command");
 		}
-		
-		super.incrementPC();
 	}
 	
 	public boolean isDestinationBitSet() {

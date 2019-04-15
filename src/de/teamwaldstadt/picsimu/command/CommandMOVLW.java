@@ -10,11 +10,12 @@ public class CommandMOVLW extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
+		Main.STORAGE.incrementPC();
+		
 		int result = super.getArguments();
 		
 		super.affectStatus(Command.MOVLW, result);
 		Main.STORAGE.setW(result);
-		super.incrementPC();
 	}
 
 }

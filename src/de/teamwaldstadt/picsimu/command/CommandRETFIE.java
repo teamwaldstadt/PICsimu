@@ -14,7 +14,7 @@ public class CommandRETFIE extends CommandExecutor {
 		int tos = Main.STACK.pop();
 		
 		// lade tos in PC
-		Main.STORAGE.setPC(tos);
+		Main.STORAGE.jumpPC(tos);
 		
 		// setze GIE bit im INTCON register
 		Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 7, true, false);
