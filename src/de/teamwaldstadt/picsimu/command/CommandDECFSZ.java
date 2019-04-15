@@ -20,7 +20,6 @@ public class CommandDECFSZ extends CommandExecutor {
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f - 1;
 		
-		// TODO wie verh�lt sich der Command, wenn f bereits 0 ist?
 		if (result == -1) {
 			result = 0xFF;
 		}

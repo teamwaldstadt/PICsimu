@@ -22,7 +22,7 @@ public class CommandADDWF extends CommandExecutor {
 		int result = f + w;
 		
 		super.affectStatus(Command.ADDWF, result);
-		super.affectStatusDC(Command.ADDWF, super.getArguments());
+		super.affectStatusDC(Command.ADDWF, f);
 		
 		result &= 0xFF; // result maskieren
 		

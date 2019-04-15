@@ -68,9 +68,9 @@ public abstract class CommandExecutor {
 		int arg = argument & 0x0F;
 		int w = Main.STORAGE.getW() & 0x0F;
 		
-		if ((command == Command.ADDLW || command == Command.ADDWF) && arg + w > 0x0F) {
+		if ((command == Command.ADDLW || command == Command.ADDWF) && (arg + w > 0x0F)) {
 			digitCarry = true;
-		} else if ((command == Command.SUBLW || command == Command.SUBWF) && arg - w < 0x00) {
+		} else if ((command == Command.SUBLW || command == Command.SUBWF) && (arg - w < 0x0F)) {
 			digitCarry = true;
 		}
 
