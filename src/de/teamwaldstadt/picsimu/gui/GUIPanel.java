@@ -52,6 +52,8 @@ public class GUIPanel extends JPanel {
 	JCheckBox impulsActivated;
 	JTextField runtimeField;
 	JLabel runtime;
+	JSpinner frequencySpinner;
+	JLabel labelTitle;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -231,7 +233,7 @@ public class GUIPanel extends JPanel {
 		freqSettings.setLayout(new GridBagLayout());
 		
 		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 0.5, 6.0, 0.1);
-		JSpinner frequencySpinner = new JSpinner(snm);
+		frequencySpinner = new JSpinner(snm);
         
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));
 		frequencySpinner.setMinimumSize(new Dimension(100, 30));
@@ -245,7 +247,7 @@ public class GUIPanel extends JPanel {
 			}
 		});
 		
-		JLabel labelTitle = new JLabel("Quarz-Frequenz (MHz) ");
+		labelTitle = new JLabel("Quarz-Frequenz (MHz) ");
 		c.fill = GridBagConstraints.HORIZONTAL;
 		c.anchor = GridBagConstraints.BASELINE;
 		c.gridy = 0;
@@ -260,11 +262,18 @@ public class GUIPanel extends JPanel {
 		c.gridwidth = 1;
 		c.gridx = 3;
 		
-		runtime = new JLabel("Laufzeit (1\u00B5s / Befehl)");
+		runtime = new JLabel("Laufzeit");
+		
 		c.gridy = 1;
 		c.gridx = 0;
 		freqSettings.add(runtime, c);
 		runtimeField = new JTextField("0\u00B5s");
+		
+		runtime.setToolTipText("1\u00B5s / Befehl");
+		frequencySpinner.setToolTipText("1\u00B5s / Befehl");
+		labelTitle.setToolTipText("1\u00B5s / Befehl");
+		runtimeField.setToolTipText("1\u00B5s / Befehl");
+		
 		runtimeField.setComponentOrientation(ComponentOrientation.RIGHT_TO_LEFT);
 		runtimeField.setEditable(false);
 		c.gridx = 1;
@@ -391,7 +400,10 @@ public class GUIPanel extends JPanel {
 	public void setCommandDuration(double duration) {
 		DecimalFormat df = new DecimalFormat("#.###");
 		df.setRoundingMode(RoundingMode.HALF_UP);
-		runtime.setText("Laufzeit (" + df.format(duration) + "\u00B5s / Befehl)");
+		runtime.setToolTipText(df.format(duration) + "\u00B5s / Befehl");
+		frequencySpinner.setToolTipText(df.format(duration) + "\u00B5s / Befehl");
+		labelTitle.setToolTipText(df.format(duration) + "\u00B5s / Befehl");
+		runtimeField.setToolTipText(df.format(duration) + "\u00B5s / Befehl");
 	}
 	public StorageTable getStorageTable() {
 		return storageTable;
