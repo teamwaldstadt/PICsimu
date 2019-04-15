@@ -21,7 +21,7 @@ public class CommandIORWF extends CommandExecutor {
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = w | f;
 		
-		super.affectStatus(Command.IORWF, (result == 0x00 ? 0xFF : 0x00)); // z-flag is inverted for this command
+		super.affectStatus(Command.IORWF, result);
 		
 		if (this.isDestinationBitSet) {
 			Main.STORAGE.setRegister(this.fileRegister, result, false);

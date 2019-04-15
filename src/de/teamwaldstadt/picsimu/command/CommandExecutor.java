@@ -56,7 +56,7 @@ public abstract class CommandExecutor {
 		}
 	}
 	
-	public void affectStatusDC(Command command, int argument) throws Exception {
+	public void affectStatusDC(Command command, int argument, int wRegister) throws Exception {
 		List<Status> statusAffected = Arrays.asList(command.getStatusAffected());
 		
 		if (!statusAffected.contains(Status.DC)) {
@@ -66,11 +66,9 @@ public abstract class CommandExecutor {
 		boolean digitCarry = false;
 
 		int arg = argument & 0x0F;
-		int w = Main.STORAGE.getW() & 0x0F;
+		int w = wRegister & 0x0F;
 		
-		if ((command == Command.ADDLW || command == Command.ADDWF) && (arg + w > 0x0F)) {
-			digitCarry = true;
-		} else if ((command == Command.SUBLW || command == Command.SUBWF) && (arg - w < 0x0F)) {
+		if (arg + w > 0x0F) {
 			digitCarry = true;
 		}
 

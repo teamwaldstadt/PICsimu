@@ -10,11 +10,11 @@ public class CommandSUBLW extends CommandExecutor {
 	
 	@Override
 	public void execute() throws Exception {
-		int w = ((Main.STORAGE.getW() ^ 0xFF) + 1) & 0xFF; // 2er-Komplement und maskieren
+		int w = ((~Main.STORAGE.getW()) + 1) & 0xFF; // 2er-Komplement und maskieren
 		int result = super.getArguments() + w;
 		
 		super.affectStatus(Command.SUBLW, result);
-		super.affectStatusDC(Command.SUBLW, super.getArguments());
+		super.affectStatusDC(Command.SUBLW, super.getArguments(), w);
 		
 		result &= 0xFF; // result maskieren
 		

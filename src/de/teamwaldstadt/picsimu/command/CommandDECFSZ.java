@@ -18,11 +18,8 @@ public class CommandDECFSZ extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
-		int result = f - 1;
-		
-		if (result == -1) {
-			result = 0xFF;
-		}
+		int minus = ((~1) + 1) & 0xFF; // 2er-Komplement und maskieren
+		int result = f + minus;
 		
 		super.affectStatus(Command.DECFSZ, result);
 		

@@ -17,12 +17,12 @@ public class CommandSUBWF extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		int w = ((Main.STORAGE.getW() ^ 0xFF) + 1) & 0xFF; // 2er-Komplement und maskieren
+		int w = ((~Main.STORAGE.getW()) + 1) & 0xFF; // 2er-Komplement und maskieren
 		int f = Main.STORAGE.getRegister(this.fileRegister, false);
 		int result = f + w;
 		
 		super.affectStatus(Command.SUBWF, result);
-		super.affectStatusDC(Command.SUBWF, f);
+		super.affectStatusDC(Command.SUBWF, f, w);
 		
 		result &= 0xFF; // result maskieren
 		

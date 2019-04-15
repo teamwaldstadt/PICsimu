@@ -14,7 +14,7 @@ public class CommandADDLW extends CommandExecutor {
 		int result = super.getArguments() + w;
 		
 		super.affectStatus(Command.ADDLW, result);
-		super.affectStatusDC(Command.ADDLW, super.getArguments());
+		super.affectStatusDC(Command.ADDLW, super.getArguments(), w);
 		
 		result &= 0xFF; // result maskieren
 		
