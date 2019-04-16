@@ -14,7 +14,7 @@ public class JInfoTableModel extends DefaultTableModel {
 	private static final long serialVersionUID = 1L;
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		if (col == 1 && row == 1) return false;
+		if ((col == 1 && row == 1) || (col == 1 && row == 3)) return false;
 		return col != 0;
 	}
 
