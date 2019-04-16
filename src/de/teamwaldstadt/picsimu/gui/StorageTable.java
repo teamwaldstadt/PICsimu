@@ -5,6 +5,7 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.EventObject;
 
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.TableCellRenderer;
@@ -66,19 +67,23 @@ public class StorageTable extends JTable {
 	
 	@Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {		
-        if (row == 0 || column == 0) {
+
+		String tooltip = null;
+		
+		if (row == 0 || column == 0) {
         	setBackground(Color.LIGHT_GRAY);
+        	tooltip = null;
         } else {
-    		setToolTipText("Adresse: 0x" + String.format("%2X", (column-1) + (getColumnCount() - 1) * (row-1)).replaceAll(" ", "0"));
-//        	setToolTipText("row: " + row + " col: " + column);
+        	tooltip = "Adresse: 0x" + String.format("%2X", (column-1) + (getColumnCount() - 1) * (row-1)).replaceAll(" ", "0");
         	
         	if (row % 2 == 1)
         		setBackground(Color.WHITE);
         	else 
         		setBackground(new Color(240, 240, 240));
         }
-        
 		Component c = super.prepareRenderer(renderer, row, column);
+		if (c instanceof JLabel)
+			((JLabel) c).setToolTipText(tooltip);
         return c;
     }
 }
