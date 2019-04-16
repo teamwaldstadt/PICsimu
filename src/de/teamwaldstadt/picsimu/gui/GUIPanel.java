@@ -427,5 +427,22 @@ public class GUIPanel extends JPanel {
 		}
 		infoTable.updateGUI();
 	}
+	boolean isDarkMode = false;
+	public void toggleDarkMode() {
+		if (!isDarkMode) {
+			GUIColor.TEXT_COLOR.setColor(new Color(240,240,240));
+			GUIColor.NO_EDIT_COLOR.setColor(new Color(30,30,30));
+			GUIColor.DISABLED_TABLE_CELL.setColor(new Color(0,0,0));
+			GUIColor.ALTERNATE_CELL_BACKGROUND.setColor(new Color(40,40,40));
+			GUIColor.CELL_BACKGROUND.setColor(new Color(70,70,70));
+			GUIColor.CELL_HIGHLIGHT_BACKGROUND.setColor(Color.ORANGE);
+			GUIColor.CELL_HIGHLIGHT_FOREGROUND.setColor(Color.BLACK);
+		} else {
+			for (GUIColor c : GUIColor.values()) {
+				c.resetColor();
+			}
+		}
+		isDarkMode = !isDarkMode;
+	}
 
 }

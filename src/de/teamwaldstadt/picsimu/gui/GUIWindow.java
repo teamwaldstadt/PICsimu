@@ -90,20 +90,22 @@ public class GUIWindow extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (!isDarkMode) {
-					UIManager.put( "control", new Color( 128, 128, 128) );
-					UIManager.put( "info", new Color(128,128,128) );
-					UIManager.put( "nimbusBase", new Color( 18, 30, 49) );
-					UIManager.put( "nimbusAlertYellow", new Color( 248, 187, 0) );
-					UIManager.put( "nimbusDisabledText", new Color( 128, 128, 128) );
-					UIManager.put( "nimbusFocus", new Color(115,164,209) );
-					UIManager.put( "nimbusGreen", new Color(176,179,50) );
-					UIManager.put( "nimbusInfoBlue", new Color( 66, 139, 221) );
-					UIManager.put( "nimbusLightBackground", new Color( 18, 30, 49) );
-					UIManager.put( "nimbusOrange", new Color(191,98,4) );
-					UIManager.put( "nimbusRed", new Color(169,46,34) );
-					UIManager.put( "nimbusSelectedText", new Color( 255, 255, 255) );
-					UIManager.put( "nimbusSelectionBackground", new Color( 104, 93, 156) );
-					UIManager.put( "text", new Color( 230, 230, 230) );
+					Color dark = new Color(50,50,50);
+					Color light = new Color(255,255,255);
+					UIManager.put( "control", dark );
+					UIManager.put( "info", dark);
+					UIManager.put( "nimbusBase", dark );
+					UIManager.put( "nimbusAlertYellow", light );
+					UIManager.put( "nimbusDisabledText",dark );
+					UIManager.put( "nimbusFocus", dark );
+					UIManager.put( "nimbusGreen", dark);
+					UIManager.put( "nimbusInfoBlue", light);
+					UIManager.put( "nimbusLightBackground", new Color(100,100,100) );//text boxes background
+					UIManager.put( "nimbusOrange", dark);
+					UIManager.put( "nimbusRed", dark);
+					UIManager.put( "nimbusSelectedText", dark );
+					UIManager.put( "nimbusSelectionBackground", light );
+					UIManager.put( "text", light );
 				} else {
 					UIManager.getDefaults().put( "control", new Color( 214, 217, 223) );
 					UIManager.put( "info", new ColorUIResource(242,242,189) );
@@ -127,6 +129,7 @@ public class GUIWindow extends JFrame {
 				}
 				SwingUtilities.updateComponentTreeUI(frame);
 				isDarkMode = !isDarkMode;
+				guiPanel.toggleDarkMode();
 			}
 		});
 		menu.add(darkModeItem);

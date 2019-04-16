@@ -116,16 +116,21 @@ public class CodeView extends JTable {
 	
 	@Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
-   
 		if (row % 2 == 1)
-    		setBackground(Color.WHITE);
+    		setBackground(GUIColor.CELL_BACKGROUND.getColor());
     	else 
-    		setBackground(new Color(240, 240, 240));
+    		setBackground(GUIColor.ALTERNATE_CELL_BACKGROUND.getColor());
 		
-		if (row == selected)
-        	setBackground(Color.YELLOW);
+		
+		if (row == selected) {
+        	setBackground(GUIColor.CELL_HIGHLIGHT_BACKGROUND.getColor());
+		}
 		Component c = super.prepareRenderer(renderer, row, column);
-
+		if (row == selected) {
+			c.setForeground(GUIColor.CELL_HIGHLIGHT_FOREGROUND.getColor());
+		} else {
+			c.setForeground(GUIColor.TEXT_COLOR.getColor());
+		}
 		Object value = getValueAt(row, column);
 		if (value != null && c instanceof JLabel) {
         	JLabel l = (JLabel) c;

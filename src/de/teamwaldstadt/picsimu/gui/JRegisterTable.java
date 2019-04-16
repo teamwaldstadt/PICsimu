@@ -172,19 +172,19 @@ public class JRegisterTable extends JTable {
 
 		if (row == 0 || row == getRowCount() - 2 || column == 0) {
 			
-			setBackground(Color.LIGHT_GRAY);
+			setBackground(GUIColor.DISABLED_TABLE_CELL.getColor());
 			return super.prepareRenderer(renderer, row, column);
 		}
 		
 		if (row == 2 && column >= 1 && getValueAt(row - 1,  column).equals("o")) {
-			setBackground(new Color(230, 230, 230));
+			setBackground(GUIColor.NO_EDIT_COLOR.getColor());
 			return super.prepareRenderer(renderer, row, column);
 		}
 
-		setBackground(Color.WHITE);
+		setBackground(GUIColor.CELL_BACKGROUND.getColor());
 
 		Component c = super.prepareRenderer(renderer, row, column);
-
+		c.setForeground(GUIColor.TEXT_COLOR.getColor());
 		Object value = getValueAt(row, column);
 		if (value != null && c instanceof JLabel) {
 			JLabel l = (JLabel) c;

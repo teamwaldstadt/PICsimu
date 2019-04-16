@@ -55,10 +55,11 @@ public class JInfoTable extends JTable {
 	@Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
     	if (row % 2 == 1)
-    		setBackground(Color.WHITE);
+    		setBackground(GUIColor.CELL_BACKGROUND.getColor());
     	else 
-    		setBackground(new Color(240, 240, 240));
+    		setBackground(GUIColor.ALTERNATE_CELL_BACKGROUND.getColor());
 		Component c = super.prepareRenderer(renderer, row, column);
+		c.setForeground(GUIColor.TEXT_COLOR.getColor());
         return c;
     }
 	@Override

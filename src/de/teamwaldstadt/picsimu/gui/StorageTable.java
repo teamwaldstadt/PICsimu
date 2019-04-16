@@ -71,19 +71,21 @@ public class StorageTable extends JTable {
 		String tooltip = null;
 		
 		if (row == 0 || column == 0) {
-        	setBackground(Color.LIGHT_GRAY);
+        	setBackground(GUIColor.DISABLED_TABLE_CELL.getColor());
         	tooltip = null;
         } else {
         	tooltip = "Adresse: 0x" + String.format("%2X", (column-1) + (getColumnCount() - 1) * (row-1)).replaceAll(" ", "0");
         	
         	if (row % 2 == 1)
-        		setBackground(Color.WHITE);
+        		setBackground(GUIColor.CELL_BACKGROUND.getColor());
         	else 
-        		setBackground(new Color(240, 240, 240));
+        		setBackground(GUIColor.ALTERNATE_CELL_BACKGROUND.getColor());
         }
 		Component c = super.prepareRenderer(renderer, row, column);
 		if (c instanceof JLabel)
 			((JLabel) c).setToolTipText(tooltip);
+		c.setForeground(GUIColor.TEXT_COLOR.getColor());
         return c;
     }
+
 }
