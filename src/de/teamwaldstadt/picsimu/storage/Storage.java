@@ -53,7 +53,10 @@ public class Storage {
 		int lower = arg;
 		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
 		
+		// hier wird absichtlich setRegister(SpecialRegister-Objekt, Integer-Wert) und nicht 
+		// setRegister(SpecialRegister-Adresse, Integer-Wert, Boolean-IgnoreBank) verwendet
 		this.setRegister(SpecialRegister.PCL, lower);
+		
 		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
 		
 		this.pc = (upper << 8) + lower;
@@ -65,24 +68,19 @@ public class Storage {
 		int lower = arg & 0xFF;
 		int upper = (Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2) << 3) + Utils.extractBitsFromIntNumber(arg, 8, 3);
 		
+		// hier wird absichtlich setRegister(SpecialRegister-Objekt, Integer-Wert) und nicht 
+		// setRegister(SpecialRegister-Adresse, Integer-Wert, Boolean-IgnoreBank) verwendet
 		this.setRegister(SpecialRegister.PCL, lower);
 		
 		this.pc = (upper << 8) + lower;
 	}
 	
 	public void incrementPC() throws Exception {
-		int lower = this.getRegister(SpecialRegister.PCL.getAddress(), true);
-		int upper = Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 0, 5);
-		
-		int dummyPC = (upper << 8) + lower + 1;
-		
-		lower = Utils.extractBitsFromIntNumber(dummyPC, 0, 8);
-		upper = Utils.extractBitsFromIntNumber(dummyPC, 8, 5);
-		
-		this.setRegister(SpecialRegister.PCL, lower);
-		this.setRegister(SpecialRegister.PCLATH.getAddress(), upper, true);
-		
 		this.pc = pc + 1;
+		
+		// hier wird absichtlich setRegister(SpecialRegister-Objekt, Integer-Wert) und nicht 
+		// setRegister(SpecialRegister-Adresse, Integer-Wert, Boolean-IgnoreBank) verwendet
+		this.setRegister(SpecialRegister.PCL, this.pc & 0xFF);
 	}
 
 	public int[] getStorage() {
@@ -170,7 +168,7 @@ public class Storage {
 		try {
 			SpecialRegister register = SpecialRegister.atAddress(address);
 			
-			// Sonderfall für PCL
+			// Sonderfall fï¿½r PCL
 			if (register == SpecialRegister.PCL) {
 				this.manipulatePC(value);
 				return;
