@@ -43,6 +43,13 @@ public class JRegisterTable extends JTable {
 				setValueAt(values[8 - i], 0, 8 - i + 1);
 			}
 			setValueAt("Bit", 1, 0);
+		} else if (reg == SpecialRegister.OPTION_REG) {
+			tm.setRowCount(2);
+			String[] values = { "RBP", "IntEdg", "TOCS", "TOSE", "PSA", "PS2", "PS1", "PS0" };
+			for (int i = 8; i > 0; i--) {
+				setValueAt(values[8 - i], 0, 8 - i + 1);
+			}
+			setValueAt("Bit", 1, 0);
 		} else {
 			for (int i = 8; i > 0; i--) {
 				setValueAt(i - 1, 0, 8 - i + 1);
@@ -100,7 +107,7 @@ public class JRegisterTable extends JTable {
 		tm.setColumnCount(9);
 		setModel(tm);
 
-		getColumnModel().getColumn(0).setPreferredWidth(width * 2);
+		getColumnModel().getColumn(0).setPreferredWidth(width + 11);
 		getColumnModel().getColumn(1).setPreferredWidth(width);
 		getColumnModel().getColumn(2).setPreferredWidth(width);
 		getColumnModel().getColumn(3).setPreferredWidth(width);
@@ -129,6 +136,17 @@ public class JRegisterTable extends JTable {
 				if (row != getRowCount() - 1)
 					return;
 
+				if (reg == SpecialRegister.PORTA || reg == SpecialRegister.PORTB) {
+					try {
+						int trisbit = (Main.STORAGE.getRegister(reg.getAddress() + 0x80, false) >> (8 - col)) & 1;
+						if (trisbit == 0) {
+							return;
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
+				}
+				
 				setValueAt(Integer.parseInt(String.valueOf(getValueAt(row, col))) ^ 1, row, col);
 
 				int value = 0;
@@ -153,14 +171,17 @@ public class JRegisterTable extends JTable {
 	public Component prepareRenderer(TableCellRenderer renderer, int row, int column) {
 
 		if (row == 0 || row == getRowCount() - 2 || column == 0) {
+			
 			setBackground(Color.LIGHT_GRAY);
 			return super.prepareRenderer(renderer, row, column);
 		}
+		
+		if (row == 2 && column >= 1 && getValueAt(row - 1,  column).equals("o")) {
+			setBackground(new Color(230, 230, 230));
+			return super.prepareRenderer(renderer, row, column);
+		}
 
-		if (row % 2 == 1)
-			setBackground(Color.WHITE);
-		else
-			setBackground(new Color(240, 240, 240));
+		setBackground(Color.WHITE);
 
 		Component c = super.prepareRenderer(renderer, row, column);
 

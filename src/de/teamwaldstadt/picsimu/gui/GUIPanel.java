@@ -136,6 +136,12 @@ public class GUIPanel extends JPanel {
 		registers.add(Box.createRigidArea(new Dimension(0, space)));
 		registerTables.add(specialRegsStatus);
 		
+		/* OPTION */
+		JRegisterTable optionRegs = new JRegisterTable("Option", codeExecutor, SpecialRegister.OPTION_REG);
+		registers.add(optionRegs);
+		registers.add(Box.createRigidArea(new Dimension(0, space)));
+		registerTables.add(optionRegs);
+		
 		/* Some special registers (W, PC, FSR, ...) */
 		JPanel regInfoPanel = new JPanel();
 		regInfoPanel.setBackground(Color.GREEN);
@@ -145,9 +151,9 @@ public class GUIPanel extends JPanel {
 		registers.add(regInfoPanel);
 		
 		registerScroll.setViewportView(registers);
-		registerScroll.setPreferredSize(new Dimension(250, 200));
-		registerScroll.setMinimumSize(new Dimension(250, 200));
-		registerScroll.setMaximumSize(new Dimension(250, 200));
+		registerScroll.setPreferredSize(new Dimension(300, 200));
+		registerScroll.setMinimumSize(new Dimension(300, 200));
+		registerScroll.setMaximumSize(new Dimension(300, 200));
 		add(registerScroll, c);
 		
 		/*
