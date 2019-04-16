@@ -11,7 +11,7 @@ public class CommandCALL extends CommandExecutor {
 	@Override
 	public void execute() throws Exception {
 		// lade (PC + 1) auf den stack
-		Main.STACK.push(Main.STORAGE.getPC() + 1);
+		Main.STORAGE.getStack().push(Main.STORAGE.getPC() + 1);
 		
 		// setze PC auf die Adresse der Routine
 		Main.STORAGE.jumpPC(super.getArguments());

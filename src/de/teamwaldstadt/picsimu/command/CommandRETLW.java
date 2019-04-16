@@ -10,7 +10,7 @@ public class CommandRETLW extends CommandExecutor {
 
 	@Override
 	public void execute() throws Exception {
-		int tos = Main.STACK.pop();
+		int tos = Main.STORAGE.getStack().pop();
 		
 		// lade literal in w
 		Main.STORAGE.setW(super.getArguments());

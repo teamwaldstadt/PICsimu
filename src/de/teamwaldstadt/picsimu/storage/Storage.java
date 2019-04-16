@@ -1,20 +1,25 @@
 package de.teamwaldstadt.picsimu.storage;
 
+import java.util.Stack;
+
 import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class Storage {
 
+	private Stack<Integer> stack;
 	private int[] storage;
 	private int w, pc;
 
 	public Storage() {
 		this.storage = new int[32 * 8]; // PIC main storage of 256 bytes
+		this.stack = new Stack<>();
 		this.resetAll(); // initialize main storage and w register
 	}
 
 	public void resetAll() {
 		this.resetStorage();
 		this.resetW();
+		this.stack.clear();
 		this.pc = 0;
 	}
 
@@ -130,6 +135,10 @@ public class Storage {
 		return this.w;
 	}
 	
+	public Stack<Integer> getStack() {
+		return this.stack;
+	}
+	
 	public int getPC() {
 		return this.pc;
 	}
@@ -142,14 +151,6 @@ public class Storage {
 		int value = this.getRegister(register, ignoreBank);
 		
 		return ((value >> (bitIndex)) & 1) == 1;
-	}
-
-	public void setStorage(int[] storage) throws Exception {
-		if (storage.length != this.storage.length) {
-			throw new Exception("Storage size mismatch (found: " + storage.length + ", expected: " + this.storage.length + ")");
-		}
-
-		this.storage = storage;
 	}
 	
 	public void setRegister(int address, int value, boolean ignoreBank) throws Exception {

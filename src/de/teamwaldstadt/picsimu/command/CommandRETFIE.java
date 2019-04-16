@@ -11,7 +11,7 @@ public class CommandRETFIE extends CommandExecutor {
 	
 	@Override
 	public void execute() throws Exception {
-		int tos = Main.STACK.pop();
+		int tos = Main.STORAGE.getStack().pop();
 		
 		// lade tos in PC
 		Main.STORAGE.jumpPC(tos);
