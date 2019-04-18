@@ -2,6 +2,9 @@ package de.teamwaldstadt.picsimu.storage;
 
 import java.util.Stack;
 
+import de.teamwaldstadt.picsimu.CodeExecutor;
+import de.teamwaldstadt.picsimu.Main;
+import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class Storage {
@@ -174,6 +177,10 @@ public class Storage {
 				this.manipulatePC(value);
 				return;
 			}
+			if (register == SpecialRegister.TMR0) {
+				//see page 27 on Datenblatt
+				CodeExecutor.prescalerTact = -1; 
+			}
 			
 			this.setRegister(register, value);
 			return;
@@ -193,6 +200,10 @@ public class Storage {
 		throw new Exception("Invalid register address: " + String.format("%2X", address));
 	}
 
+	public void setTimer(int value) throws Exception {
+		setRegister(SpecialRegister.TMR0, value);
+	}
+	
 	private void setRegister(SpecialRegister register, int value) throws Exception {
 		Utils.checkBitsExceed(value, 8);
 		
