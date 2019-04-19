@@ -177,6 +177,9 @@ public class CodeExecutor implements ActionListener {
 					tacts = ((f + 1) & 0xFF) == 0 ? 2 : 1;
 				}
 			}
+			
+			if ((optionReg & 32) != 0) tacts = 1;
+			
 			for (int i = 0; i < tacts; i++) {
 				//val++;
 				if ((val + inc) % 256 == 0) {

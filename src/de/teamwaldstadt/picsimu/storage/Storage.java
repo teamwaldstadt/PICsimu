@@ -181,6 +181,26 @@ public class Storage {
 				//see page 27 on Datenblatt
 				CodeExecutor.prescalerTact = -1; 
 			}
+			if (register == SpecialRegister.PORTA) {
+				int currentVal = Main.STORAGE.getRegister(register);
+				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);
+				boolean tose = (option & 16) == 0 ? false: true; 
+				if (tose) {
+					//falling edge
+					if ((currentVal & 16) != 0) {
+						if ((value & 16) == 0 && (option & 32) != 0) {
+							Main.EXECUTOR.triggerTMR0(option);
+						}
+					}
+				} else {
+					//raising edge
+					if ((currentVal & 16) == 0) {
+						if ((value & 16) != 0 && (option & 32) != 0) {
+							Main.EXECUTOR.triggerTMR0(option);
+						}
+					}
+				}
+			}
 			
 			this.setRegister(register, value);
 			return;
