@@ -22,6 +22,9 @@ import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class CodeExecutor implements ActionListener {
 	
+	boolean WATCHDOG_ENABLED = true;
+	
+	
 	/*
 	 * factor, that gets multiplied with the real delay in micro seconds, to create the delay in ms
 	 * example: real delay: 1us -> simulated delay: 1us * 10 -> 10ms
@@ -98,6 +101,7 @@ public class CodeExecutor implements ActionListener {
 			}
 		}
 		gui.getCodeView().removeBreakPoints();
+		watchdogCounter = 0;
 	}
 	
 	int prescaler = 4;
@@ -117,6 +121,7 @@ public class CodeExecutor implements ActionListener {
 			// if TOCS is unset -> timer mode
 			if ((option & 32) == 0) {
 				triggerTMR0(option);
+				if (DONE) return;
 			}
 			
 			runCommand(correctPC(Main.STORAGE.getPC()));
@@ -138,6 +143,8 @@ public class CodeExecutor implements ActionListener {
 		updateStorage();
 	}
 	
+	static int watchdogCounter = 0;
+	int watchdogLimit = 18000;
 	
 	/*
 	 * maybe TODO: nicer version of this function
@@ -146,9 +153,11 @@ public class CodeExecutor implements ActionListener {
 		//if PSA is set -> use prescaler
 		if ((optionReg & 8) == 0) {
 			prescaler = (int) Math.pow(2, (optionReg & 7) + 1);
+			watchdogLimit = 18000;
 		} else {
 			prescaler = 1;
 			prescalerTact = 1;
+			watchdogLimit = 18000 * (int) (Math.pow(2, (optionReg & 7)));
 		}
 		try {
 			int val = Main.STORAGE.getRegister(SpecialRegister.TMR0.getAddress(), true);
@@ -177,6 +186,22 @@ public class CodeExecutor implements ActionListener {
 					tacts = ((f + 1) & 0xFF) == 0 ? 2 : 1;
 				}
 			}
+			
+			
+			/* watchdog stuff */
+			for (int i = 0; i < tacts; i++) {
+				watchdogCounter++;
+				//System.out.println(watchdogCounter + " / " + watchdogLimit);
+				if (watchdogCounter > watchdogLimit) {
+					stop();
+					gui.getCodeView().setLine(commands[0].getLineNr());
+					DONE = true;
+					Main.STORAGE.setRegister(SpecialRegister.PCL.getAddress(), 0, true);
+					return;
+				}
+			}
+			
+			
 			
 			if ((optionReg & 32) != 0) tacts = 1;
 			
