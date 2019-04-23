@@ -6,7 +6,7 @@ PICsimu ist ein in Java entwickelter Simulator für den [PIC16F84 Mikroprozessor
 
 Im Verzeichnis des Projekts den Terminal-Befehl `ant build` ausführen. Die ausführbare JAR wird im Verzeichnis `jar/` unter dem Namensformat `PICsimu-[JAHR][MONAT][TAG]-[STUNDEN][MINUTEN][SEKUNDEN].jar` erstellt, wobei `[JAHR]`, `[MONAT]`, `[TAG]`, `[STUNDEN]`, `[MINUTEN]` und `[SEKUNDEN]` den Zeitpunkt des Builds festlegen.
 
-Zum selbstständigen Compilen bzw. Builden muss eine aktuelle Version von [Apache Ant](https://ant.apache.org/) sowie auf dem System installiert sein. Zusätzlich wird ein installierter Java-Compiler (beipielsweise [Java SE Development Kit](https://www.oracle.com/technetwork/java/javaee/downloads/jdk8-downloads-2133151.html) Version 8+ oder [OpenJDK](https://openjdk.java.net/) Version 11+) vorausgesetzt.
+Zum eigenhändigen Compilen bzw. Builden muss eine aktuelle Version von [Apache Ant](https://ant.apache.org/) auf dem System installiert sein. Zusätzlich wird ein installierter Java-Compiler (beipielsweise [Java SE Development Kit](https://www.oracle.com/technetwork/java/javaee/downloads/jdk8-downloads-2133151.html) Version 8+ oder [OpenJDK](https://openjdk.java.net/) Version 11+) vorausgesetzt.
 
 ## Download
 
@@ -15,11 +15,11 @@ Ausführbare JARs können [HIER](https://picsimu.teamwaldstadt.de/jar/) herunter
 ## TODO-Liste
 
 * Interrupts
-* TMR0, Watchdog inkl. Vorteiler
+* TMR0, Watchdog inkl. Vorteiler **[IN PROGRESS]**
 * Command SLEEP
 * Stack visualisieren
 * Quellcode kommentieren
-* Apache Ant integrieren
+* ~~Apache Ant integrieren~~ **[DONE]**
 * Hardwareansteuerung via RS232
 * License-Button
 * Dokumentation / Hilfe-Button
