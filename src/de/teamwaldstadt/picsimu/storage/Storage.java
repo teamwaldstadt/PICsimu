@@ -177,8 +177,7 @@ public class Storage {
 				return;
 			}
 			if (register == SpecialRegister.TMR0) {
-				//see page 27 on Datenblatt
-				CodeExecutor.prescalerTact = -1; 
+				CodeExecutor.prescalerTact = 1; 
 			}
 			if (register == SpecialRegister.PORTA) {
 				int currentVal = Main.STORAGE.getRegister(register);
