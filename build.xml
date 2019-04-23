@@ -6,7 +6,7 @@
 	
 	<property name="src.dir" value="src"/>
 	<property name="bin.dir" value="bin"/>
-    <property name="jar.dir" value="jar"/>
+	<property name="jar.dir" value="jar"/>
 	<property name="jar.file" value="${jar.dir}/${ant.project.name}-${time}.jar"/>
 	<property name="main.class" value="de.teamwaldstadt.picsimu.Main"/>
 	
@@ -26,7 +26,7 @@
 	<target depends="clean" name="compile" description="compile all java files into bin directory">
 		<mkdir dir="${bin.dir}"/>
 		<echo message="${ant.project.name}: ${ant.file}"/>
-		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${bin.dir}"/>
+		<javac includeantruntime="false" source="1.8" target="1.8" srcdir="${src.dir}" destdir="${bin.dir}"/>
 	</target>
 	
 	<target depends="compile" name="build" description="pack compiled class files into a jar file into jar directory">
