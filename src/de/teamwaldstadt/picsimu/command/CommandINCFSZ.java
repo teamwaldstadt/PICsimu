@@ -32,7 +32,7 @@ public class CommandINCFSZ extends CommandExecutor {
 			Main.STORAGE.setW(result);
 		}
 		
-		// wenn result 0x00, dann führe NOP aus und erhöhe Runtime-Counter
+		// wenn result 0x00, dann fuehre NOP aus und erhoehe Runtime-Counter
 		if (result == 0x00) {
 			new CommandNOP(super.getArguments()).execute();
 			Main.EXECUTOR.incrementRuntime(Command.NOP);

@@ -23,7 +23,7 @@ public class CommandBTFSC extends CommandExecutor {
 		
 		super.affectStatus(Command.BTFSC, 0);
 		
-		// wenn testBit nicht gesetzt, dann führe NOP aus und erhöhe Runtime-Counter
+		// wenn testBit nicht gesetzt, dann fuehre NOP aus und erhoehe Runtime-Counter
 		if (!testBit) {
 			new CommandNOP(super.getArguments()).execute();
 			Main.EXECUTOR.incrementRuntime(Command.NOP);

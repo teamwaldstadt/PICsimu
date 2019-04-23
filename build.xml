@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project basedir="." default="build" name="PICsimu">
+	<tstamp>
+		<format property="time" pattern="yyyyMMdd-hhmmss" />
+	</tstamp>
+	
+	<property name="src.dir" value="src"/>
+	<property name="bin.dir" value="bin"/>
+    <property name="jar.dir" value="jar"/>
+	<property name="jar.file" value="${jar.dir}/${ant.project.name}-${time}.jar"/>
+	<property name="main.class" value="de.teamwaldstadt.picsimu.Main"/>
+	
+	<target name="clean" description="clean bin directory (remove compiled java class files)">
+		<delete dir="${bin.dir}"/>
+	</target>
+	
+	<target name="clean-jar" description="clean jar directory (remove built jar files)">
+		<delete dir="${jar.dir}"/>
+	</target>
+	
+	<target name="clean-all" description="clean bin and jar directory">
+		<delete dir="${bin.dir}"/>
+		<delete dir="${jar.dir}"/>
+	</target>
+	
+	<target depends="clean" name="compile" description="compile all java files into bin directory">
+		<mkdir dir="${bin.dir}"/>
+		<echo message="${ant.project.name}: ${ant.file}"/>
+		<javac includeantruntime="false" srcdir="${src.dir}" destdir="${bin.dir}"/>
+	</target>
+	
+	<target depends="compile" name="build" description="pack compiled class files into a jar file into jar directory">
+		<mkdir dir="${jar.dir}"/>
+		<jar destfile="${jar.file}" basedir="${bin.dir}">
+			<manifest>
+				<attribute name="Main-Class" value="${main.class}"/>
+			</manifest>
+		</jar>
+	</target>
+</project>

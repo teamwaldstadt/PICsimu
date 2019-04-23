@@ -4,7 +4,6 @@ import java.util.Stack;
 
 import de.teamwaldstadt.picsimu.CodeExecutor;
 import de.teamwaldstadt.picsimu.Main;
-import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class Storage {
