@@ -244,7 +244,7 @@ public class GUIPanel extends JPanel {
 		freqSettings1.setBorder(border);
 		freqSettings.setLayout(new GridBagLayout());
 		
-		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 0.5, 10.0, 0.1);
+		SpinnerNumberModel snm = new SpinnerNumberModel(4.0, 0.01, 10.0, 0.01);
 		frequencySpinner = new JSpinner(snm);
         
 		frequencySpinner.setPreferredSize(new Dimension(100, 30));

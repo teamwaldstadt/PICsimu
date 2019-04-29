@@ -43,14 +43,13 @@ public class CodeExecutor implements ActionListener {
 	GUIWindow w;
 	Timer t;
 	
-	
 	// values in micro seconds
 	double runtime;
 	double commandDuration = 0;
 	
 	public CodeExecutor() {
 		runtime = 0;
-		t = new Timer(100, this);
+		t = new Timer(1, this);
 		DONE = false;
 		w = new GUIWindow(this);
 		Main.STORAGE.resetAll();
@@ -103,12 +102,14 @@ public class CodeExecutor implements ActionListener {
 		gui.getCodeView().removeBreakPoints();
 		watchdogCounter = 0;
 		awaitInterrupt = false;
+		watchdogInterrupt = false;
 	}
 	
 	int prescaler = 4;
 	public static int prescalerTact = 0;
 	
 	boolean awaitInterrupt = false;
+	boolean watchdogInterrupt = false;
 	
 	public void nextCommand() {
 		try {
@@ -121,9 +122,10 @@ public class CodeExecutor implements ActionListener {
 			boolean toie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 5, true);
 			boolean toif = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 2, true);
 			
-			if (gie && toie && toif) {
+			if (gie && toie && toif || watchdogInterrupt) {
 				//interrupt detected
 				awaitInterrupt = false;
+				watchdogInterrupt = false;
 				
 				Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 7, false, true);
 				
@@ -155,7 +157,6 @@ public class CodeExecutor implements ActionListener {
 				return;
 			}
 			
-			
 			this.incrementRuntime(commands[correctPC(Main.STORAGE.getPC())].getCommand());
 			
 						
@@ -167,15 +168,15 @@ public class CodeExecutor implements ActionListener {
 				if (DONE) return;
 			}
 			
-			
-			runCommand(correctPC(Main.STORAGE.getPC()));
-			
-			
 			if (commands[correctPC(Main.STORAGE.getPC())].getCommand() == Command.SLEEP) {
 				//sleep did not increment the pc
 				//now waiting for an interrupt or watchdog
 				awaitInterrupt = true;
 			}
+			
+			runCommand(correctPC(Main.STORAGE.getPC()));
+			
+			if (awaitInterrupt) nextCommand();
 			
 			if (correctPC(Main.STORAGE.getPC()) >= commands.length) {
 				DONE = true;
@@ -194,7 +195,7 @@ public class CodeExecutor implements ActionListener {
 		updateStorage();
 	}
 	
-	static int watchdogCounter = 0;
+	public static int watchdogCounter = 0;
 	int watchdogLimit = 18000;
 	
 	/*
@@ -279,36 +280,49 @@ public class CodeExecutor implements ActionListener {
 	
 	public void triggerWatchdog(int tacts) {
 		/* watchdog stuff */
-		int optionReg = 0;
 		try {
-			optionReg = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG.getAddress(), true);
+			if (!Main.STORAGE.isBitOfRegisterSet(SpecialRegister.OPTION_REG.getAddress(), 3, true)) {
+				watchdogLimit = 18000;
+			} else {
+				watchdogLimit = 18000 * (int) (Math.pow(2, Utils.extractBitsFromIntNumber(Main.STORAGE.getRegister(SpecialRegister.OPTION_REG.getAddress(), true), 0, 3)));
+			}
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		if ((optionReg & 8) == 0) {
-			watchdogLimit = 18000;
-		} else {
-			watchdogLimit = 18000 * (int) (Math.pow(2, (optionReg & 7)));
-		}
 		
 		for (int i = 0; i < tacts; i++) {
-			watchdogCounter++;
+			watchdogCounter += commandDuration;
 			System.out.println(watchdogCounter + " / " + watchdogLimit);
 			
 			/*
 			 * watchdog timer reset
 			 */
 			if (watchdogCounter > watchdogLimit) {
-				stop();
-				gui.getCodeView().setLine(commands[0].getLineNr());
-				DONE = true;
-				try {
-					Main.STORAGE.setRegister(SpecialRegister.PCL.getAddress(), 0, true);
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+				
+				if (commands[this.correctPC(Main.STORAGE.getPC())].getCommand() != Command.SLEEP) {
+					stop();
+					DONE = true;
+					
+					gui.getCodeView().setLine(commands[0].getLineNr());
+					
+					try {
+						Main.STORAGE.jumpPC(0);
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				} else {
+					try {
+						Main.STORAGE.incrementPC();
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 				}
+				watchdogInterrupt = true;
+				this.updateStorage();
+				this.updateRegisters();
 				return;
 			}
 		}
@@ -376,7 +390,8 @@ public class CodeExecutor implements ActionListener {
 		if (gui != null)
 			gui.setCommandDuration(commandDuration);
 //		System.out.println((int) (commandDuration * 10));
-		t.setDelay((int) (commandDuration * DELAY_FACTOR)); 
+//		t.setDelay((int) (commandDuration * DELAY_FACTOR));
+		t.setDelay(1);
 	}
 
 	int stoppedOnLine = -1;
