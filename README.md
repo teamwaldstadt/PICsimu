@@ -23,14 +23,16 @@ Copyright (c) 2019 Team Waldstadt
 
 Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen Sie den Bedingungen der Lizenz zu.
 
-## TODO-Liste
+## TODOs / Geplante Features
 
-* ~~Interrupts~~ **[IN PROGRESS]**
-* TMR0, Watchdog inkl. Vorteiler **[IN PROGRESS]**
-* ~~Command SLEEP~~ **[DONE]**
-* ~~Stack visualisieren~~ **[DISCARDED]**
-* Quellcode kommentieren
-* ~~Apache Ant integrieren~~ **[DONE]**
-* Hardwareansteuerung via RS232
-* License-Button
-* Dokumentation / Hilfe-Button
+| Status        | TODO / Feature                 | Priorität  |
+|---------------|--------------------------------|------------|
+| *IN PROGRESS* | Interrupts                     | HIGH       |
+| *IN PROGRESS* | TMR0, Watchdog inkl. Vorteiler | HIGH       |
+| *IN PROGRESS* | Command SLEEP                  | HIGH       |
+| PLANNED       | Dokumentation / Hilfe-Button   | MEDIUM     |
+| PLANNED       | Quellcode kommentieren         | MEDIUM     |
+| **DONE**      | ~~Apache Ant integrieren~~     | ~~MEDIUM~~ |
+| **DISCARDED** | ~~Stack visualisieren~~        | ~~LOW~~    |
+| **DONE**      | ~~License-Button~~             | ~~LOW~~    |
+| PLANNED       | Hardwareansteuerung via RS232  | LOW        |
