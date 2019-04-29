@@ -25,7 +25,7 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 ## TODO-Liste
 
-* Interrupts
+* ~~Interrupts~~ **[IN PROGRESS]**
 * TMR0, Watchdog inkl. Vorteiler **[IN PROGRESS]**
 * ~~Command SLEEP~~ **[DONE]**
 * ~~Stack visualisieren~~ **[DISCARDED]**

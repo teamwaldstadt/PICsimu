@@ -113,6 +113,33 @@ public class CodeExecutor implements ActionListener {
 				return;
 			}
 			
+			//if GIE=0 and T0IE=0 and T0IF=1 -> interrupt
+			boolean gie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 7, true);
+			boolean toie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 5, true);
+			boolean toif = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 2, true);
+			
+			if (gie && toie && toif) {
+				//interrupt detected
+				
+				Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 7, false, true);
+				
+				Main.STORAGE.getStack().push(correctPC(Main.STORAGE.getPC()));
+				
+				Main.STORAGE.jumpPC(4);
+				
+				gui.getCodeView().setLine(commands[correctPC(Main.STORAGE.getPC())].getLineNr());
+				
+				//JOptionPane.showMessageDialog(null, "Int", "titel", JOptionPane.CANCEL_OPTION);
+				gui.setRuntime(runtime);
+				
+				updateRegisters();
+				updateStorage();
+				
+				return;
+
+			}
+			
+			
 			this.incrementRuntime(commands[correctPC(Main.STORAGE.getPC())].getCommand());
 			
 						
@@ -214,16 +241,17 @@ public class CodeExecutor implements ActionListener {
 			
 			for (int i = 0; i < tacts; i++) {
 				//val++;
-				if ((val + inc) % 256 == 0) {
-					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 2, true, true);
-					
-					//set T0IF
-					Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 2, true, true);
-					
-					
-				} 
+				
 				if (prescalerTact == prescaler) {
 					inc++;
+					
+					if ((val + inc) % 256 == 0) {
+						Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 2, true, true);
+						
+						//set T0IF
+						Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 2, true, true);
+					} 
+					
 					prescalerTact = 0;
 				} 
 				prescalerTact++;

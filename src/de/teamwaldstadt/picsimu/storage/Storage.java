@@ -71,14 +71,13 @@ public class Storage {
 	
 	public void jumpPC(int arg) throws Exception {
 		Utils.checkBitsExceed(arg, 11);
-		
+	
 		int lower = arg & 0xFF;
 		int upper = (Utils.extractBitsFromIntNumber(this.getRegister(SpecialRegister.PCLATH.getAddress(), true), 3, 2) << 3) + Utils.extractBitsFromIntNumber(arg, 8, 3);
-		
+	
 		// hier wird absichtlich setRegister(SpecialRegister-Objekt, Integer-Wert) und nicht 
 		// setRegister(SpecialRegister-Adresse, Integer-Wert, Boolean-IgnoreBank) verwendet
 		this.setRegister(SpecialRegister.PCL, lower);
-		
 		this.pc = (upper << 8) + lower;
 	}
 	
