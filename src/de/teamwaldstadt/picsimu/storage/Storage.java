@@ -183,9 +183,9 @@ public class Storage {
 			if (register == SpecialRegister.PORTB) {
 				int currentVal = Main.STORAGE.getRegister(register);
 				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);
-				boolean tose = (option & 16) == 0 ? false: true;
 				
-				if (tose) {
+				boolean intedge = (option & 64) == 0 ? true: false;
+				if (intedge) {
 					//falling edge
 					if ((currentVal & 1) != 0) {
 						if ((value & 1) == 0) {
@@ -200,13 +200,19 @@ public class Storage {
 						}
 					}
 				}
+				
+				//TODO: set RBIF by change in one of RB4-RB7, has to be input
+				int mask = getRegister(SpecialRegister.TRISB.getAddress(), true);
+				if (((currentVal & mask) & 0xF0) != ((value & mask) & 0xF0)) {
+					setBitOfRegister(SpecialRegister.INTCON.getAddress(), 0, true, false);
+				}
 			}
 			
 			if (register == SpecialRegister.PORTA) {
 				int currentVal = Main.STORAGE.getRegister(register);
 				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);
-				boolean intedge = (option & 16) == 0 ? true: false; 
-				if (intedge) {
+				boolean tose = (option & 16) == 0 ? false: true;
+				if (tose) {
 					//falling edge
 					if ((currentVal & 16) != 0) {
 						if ((value & 16) == 0 && (option & 32) != 0) {
