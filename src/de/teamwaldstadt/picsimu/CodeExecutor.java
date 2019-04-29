@@ -320,6 +320,15 @@ public class CodeExecutor implements ActionListener {
 						e.printStackTrace();
 					}
 				}
+				try {
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 3, true, true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 4, false, true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 5, false, true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 6, false, true);
+				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 7, false, true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 				watchdogInterrupt = true;
 				this.updateStorage();
 				this.updateRegisters();
