@@ -171,14 +171,16 @@ public class Storage {
 		try {
 			SpecialRegister register = SpecialRegister.atAddress(address);
 			
-			// Sonderfall f�r PCL
+			// Sonderfall fuer PCL
 			if (register == SpecialRegister.PCL) {
 				this.manipulatePC(value);
 				return;
 			}
+			
 			if (register == SpecialRegister.TMR0) {
 				CodeExecutor.prescalerTact = 1; 
 			}
+			
 			if (register == SpecialRegister.PORTA) {
 				int currentVal = Main.STORAGE.getRegister(register);
 				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);

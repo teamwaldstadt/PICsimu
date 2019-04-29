@@ -161,7 +161,7 @@ public class GUIWindow extends JFrame {
 		license.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Not implemented yet", "Lizenz", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(null, "Copyright \u00A9 2019 Team Waldstadt\n\nLicensed under the EUPL", "Lizenz", JOptionPane.INFORMATION_MESSAGE);
 			}
 		});
 		
