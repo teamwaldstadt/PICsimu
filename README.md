@@ -18,8 +18,8 @@ Copyright (c) 2019 Team Waldstadt
 
 * ab (inklusive) Commit [1aa4cff](https://github.com/teamwaldstadt/PICsimu/commit/1aa4cff1d53838e7dec16e36e067cb0b74f6112a) und neuer:
   * Lizenziert unter der [EUPL](LICENSE)
-* bis (exklusive) Commit [1aa4cff](https://github.com/teamwaldstadt/PICsimu/commit/1aa4cff1d53838e7dec16e36e067cb0b74f6112a) und älter:
-  * LIZENZIERT Unter der [MIT-Lizenz](https://raw.githubusercontent.com/teamwaldstadt/PICsimu/cc2c1530e56f540eeb0db61699478b8c921d09cd/LICENSE)
+* bis (inklusive) Commit [cc2c153](https://github.com/teamwaldstadt/PICsimu/commit/cc2c1530e56f540eeb0db61699478b8c921d09cd) und älter:
+  * Lizenziert unter der [MIT-Lizenz](https://raw.githubusercontent.com/teamwaldstadt/PICsimu/cc2c1530e56f540eeb0db61699478b8c921d09cd/LICENSE)
 
 Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen Sie den Bedingungen der Lizenz zu.
 
