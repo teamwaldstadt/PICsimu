@@ -11,7 +11,7 @@ public class CommandSLEEP extends CommandExecutor {
 	
 	@Override
 	public void execute() throws Exception {
-		Main.STORAGE.incrementPC();
+		//Main.STORAGE.incrementPC();
 		
 		// set Prescaler Assignment (PSA) bit
 		Main.STORAGE.setBitOfRegister(SpecialRegister.OPTION_REG.getAddress(), 3, true, false);

@@ -102,10 +102,13 @@ public class CodeExecutor implements ActionListener {
 		}
 		gui.getCodeView().removeBreakPoints();
 		watchdogCounter = 0;
+		awaitInterrupt = false;
 	}
 	
 	int prescaler = 4;
 	public static int prescalerTact = 0;
+	
+	boolean awaitInterrupt = false;
 	
 	public void nextCommand() {
 		try {
@@ -120,6 +123,7 @@ public class CodeExecutor implements ActionListener {
 			
 			if (gie && toie && toif) {
 				//interrupt detected
+				awaitInterrupt = false;
 				
 				Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 7, false, true);
 				
@@ -136,7 +140,19 @@ public class CodeExecutor implements ActionListener {
 				updateStorage();
 				
 				return;
+			}
+			
+			if (awaitInterrupt) {
+				System.out.println("waiting...");
+				this.incrementRuntime(commands[correctPC(Main.STORAGE.getPC())].getCommand());
 
+				gui.setRuntime(runtime);
+				
+				updateRegisters();
+				updateStorage();
+				
+				triggerWatchdog(1);
+				return;
 			}
 			
 			
@@ -147,11 +163,19 @@ public class CodeExecutor implements ActionListener {
 			
 			// if TOCS is unset -> timer mode
 			if ((option & 32) == 0) {
-				triggerTMR0(option);
+				triggerTMR0();
 				if (DONE) return;
 			}
 			
+			
 			runCommand(correctPC(Main.STORAGE.getPC()));
+			
+			
+			if (commands[correctPC(Main.STORAGE.getPC())].getCommand() == Command.SLEEP) {
+				//sleep did not increment the pc
+				//now waiting for an interrupt or watchdog
+				awaitInterrupt = true;
+			}
 			
 			if (correctPC(Main.STORAGE.getPC()) >= commands.length) {
 				DONE = true;
@@ -176,18 +200,22 @@ public class CodeExecutor implements ActionListener {
 	/*
 	 * maybe TODO: nicer version of this function
 	 */
-	public void triggerTMR0(int optionReg) {
-		
+	public void triggerTMR0() {
+		int optionReg = 0;
+		try {
+			optionReg = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG.getAddress(), true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		if (commands == null) return;
 		
 		//if PSA is set -> use prescaler
 		if ((optionReg & 8) == 0) {
 			prescaler = (int) Math.pow(2, (optionReg & 7) + 1);
-			watchdogLimit = 18000;
 		} else {
 			prescaler = 1;
 			prescalerTact = 1;
-			watchdogLimit = 18000 * (int) (Math.pow(2, (optionReg & 7)));
 		}
 		try {
 			int val = Main.STORAGE.getRegister(SpecialRegister.TMR0.getAddress(), true);
@@ -218,23 +246,7 @@ public class CodeExecutor implements ActionListener {
 			}
 			
 			
-			/* watchdog stuff */
-			for (int i = 0; i < tacts; i++) {
-				watchdogCounter++;
-				//System.out.println(watchdogCounter + " / " + watchdogLimit);
-				
-				/*
-				 * watchdog timer reset
-				 */
-				if (watchdogCounter > watchdogLimit) {
-					stop();
-					gui.getCodeView().setLine(commands[0].getLineNr());
-					DONE = true;
-					Main.STORAGE.setRegister(SpecialRegister.PCL.getAddress(), 0, true);
-					return;
-				}
-			}
-			
+			triggerWatchdog(tacts);
 			
 			
 			if ((optionReg & 32) != 0) tacts = 1;
@@ -263,6 +275,44 @@ public class CodeExecutor implements ActionListener {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}
+	}
+	
+	public void triggerWatchdog(int tacts) {
+		/* watchdog stuff */
+		int optionReg = 0;
+		try {
+			optionReg = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG.getAddress(), true);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		if ((optionReg & 8) == 0) {
+			watchdogLimit = 18000;
+		} else {
+			watchdogLimit = 18000 * (int) (Math.pow(2, (optionReg & 7)));
+		}
+		
+		for (int i = 0; i < tacts; i++) {
+			watchdogCounter++;
+			System.out.println(watchdogCounter + " / " + watchdogLimit);
+			
+			/*
+			 * watchdog timer reset
+			 */
+			if (watchdogCounter > watchdogLimit) {
+				stop();
+				gui.getCodeView().setLine(commands[0].getLineNr());
+				DONE = true;
+				try {
+					Main.STORAGE.setRegister(SpecialRegister.PCL.getAddress(), 0, true);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				return;
+			}
+		}
+		
 	}
 	
 	public void incrementRuntime(Command command) {

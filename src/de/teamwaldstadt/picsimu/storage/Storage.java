@@ -188,14 +188,14 @@ public class Storage {
 					//falling edge
 					if ((currentVal & 16) != 0) {
 						if ((value & 16) == 0 && (option & 32) != 0) {
-							Main.EXECUTOR.triggerTMR0(option);
+							Main.EXECUTOR.triggerTMR0();
 						}
 					}
 				} else {
 					//raising edge
 					if ((currentVal & 16) == 0) {
 						if ((value & 16) != 0 && (option & 32) != 0) {
-							Main.EXECUTOR.triggerTMR0(option);
+							Main.EXECUTOR.triggerTMR0();
 						}
 					}
 				}
