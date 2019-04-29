@@ -113,17 +113,27 @@ public class CodeExecutor implements ActionListener {
 	
 	public void nextCommand() {
 		try {
+			//if there is no command available: return
 			if (commands == null || commands.length == 0 || DONE) {
 				return;
 			}
 			
-			//if GIE=0 and T0IE=0 and T0IF=1 -> interrupt
 			boolean gie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 7, true);
 			boolean toie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 5, true);
+			boolean inte = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 4, true);
+			boolean rbie = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 3, true);
 			boolean toif = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 2, true);
+			boolean intf = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 1, true);
+			boolean rbif = Main.STORAGE.isBitOfRegisterSet(SpecialRegister.INTCON.getAddress(), 0, true);
 			
-			if (gie && toie && toif || watchdogInterrupt) {
-				//interrupt detected
+			
+			
+			boolean timerInterrupt = gie && toie && toif;
+			boolean portB0Interrupt = gie && inte && intf;
+			boolean portB4to7Interrupt = gie && rbie && rbif;
+			
+			//detect interrupts
+			if (timerInterrupt || portB0Interrupt || portB4to7Interrupt || watchdogInterrupt) {
 				awaitInterrupt = false;
 				watchdogInterrupt = false;
 				
