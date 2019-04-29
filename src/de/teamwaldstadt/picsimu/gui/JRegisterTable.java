@@ -50,6 +50,13 @@ public class JRegisterTable extends JTable {
 				setValueAt(values[8 - i], 0, 8 - i + 1);
 			}
 			setValueAt("Bit", 1, 0);
+		} else if (reg == SpecialRegister.INTCON) {
+			tm.setRowCount(2);
+			String[] values = { "GIE", "PIE", "T0IE", "INTE", "RBIE", "T0IF", "INTF", "RBIF" };
+			for (int i = 8; i > 0; i--) {
+				setValueAt(values[8 - i], 0, 8 - i + 1);
+			}
+			setValueAt("Bit", 1, 0);
 		} else {
 			for (int i = 8; i > 0; i--) {
 				setValueAt(i - 1, 0, 8 - i + 1);

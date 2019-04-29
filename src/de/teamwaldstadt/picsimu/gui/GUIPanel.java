@@ -142,6 +142,12 @@ public class GUIPanel extends JPanel {
 		registers.add(Box.createRigidArea(new Dimension(0, space)));
 		registerTables.add(optionRegs);
 		
+		JRegisterTable intConReg = new JRegisterTable("IntCon", codeExecutor, SpecialRegister.INTCON);
+		registers.add(intConReg);
+		registers.add(Box.createRigidArea(new Dimension(0, space)));
+		registerTables.add(intConReg);
+		
+		
 		/* Some special registers (W, PC, FSR, ...) */
 		JPanel regInfoPanel = new JPanel();
 		regInfoPanel.setBackground(Color.GREEN);

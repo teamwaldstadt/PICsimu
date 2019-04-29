@@ -27,7 +27,7 @@ public class CodeExecutor implements ActionListener {
 	
 	/*
 	 * factor, that gets multiplied with the real delay in micro seconds, to create the delay in ms
-	 * example: real delay: 1us -> simulated delay: 1us * 10 -> 10ms
+	 * example: real delay: 1us -> simulated delay: 1us * DELAY_FACTOR -> x ms
 	 * 
 	 * if this FACTOR is 1, then 1kHz = 1s delay
 	 * with 100, 100kHz = 1s delay, or 1kHz = 100s delay
@@ -150,6 +150,9 @@ public class CodeExecutor implements ActionListener {
 	 * maybe TODO: nicer version of this function
 	 */
 	public void triggerTMR0(int optionReg) {
+		
+		if (commands == null) return;
+		
 		//if PSA is set -> use prescaler
 		if ((optionReg & 8) == 0) {
 			prescaler = (int) Math.pow(2, (optionReg & 7) + 1);
@@ -192,6 +195,10 @@ public class CodeExecutor implements ActionListener {
 			for (int i = 0; i < tacts; i++) {
 				watchdogCounter++;
 				//System.out.println(watchdogCounter + " / " + watchdogLimit);
+				
+				/*
+				 * watchdog timer reset
+				 */
 				if (watchdogCounter > watchdogLimit) {
 					stop();
 					gui.getCodeView().setLine(commands[0].getLineNr());
@@ -209,6 +216,11 @@ public class CodeExecutor implements ActionListener {
 				//val++;
 				if ((val + inc) % 256 == 0) {
 					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 2, true, true);
+					
+					//set T0IF
+					Main.STORAGE.setBitOfRegister(SpecialRegister.INTCON.getAddress(), 2, true, true);
+					
+					
 				} 
 				if (prescalerTact == prescaler) {
 					inc++;
