@@ -27,8 +27,8 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 * Interrupts
 * TMR0, Watchdog inkl. Vorteiler **[IN PROGRESS]**
-* Command SLEEP
-* Stack visualisieren
+* ~~Command SLEEP~~ **[DONE]**
+* ~~Stack visualisieren~~ **[DISCARDED]**
 * Quellcode kommentieren
 * ~~Apache Ant integrieren~~ **[DONE]**
 * Hardwareansteuerung via RS232
