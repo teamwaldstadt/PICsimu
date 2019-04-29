@@ -12,6 +12,13 @@ Zum eigenhändigen Compilen bzw. Builden muss eine aktuelle Version von [Apache 
 
 Ausführbare JARs können [HIER](https://picsimu.teamwaldstadt.de/jar/) heruntergeladen werden. Neueste Version siehe Zeitstempel des jeweiligen Builds. Es wird eine [Java Runtime Environment](https://java.com/de/download/) Version 8+ zum Ausführen der JARs benötigt.
 
+## Lizenz
+
+Copyright (c) 2019 Team Waldstadt
+Lizenziert unter der [EUPL](LICENSE)
+
+Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen Sie den Bedingungen der Lizenz zu.
+
 ## TODO-Liste
 
 * Interrupts
