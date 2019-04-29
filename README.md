@@ -25,14 +25,14 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 ## TODOs / Geplante Features
 
-| Status        | TODO / Feature                 | Priorität  |
-|---------------|--------------------------------|------------|
-| *IN PROGRESS* | Interrupts                     | HIGH       |
-| *IN PROGRESS* | TMR0, Watchdog inkl. Vorteiler | HIGH       |
-| *IN PROGRESS* | Command SLEEP                  | HIGH       |
-| PLANNED       | Dokumentation / Hilfe-Button   | MEDIUM     |
-| PLANNED       | Quellcode kommentieren         | MEDIUM     |
-| **DONE**      | ~~Apache Ant integrieren~~     | ~~MEDIUM~~ |
-| **DISCARDED** | ~~Stack visualisieren~~        | ~~LOW~~    |
-| **DONE**      | ~~License-Button~~             | ~~LOW~~    |
-| PLANNED       | Hardwareansteuerung via RS232  | LOW        |
+| Status          | TODO / Feature                 | Priorität  |
+|-----------------|--------------------------------|------------|
+| *IN PROGRESS*   | Interrupts                     | HIGH       |
+| *IN PROGRESS*   | TMR0, Watchdog inkl. Vorteiler | HIGH       |
+| **DONE**        | ~~Command SLEEP~~              | ~~HIGH~~   |
+| PLANNED         | Dokumentation / Hilfe-Button   | MEDIUM     |
+| PLANNED         | Quellcode kommentieren         | MEDIUM     |
+| **DONE**        | ~~Apache Ant integrieren~~     | ~~MEDIUM~~ |
+| **DISCARDED**   | ~~Stack visualisieren~~        | ~~LOW~~    |
+| **DONE**        | ~~License-Button~~             | ~~LOW~~    |
+| PLANNED         | Hardwareansteuerung via RS232  | LOW        |
