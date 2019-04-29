@@ -12,6 +12,17 @@ Zum eigenhändigen Compilen bzw. Builden muss eine aktuelle Version von [Apache 
 
 Ausführbare JARs können [HIER](https://picsimu.teamwaldstadt.de/jar/) heruntergeladen werden. Neueste Version siehe Zeitstempel des jeweiligen Builds. Es wird eine [Java Runtime Environment](https://java.com/de/download/) Version 8+ zum Ausführen der JARs benötigt.
 
+## Lizenz
+
+Copyright (c) 2019 Team Waldstadt
+
+* ab (inklusive) Commit [1aa4cff](https://github.com/teamwaldstadt/PICsimu/commit/1aa4cff1d53838e7dec16e36e067cb0b74f6112a) und neuer:
+  * Lizenziert unter der [EUPL](LICENSE)
+* bis (inklusive) Commit [cc2c153](https://github.com/teamwaldstadt/PICsimu/commit/cc2c1530e56f540eeb0db61699478b8c921d09cd) und älter:
+  * Lizenziert unter der [MIT-Lizenz](https://raw.githubusercontent.com/teamwaldstadt/PICsimu/cc2c1530e56f540eeb0db61699478b8c921d09cd/LICENSE)
+
+Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen Sie den Bedingungen der Lizenz zu.
+
 ## TODO-Liste
 
 * Interrupts
