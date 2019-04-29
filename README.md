@@ -15,6 +15,7 @@ Ausführbare JARs können [HIER](https://picsimu.teamwaldstadt.de/jar/) herunter
 ## Lizenz
 
 Copyright (c) 2019 Team Waldstadt
+
 Lizenziert unter der [EUPL](LICENSE)
 
 Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen Sie den Bedingungen der Lizenz zu.
