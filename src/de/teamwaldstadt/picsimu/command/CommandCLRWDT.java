@@ -24,6 +24,7 @@ public class CommandCLRWDT extends CommandExecutor {
 		// clear the timer register
 		Main.STORAGE.setRegister(SpecialRegister.TMR0.getAddress(), 0x00, false);
 		
+		// affect TO_INV and PD_INV
 		super.affectStatus(Command.CLRWDT, 0);
 	}
 
