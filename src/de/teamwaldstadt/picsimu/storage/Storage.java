@@ -180,11 +180,33 @@ public class Storage {
 				CodeExecutor.prescalerTact = 1; 
 			}
 			
+			if (register == SpecialRegister.PORTB) {
+				int currentVal = Main.STORAGE.getRegister(register);
+				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);
+				boolean tose = (option & 16) == 0 ? false: true;
+				
+				if (tose) {
+					//falling edge
+					if ((currentVal & 1) != 0) {
+						if ((value & 1) == 0) {
+							setBitOfRegister(SpecialRegister.INTCON.getAddress(), 1, true, true);
+						}
+					}
+				} else {
+					//raising edge
+					if ((currentVal & 1) == 0) {
+						if ((value & 1) != 0) {
+							setBitOfRegister(SpecialRegister.INTCON.getAddress(), 1, true, true);
+						}
+					}
+				}
+			}
+			
 			if (register == SpecialRegister.PORTA) {
 				int currentVal = Main.STORAGE.getRegister(register);
 				int option = Main.STORAGE.getRegister(SpecialRegister.OPTION_REG);
-				boolean tose = (option & 16) == 0 ? false: true; 
-				if (tose) {
+				boolean intedge = (option & 16) == 0 ? true: false; 
+				if (intedge) {
 					//falling edge
 					if ((currentVal & 16) != 0) {
 						if ((value & 16) == 0 && (option & 32) != 0) {

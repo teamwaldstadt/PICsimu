@@ -303,7 +303,7 @@ public class CodeExecutor implements ActionListener {
 		
 		for (int i = 0; i < tacts; i++) {
 			watchdogCounter += commandDuration;
-			System.out.println(watchdogCounter + " / " + watchdogLimit);
+//			System.out.println(watchdogCounter + " / " + watchdogLimit);
 			
 			/*
 			 * watchdog timer reset
