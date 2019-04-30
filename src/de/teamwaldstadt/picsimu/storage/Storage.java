@@ -104,6 +104,10 @@ public class Storage {
 			address += Bank.OFFSET;
 		}
 		
+		//Spezialfall EECON2:
+		if (address == SpecialRegister.EECON2.getAddress())
+			return 0x00;
+		
 		try {
 			SpecialRegister register = SpecialRegister.atAddress(address);
 			
@@ -154,6 +158,12 @@ public class Storage {
 		return ((value >> (bitIndex)) & 1) == 1;
 	}
 	
+	boolean writeOperationAllowed = false;
+	boolean writeStart = false;
+	boolean eecon2WasSetToAA = false;
+	boolean eecon2WasSetTo55 = false;
+	private int[] eeprom = new int[64]; 
+	
 	public void setRegister(int address, int value, boolean ignoreBank) throws Exception {
 		Utils.checkBitsExceed(value, 8);
 		
@@ -173,6 +183,63 @@ public class Storage {
 			// Sonderfall fuer PCL
 			if (register == SpecialRegister.PCL) {
 				this.manipulatePC(value);
+				return;
+			}
+			
+			
+			 
+			//Sonderfall für EEPROM
+			switch (register) {
+			case EECON1: 
+				//control register, bits are: EEIF, WRERR, WREN, WR, RD
+				int currentVal = Main.STORAGE.getRegister(register);
+				//if WR or RD have been set:
+				if ((((value & 1) == 0) && ((currentVal & 1) != 0)) || (((value & 2) == 0) && ((currentVal & 2)) != 0)) {
+					//if somebody wants to unset them -> do nothing and return
+					throw new Exception("Write not allowed"); 
+				}	
+				//if WREN has been set:
+				if ((currentVal & 4) == 0 && (value & 4) != 0) {
+					writeOperationAllowed = true;
+				} else if ((currentVal & 4) != 0 && (value & 4) == 0) {
+					writeOperationAllowed = false;
+				}
+				
+				//TODO: 
+				//if WR has been set:
+				if ((currentVal & 2) == 0 && (value & 2) != 0) {
+					writeStart = true;
+				} else if ((currentVal & 2) != 0 && (value & 2) == 0) {
+					writeStart = false;
+				}
+				
+					
+				
+				if ((currentVal & 1) == 0 && (value & 1) != 0) {
+					doEEPROMRead();
+					return;
+				}
+				
+				break;
+			case EECON2:
+				//not a real physical register
+				if (value == 0x55) {
+					eecon2WasSetTo55 = true;
+				} else if (value == 0xAA && eecon2WasSetTo55) {
+					eecon2WasSetTo55 = false;
+					eecon2WasSetToAA = true;
+				}
+			case EEDATA: 
+				//nothing special about this, is like a normal register
+				break;
+			case EEADR: 
+				value &= 0x3f;
+				break;
+			default: break;
+			}
+			
+			if (writeStart && writeOperationAllowed && eecon2WasSetToAA) {
+				doEEPROMWrite();
 				return;
 			}
 			
@@ -232,7 +299,9 @@ public class Storage {
 			this.setRegister(register, value);
 			return;
 		} catch (Exception e) {
-			// do nothing
+			if (e.getMessage().contentEquals("Write not allowed")) {
+				throw e;
+			}
 		}
 		
 		try {
@@ -245,6 +314,29 @@ public class Storage {
 		}
 		
 		throw new Exception("Invalid register address: " + String.format("%2X", address));
+	}
+	
+	private void doEEPROMWrite() throws Exception {
+
+		eecon2WasSetToAA = false;
+		writeStart = false;
+		
+		eeprom[getRegister(SpecialRegister.EEADR.getAddress(), true)] = getRegister(SpecialRegister.EEDATA.getAddress(), true);
+		
+		//set EEIF if finshed
+		Main.STORAGE.setBitOfRegister(SpecialRegister.EECON1.getAddress(), 4, true, true);
+		
+		//reset WR
+		int newEECON1 = Main.STORAGE.getRegister(SpecialRegister.EECON1.getAddress(), true);
+		newEECON1 &= 0xFD;
+		Main.STORAGE.setRegister(SpecialRegister.EECON1, newEECON1);
+		
+		System.out.println("EEPROM WRITE executed successfully");
+	}
+	
+	private void doEEPROMRead() throws Exception {
+		Main.STORAGE.setRegister(SpecialRegister.EEDATA.getAddress(), eeprom[getRegister(SpecialRegister.EEADR.getAddress(), true)], true);
+		System.out.println("EEPROM READ executed successfully");
 	}
 
 	public void setTimer(int value) throws Exception {

@@ -9,7 +9,6 @@ import java.lang.reflect.Constructor;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 
-import de.teamwaldstadt.picsimu.Main;
 import de.teamwaldstadt.picsimu.command.Command;
 import de.teamwaldstadt.picsimu.command.CommandExecutor;
 import de.teamwaldstadt.picsimu.command.CommandSet;
@@ -341,6 +340,14 @@ public class CodeExecutor implements ActionListener {
 					
 					gui.getCodeView().setLine(commands[0].getLineNr());
 					
+					//if there is an EEPROM write and the watchdog reset occurs -> set WRERR in EECON1
+					try {
+						if (Main.STORAGE.isBitOfRegisterSet(SpecialRegister.EECON1.getAddress(), 1, true)) {
+							Main.STORAGE.setBitOfRegister(SpecialRegister.EECON1.getAddress(), 3, true, true);
+						}
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					try {
 						Main.STORAGE.jumpPC(0);
 						try {
