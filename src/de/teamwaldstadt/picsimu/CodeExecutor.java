@@ -136,6 +136,15 @@ public class CodeExecutor implements ActionListener {
 			
 			if (commands[correctPC(Main.STORAGE.getPC())].getCommand() == Command.SLEEP && ((!gie && inte && intf) || (!gie && rbie && rbif) || watchdogInterrupt)) {
 				//sleep wakeup -> different behaviour
+				
+				if (watchdogInterrupt) {
+					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 3, false, true);
+					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 4, false, true);
+				} else {
+					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 3, false, true);
+					Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 4, true, true);
+				}
+				
 				Main.STORAGE.incrementPC();
 				awaitInterrupt = false;
 				watchdogInterrupt = false;
