@@ -1,6 +1,6 @@
 # PICsimu
 
-PICsimu ist ein in Java entwickelter Simulator für den [PIC16F84 Mikroprozessor](https://www.microchip.com/wwwproducts/en/PIC16F84) und entstand im Rahmen der Vorlesung "Systemnahe Programmierung 2" an der [DHBW Karlsruhe](https://www.karlsruhe.dhbw.de/startseite.html).
+PICsimu ist ein in Java entwickelter Simulator für den [PIC16F84 Mikroprozessor](https://www.microchip.com/wwwproducts/en/PIC16F84) und entstand im Rahmen der Vorlesung "Systemnahe Programmierung 2" an der [DHBW Karlsruhe](https://www.karlsruhe.dhbw.de/startseite.html). Dokumentation siehe Repository [PICsimu-doc](https://github.com/teamwaldstadt/PICsimu-doc).
 
 ## Compiling / Building
 
@@ -25,14 +25,14 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 ## TODOs / Geplante Features
 
-| Status          | TODO / Feature                 | Priorität  |
-|-----------------|--------------------------------|------------|
-| *IN PROGRESS*   | Interrupts                     | HIGH       |
-| *IN PROGRESS*   | TMR0, Watchdog inkl. Vorteiler | HIGH       |
-| **DONE**        | ~~Command SLEEP~~              | ~~HIGH~~   |
-| PLANNED         | Dokumentation / Hilfe-Button   | MEDIUM     |
-| PLANNED         | Quellcode kommentieren         | MEDIUM     |
-| **DONE**        | ~~Apache Ant integrieren~~     | ~~MEDIUM~~ |
-| **DISCARDED**   | ~~Stack visualisieren~~        | ~~LOW~~    |
-| **DONE**        | ~~License-Button~~             | ~~LOW~~    |
-| PLANNED         | Hardwareansteuerung via RS232  | LOW        |
+| Status          | TODO / Feature                                                               | Priorität  |
+|-----------------|------------------------------------------------------------------------------|------------|
+| *TESTING*       | Interrupts                                                                   | HIGH       |
+| *TESTING*       | TMR0, Watchdog inkl. Vorteiler                                               | HIGH       |
+| **DONE**        | ~~Command SLEEP~~                                                            | ~~HIGH~~   |
+| *IN PROGRESS*   | [Dokumentation](https://github.com/teamwaldstadt/PICsimu-doc) / Hilfe-Button | MEDIUM     |
+| PLANNED         | Quellcode kommentieren                                                       | MEDIUM     |
+| **DONE**        | ~~Apache Ant integrieren~~                                                   | ~~MEDIUM~~ |
+| **DISCARDED**   | ~~Stack visualisieren~~                                                      | ~~LOW~~    |
+| **DONE**        | ~~License-Button~~                                                           | ~~LOW~~    |
+| PLANNED         | Hardwareansteuerung via RS232                                                | LOW        |
