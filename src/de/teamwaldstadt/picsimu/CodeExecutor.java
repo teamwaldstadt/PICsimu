@@ -132,8 +132,23 @@ public class CodeExecutor implements ActionListener {
 			boolean portB0Interrupt = gie && inte && intf;
 			boolean portB4to7Interrupt = gie && rbie && rbif;
 			
+			//System.out.println(commands[correctPC(Main.STORAGE.getPC())].getCommand());
+			
+			if (commands[correctPC(Main.STORAGE.getPC())].getCommand() == Command.SLEEP && ((!gie && inte && intf) || (!gie && rbie && rbif) || watchdogInterrupt)) {
+				//sleep wakeup -> different behaviour
+				Main.STORAGE.incrementPC();
+				awaitInterrupt = false;
+				watchdogInterrupt = false;
+				System.out.println("Sleep wakeup");
+				gui.getCodeView().setLine(commands[correctPC(Main.STORAGE.getPC())].getLineNr());
+				updateRegisters();
+				updateStorage();
+				
+				return;
+			}
+			
 			//detect interrupts
-			if (timerInterrupt || portB0Interrupt || portB4to7Interrupt || watchdogInterrupt) {
+			if (timerInterrupt || portB0Interrupt || portB4to7Interrupt) {
 				awaitInterrupt = false;
 				watchdogInterrupt = false;
 				
@@ -311,6 +326,7 @@ public class CodeExecutor implements ActionListener {
 			if (watchdogCounter > watchdogLimit) {
 				
 				if (commands[this.correctPC(Main.STORAGE.getPC())].getCommand() != Command.SLEEP) {
+					//normal watchdog reset (without sleep)
 					stop();
 					DONE = true;
 					
@@ -318,28 +334,28 @@ public class CodeExecutor implements ActionListener {
 					
 					try {
 						Main.STORAGE.jumpPC(0);
+						try {
+							Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 3, true, true);
+							Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 4, false, true);
+							Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 5, false, true);
+							Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 6, false, true);
+							Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 7, false, true);
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				} else {
-					try {
-						Main.STORAGE.incrementPC();
-					} catch (Exception e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+//					try {
+//						Main.STORAGE.incrementPC();
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+					watchdogInterrupt = true;
 				}
-				try {
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 3, true, true);
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 4, false, true);
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 5, false, true);
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 6, false, true);
-				Main.STORAGE.setBitOfRegister(SpecialRegister.STATUS.getAddress(), 7, false, true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				watchdogInterrupt = true;
 				this.updateStorage();
 				this.updateRegisters();
 				return;
