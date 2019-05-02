@@ -325,7 +325,9 @@ public class CodeExecutor implements ActionListener {
 		}
 		
 		for (int i = 0; i < tacts; i++) {
-			watchdogCounter += commandDuration;
+			if (WATCHDOG_ENABLED) {
+				watchdogCounter += commandDuration;
+			}
 //			System.out.println(watchdogCounter + " / " + watchdogLimit);
 			
 			/*
@@ -449,7 +451,7 @@ public class CodeExecutor implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if (breakpoints[correctPC(Main.STORAGE.getPC())] && stoppedOnLine != correctPC(Main.STORAGE.getPC())) {
+		if (correctPC(Main.STORAGE.getPC()) < breakpoints.length && breakpoints[correctPC(Main.STORAGE.getPC())] && stoppedOnLine != correctPC(Main.STORAGE.getPC())) {
 			t.stop();
 			stoppedOnLine = correctPC(Main.STORAGE.getPC());
 			return;
