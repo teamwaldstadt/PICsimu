@@ -198,7 +198,10 @@ public class CodeExecutor implements ActionListener {
 			// if TOCS is unset -> timer mode
 			if ((option & 32) == 0) {
 				triggerTMR0();
-				if (DONE) return;
+				if (DONE) {
+					DONE = false;
+					return;
+				}
 			}
 			
 			if (commands[correctPC(Main.STORAGE.getPC())].getCommand() == Command.SLEEP) {
@@ -341,6 +344,9 @@ public class CodeExecutor implements ActionListener {
 					DONE = true;
 					
 					gui.getCodeView().setLine(commands[0].getLineNr());
+					watchdogCounter = 0;
+					gui.setRuntime(runtime);
+					JOptionPane.showMessageDialog(null, "Watchdog Overflow!", "Info", JOptionPane.CANCEL_OPTION);
 					
 					//if there is an EEPROM write and the watchdog reset occurs -> set WRERR in EECON1
 					try {
