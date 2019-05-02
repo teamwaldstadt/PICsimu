@@ -1,9 +1,13 @@
 package de.teamwaldstadt.picsimu.gui;
 
 import java.awt.Color;
+import java.awt.Desktop;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -154,21 +158,63 @@ public class GUIWindow extends JFrame {
 		about.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, Main.PGM_NAME + " version " + Main.PGM_VERSION + "\n\nMade by:\nTeam Waldstadt (Jakob Gietl, Fynn Arnold)\n\nView source code at:\nhttps://github.com/teamwaldstadt/PICsimu", "\u00DCber", JOptionPane.INFORMATION_MESSAGE);
+				Object[] options = {"View Source Code", "Cancel"};
+				
+				int result = JOptionPane.showOptionDialog(null, Main.PGM_NAME + " version " + Main.PGM_VERSION + "\n\nMade by:\nTeam Waldstadt (Jakob Gietl, Fynn Arnold)\n\nView source code at:\nhttps://github.com/teamwaldstadt/PICsimu", "\u00DCber", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			
+				if (result == JOptionPane.OK_OPTION) {
+					if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					    try {
+							Desktop.getDesktop().browse(new URI("https://github.com/teamwaldstadt/PICsimu"));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
 			}
 		});
 		
 		license.addActionListener(new ActionListener() {
 			@Override
-			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Copyright \u00A9 2019 Team Waldstadt\n\nLicensed under the EUPL\n(https://github.com/teamwaldstadt/PICsimu/blob/master/LICENSE)", "Lizenz", JOptionPane.INFORMATION_MESSAGE);
+			public void actionPerformed(ActionEvent e) {				
+				Object[] options = {"View License", "Cancel"};
+				
+				int result = JOptionPane.showOptionDialog(null, "Copyright \u00A9 2019 Team Waldstadt\n\nLicensed under the EUPL\n(https://github.com/teamwaldstadt/PICsimu/blob/master/LICENSE)", "Lizenz", JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, null, options, options[0]);
+			
+				if (result == JOptionPane.OK_OPTION) {
+					if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+					    try {
+							Desktop.getDesktop().browse(new URI("https://github.com/teamwaldstadt/PICsimu/blob/master/LICENSE"));
+						} catch (IOException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						} catch (URISyntaxException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					}
+				}
 			}
 		});
 		
 		help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(null, "Not implemented yet", "Dokumentation", JOptionPane.INFORMATION_MESSAGE);
+				if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE)) {
+				    try {
+						Desktop.getDesktop().browse(new URI("https://picsimu.teamwaldstadt.de/doc/PICsimu-doc.pdf"));
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					} catch (URISyntaxException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+				}
 			}
 		});
 		
