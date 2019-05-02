@@ -54,6 +54,7 @@ public class GUIPanel extends JPanel {
 	JLabel runtime;
 	JSpinner frequencySpinner;
 	JLabel labelTitle;
+	JCheckBox watchdogActivated;
 	
 	public GUIPanel(int width, int height, CodeExecutor codeExecutor) {
 		this.codeExecutor = codeExecutor;
@@ -373,6 +374,26 @@ public class GUIPanel extends JPanel {
 		freqSettings.add(impulsActivated, c);
 		c.insets = new Insets(0,2,0,2);
 		
+		JLabel watchdogLabel = new JLabel("Watchdog");
+		c.gridx = 0;
+		c.gridy = 7;
+		c.insets = new Insets(30,2,5,2);
+		freqSettings.add(watchdogLabel, c);
+		
+		watchdogActivated = new JCheckBox("", true);
+		c.gridx = 1;
+		c.weightx = 1;
+		watchdogActivated.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				updateWatchdog();
+				System.out.println("watchdog: " + CodeExecutor.WATCHDOG_ENABLED);
+			}
+		});
+		watchdogActivated.setHorizontalAlignment(SwingConstants.CENTER);
+		freqSettings.add(watchdogActivated, c);
+		c.insets = new Insets(0,2,0,2);
+		
 		c.gridwidth = 1;
 		c.gridheight = 1;
 		c.weightx = 0;
@@ -405,6 +426,9 @@ public class GUIPanel extends JPanel {
 			FrequencyGenerator.getInstance().runWithFreq((int) delay, regAddr, bit);
 		else
 			FrequencyGenerator.getInstance().stop();
+	}
+	private void updateWatchdog() {
+		CodeExecutor.WATCHDOG_ENABLED = watchdogActivated.isSelected();
 	}
 	public CodeView getCodeView() {
 		return codeView;

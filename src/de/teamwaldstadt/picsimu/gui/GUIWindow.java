@@ -32,7 +32,7 @@ public class GUIWindow extends JFrame {
 
 	int WIDTH = 950;
 	int HEIGHT = 720;
-	int MIN_HEIGHT = 620;
+	int MIN_HEIGHT = 660;
 	int MIN_WIDTH = 900;
 	GUIPanel guiPanel;
 	JFrame frame;

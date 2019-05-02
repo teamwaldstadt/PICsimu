@@ -21,7 +21,7 @@ import de.teamwaldstadt.picsimu.utils.Utils;
 
 public class CodeExecutor implements ActionListener {
 	
-	boolean WATCHDOG_ENABLED = true;
+	public static boolean WATCHDOG_ENABLED = true;
 	
 	
 	/*
