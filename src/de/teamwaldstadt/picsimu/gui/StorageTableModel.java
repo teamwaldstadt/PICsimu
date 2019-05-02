@@ -74,13 +74,15 @@ public class StorageTableModel extends DefaultTableModel {
 	}
 	
 	public void updateGUI() {
-		for (int i = 0; i < Main.STORAGE.getStorage().length; i++) {
+		for (int i = 1; i < Main.STORAGE.getStorage().length; i++) {
 			try {
 				setValue(Main.STORAGE.getRegister(i, true), i);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
+		//! getRegister for address 00 does return value at fsr, but should show 0
+		setValue(0, 0);
 	}
 	
 	public void init() {
