@@ -27,9 +27,10 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 | Status          | TODO / Feature                                                               | Priorität  |
 |-----------------|------------------------------------------------------------------------------|------------|
-| *TESTING*       | Interrupts                                                                   | HIGH       |
-| *TESTING*       | TMR0, Watchdog inkl. Vorteiler                                               | HIGH       |
+| **DONE**        | ~~Interrupts~~                                                               | ~~HIGH~~   |
+| **DONE**        | ~~TMR0, Watchdog inkl. Vorteiler~~                                           | ~~HIGH~~   |
 | **DONE**        | ~~Command SLEEP~~                                                            | ~~HIGH~~   |
+| *TESTING*       | EEPROM                                                                       | HIGH       |
 | *IN PROGRESS*   | [Dokumentation](https://github.com/teamwaldstadt/PICsimu-doc) / Hilfe-Button | MEDIUM     |
 | PLANNED         | Quellcode kommentieren                                                       | MEDIUM     |
 | **DONE**        | ~~Apache Ant integrieren~~                                                   | ~~MEDIUM~~ |
