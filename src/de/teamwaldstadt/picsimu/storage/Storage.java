@@ -205,7 +205,6 @@ public class Storage {
 					writeOperationAllowed = false;
 				}
 				
-				//TODO: 
 				//if WR has been set:
 				if ((currentVal & 2) == 0 && (value & 2) != 0) {
 					writeStart = true;
@@ -268,7 +267,6 @@ public class Storage {
 					}
 				}
 				
-				//TODO: set RBIF by change in one of RB4-RB7, has to be input
 				int mask = getRegister(SpecialRegister.TRISB.getAddress(), true);
 				if (((currentVal & mask) & 0xF0) != ((value & mask) & 0xF0)) {
 					setBitOfRegister(SpecialRegister.INTCON.getAddress(), 0, true, false);
