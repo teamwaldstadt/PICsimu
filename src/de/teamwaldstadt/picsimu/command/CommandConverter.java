@@ -5,6 +5,7 @@ public class CommandConverter {
 	public static Command convert(int hexCode) {
 		Command[] commandCodes = Command.values();
 
+		//loop through all possible commands and check if one matches
 		for (Command c : commandCodes) {
 			
 			int hex = hexCode & c.getMask();
