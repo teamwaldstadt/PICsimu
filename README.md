@@ -30,10 +30,10 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 | **DONE**        | ~~Interrupts~~                                                               | ~~HIGH~~   |
 | **DONE**        | ~~TMR0, Watchdog inkl. Vorteiler~~                                           | ~~HIGH~~   |
 | **DONE**        | ~~Command SLEEP~~                                                            | ~~HIGH~~   |
-| *TESTING*       | EEPROM                                                                       | HIGH       |
+| **DONE**        | ~~EEPROM~~                                                                   | ~~HIGH~~   |
 | *IN PROGRESS*   | [Dokumentation](https://github.com/teamwaldstadt/PICsimu-doc) / Hilfe-Button | MEDIUM     |
-| PLANNED         | Quellcode kommentieren                                                       | MEDIUM     |
+| **DONE**        | ~~Quellcode kommentieren~~                                                   | ~~MEDIUM~~ |
 | **DONE**        | ~~Apache Ant integrieren~~                                                   | ~~MEDIUM~~ |
 | **DISCARDED**   | ~~Stack visualisieren~~                                                      | ~~LOW~~    |
 | **DONE**        | ~~License-Button~~                                                           | ~~LOW~~    |
-| PLANNED         | Hardwareansteuerung via RS232                                                | LOW        |
+| **DISCARDED**   | ~~Hardwareansteuerung via RS232~~                                            | ~~LOW~~    |
