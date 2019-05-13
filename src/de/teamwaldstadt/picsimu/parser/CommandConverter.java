@@ -1,4 +1,6 @@
-package de.teamwaldstadt.picsimu.command;
+package de.teamwaldstadt.picsimu.parser;
+
+import de.teamwaldstadt.picsimu.command.Command;
 
 public class CommandConverter {
 	

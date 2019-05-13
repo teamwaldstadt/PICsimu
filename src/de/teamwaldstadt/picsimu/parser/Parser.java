@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.teamwaldstadt.picsimu.command.Command;
-import de.teamwaldstadt.picsimu.command.CommandConverter;
 import de.teamwaldstadt.picsimu.command.CommandSet;
 
 public class Parser {
