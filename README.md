@@ -10,7 +10,7 @@ Zum eigenhändigen Compilen bzw. Builden muss eine aktuelle Version von [Apache 
 
 ## Download
 
-Ausführbare JARs können [HIER](https://picsimu.teamwaldstadt.de/jar/) heruntergeladen werden. Neueste Version siehe Zeitstempel des jeweiligen Builds. Es wird eine [Java Runtime Environment](https://java.com/de/download/) Version 8+ zum Ausführen der JARs benötigt.
+Entwicklungsbuilds können [HIER](https://picsimu.teamwaldstadt.de/jar/) heruntergeladen werden, stabile Versionen [HIER](https://github.com/teamwaldstadt/PICsimu/releases). Neueste Version siehe Zeitstempel des jeweiligen Builds. Es wird eine [Java Runtime Environment](https://java.com/de/download/) Version 8+ zum Ausführen der JARs benötigt.
 
 ## Lizenz
 
