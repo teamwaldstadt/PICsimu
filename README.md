@@ -25,15 +25,15 @@ Mit dem Kompilieren, Herunterladen oder sonstigen Nutzen dieses Projekts stimmen
 
 ## TODOs / Geplante Features
 
-| Status          | TODO / Feature                                                               | Priorität  |
-|-----------------|------------------------------------------------------------------------------|------------|
-| **DONE**        | ~~Interrupts~~                                                               | ~~HIGH~~   |
-| **DONE**        | ~~TMR0, Watchdog inkl. Vorteiler~~                                           | ~~HIGH~~   |
-| **DONE**        | ~~Command SLEEP~~                                                            | ~~HIGH~~   |
-| **DONE**        | ~~EEPROM~~                                                                   | ~~HIGH~~   |
-| *IN PROGRESS*   | [Dokumentation](https://github.com/teamwaldstadt/PICsimu-doc) / Hilfe-Button | MEDIUM     |
-| **DONE**        | ~~Quellcode kommentieren~~                                                   | ~~MEDIUM~~ |
-| **DONE**        | ~~Apache Ant integrieren~~                                                   | ~~MEDIUM~~ |
-| **DISCARDED**   | ~~Stack visualisieren~~                                                      | ~~LOW~~    |
-| **DONE**        | ~~License-Button~~                                                           | ~~LOW~~    |
-| **DISCARDED**   | ~~Hardwareansteuerung via RS232~~                                            | ~~LOW~~    |
+| Status          | TODO / Feature                                                                   | Priorität  |
+|-----------------|----------------------------------------------------------------------------------|------------|
+| **DONE**        | ~~Interrupts~~                                                                   | ~~HIGH~~   |
+| **DONE**        | ~~TMR0, Watchdog inkl. Vorteiler~~                                               | ~~HIGH~~   |
+| **DONE**        | ~~Command SLEEP~~                                                                | ~~HIGH~~   |
+| **DONE**        | ~~EEPROM~~                                                                       | ~~HIGH~~   |
+| **DONE**        | ~~[Dokumentation](https://github.com/teamwaldstadt/PICsimu-doc) / Hilfe-Button~~ | ~~MEDIUM~~ |
+| **DONE**        | ~~Quellcode kommentieren~~                                                       | ~~MEDIUM~~ |
+| **DONE**        | ~~Apache Ant integrieren~~                                                       | ~~MEDIUM~~ |
+| **DISCARDED**   | ~~Stack visualisieren~~                                                          | ~~LOW~~    |
+| **DONE**        | ~~License-Button~~                                                               | ~~LOW~~    |
+| **DISCARDED**   | ~~Hardwareansteuerung via RS232~~                                                | ~~LOW~~    |
